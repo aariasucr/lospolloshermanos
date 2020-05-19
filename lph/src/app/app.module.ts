@@ -8,6 +8,7 @@ import { UserService } from './shared/user.service';
 import { RouteGuard } from './shared/route-guard';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
+import { NotificationService } from './shared/notification.service';
 
 
 @NgModule({
@@ -25,7 +26,9 @@ import { ToastrModule } from 'ngx-toastr';
   ],
   providers: [
     UserService,
-    RouteGuard],
+    RouteGuard,
+    NotificationService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
