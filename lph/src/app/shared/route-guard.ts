@@ -1,7 +1,9 @@
-import {Injectable} from '@angular/core';
-import {CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router} from '@angular/router';
-import {Observable} from 'rxjs';
-import {UserService} from './user.service';
+import {Injectable} from "@angular/core";
+import {CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router} from "@angular/router";
+import {Observable} from "rxjs";
+import {UserService} from "./user.service";
+import * as firebase from "firebase/app";
+import {resolve} from "url";
 
 @Injectable()
 export class RouteGuard implements CanActivate {
@@ -11,11 +13,21 @@ export class RouteGuard implements CanActivate {
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): Observable<boolean> | Promise<boolean> | boolean {
-    if (this.userService.isUserLogged()) {
-      return true;
-    } else {
-      this.router.navigate(['/login']);
-      return false;
-    }
+    return new Promise((resolve) => {
+      firebase.auth().onAuthStateChanged((user) => {
+        if (user) {
+          resolve(true);
+        } else {
+          this.router.navigate(["/login"]);
+          resolve(false);
+        }
+      });
+    });
+    //   if (this.userService.isUserLogged()) {
+    //     return true;
+    //   } else {
+    //     this.router.navigate(['/login']);
+    //     return false;
+    //   }
   }
 }

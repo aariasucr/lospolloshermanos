@@ -3,6 +3,7 @@ import {NgForm} from "@angular/forms";
 import {UserService} from "../shared/user.service";
 import {Router} from "@angular/router";
 import {NotificationService} from "../shared/notification.service";
+import * as firebase from "firebase";
 
 @Component({
   selector: "app-login",
@@ -22,15 +23,26 @@ export class LoginComponent implements OnInit {
     const email = form.value.email;
     const password = form.value.password;
 
-    if (email == "q@q.com" && password == "123") {
+    firebase
+      .auth()
+      .signInWithEmailAndPassword(email, password)
+      .then((userData) => {
+        this.userService.performLogin();
+        this.router.navigate(["/home"]);
+        console.log(userData);
+      })
+      .catch((error) => {
+        this.notificationService.showErrorMessage("Usuario o contraseña incorrecto", error.message);
+      });
+
+    /*if (email == "q@q.com" && password == "123") {
       this.userService.performLogin();
       this.router.navigate(["/home"]);
-      this.notificationService.showSuccessMessage("Exito", "Sesión iniciada");
     } else {
       this.notificationService.showErrorMessage(
         "Usuario o contraseña incorrecto",
         "Error al iniciar sesión"
       );
-    }
+    }*/
   }
 }

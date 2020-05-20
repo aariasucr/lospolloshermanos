@@ -1,4 +1,5 @@
 import {Injectable, EventEmitter} from "@angular/core";
+import * as firebase from "firebase/app";
 
 @Injectable({
   providedIn: "root"
@@ -11,20 +12,26 @@ export class UserService {
 
   performLogin() {
     this.isLogged = true;
+
     const userData = {
-      username: "q@q.com",
-      password: "123"
+      username: "prueba",
+      fullName: "nombre prueba"
     };
 
     this.statusChange.emit(userData);
   }
 
-  performLogout() {
-    this.isLogged = false;
-    this.statusChange.emit(null);
-  }
-
   isUserLogged() {
     return this.isLogged;
+  }
+
+  performLogout() {
+    firebase
+      .auth()
+      .signOut()
+      .then(() => {
+        this.isLogged = false;
+        this.statusChange.emit(null);
+      });
   }
 }
