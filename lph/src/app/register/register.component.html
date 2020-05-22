@@ -1,0 +1,120 @@
+<link
+  href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css"
+  rel="stylesheet"
+  id="bootstrap-css"
+/>
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+
+<div class="container">
+  <div class="row">
+    <div class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
+      <form class="user" role="form" #f="ngForm">
+        <h2>Registro <small>Es gratis (por ahora).</small></h2>
+        <hr class="colorgraph" />
+        <div class="row">
+          <div class="col-xs-12 col-sm-6 col-md-6">
+            <div class="form-group">
+              <input
+                type="text"
+                name="nombre"
+                id="nombre"
+                class="form-control input-lg"
+                placeholder="Nombre"
+                tabindex="1"
+                ngModel
+                required
+              />
+            </div>
+          </div>
+          <div class="col-xs-12 col-sm-6 col-md-6">
+            <div class="form-group">
+              <input
+                type="text"
+                name="apellido"
+                id="apellido"
+                class="form-control input-lg"
+                placeholder="Apellido"
+                tabindex="2"
+                ngModel
+                required
+              />
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <input
+            type="text"
+            name="username"
+            id="username"
+            class="form-control input-lg"
+            placeholder="Nombre de usuario"
+            tabindex="3"
+            ngModel
+            required
+          />
+        </div>
+        <div class="form-group">
+          <input
+            type="email"
+            name="email"
+            id="email"
+            class="form-control input-lg"
+            placeholder="Correo electrónico"
+            tabindex="4"
+            ngModel
+            required
+          />
+        </div>
+        <div class="row">
+          <div class="col-xs-12 col-sm-6 col-md-6">
+            <div class="form-group">
+              <input
+                type="password"
+                name="password"
+                id="password"
+                class="form-control input-lg"
+                placeholder="Contraseña"
+                tabindex="5"
+                ngModel
+                required
+              />
+            </div>
+          </div>
+          <div class="col-xs-12 col-sm-6 col-md-6">
+            <div class="form-group">
+              <input
+                type="password"
+                name="password_confirmation"
+                id="password_confirmation"
+                class="form-control input-lg"
+                placeholder="Confirmar contraseña"
+                tabindex="6"
+                ngModel
+                required
+              />
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-xs-12 col-md-6">
+            <button
+              button
+              type="submit"
+              class="btn btn-primary btn-block btn-lg"
+              (click)="register(f)"
+            >
+              Registrarse
+            </button>
+          </div>
+          <div class="col-xs-12 col-md-6">
+            <button button type="submit" class="btn btn-success btn-block btn-lg" (click)="login()">
+              Iniciar sesión
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

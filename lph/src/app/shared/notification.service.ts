@@ -9,7 +9,8 @@ export class NotificationService {
 
   private toastSettings = {
     closeButton: true,
-    progressBar: true
+    progressBar: true,
+    timeOut: 2000
   };
 
   showErrorMessage(title: string, message: string) {

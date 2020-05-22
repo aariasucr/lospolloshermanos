@@ -23,11 +23,5 @@ export class RouteGuard implements CanActivate {
         }
       });
     });
-    //   if (this.userService.isUserLogged()) {
-    //     return true;
-    //   } else {
-    //     this.router.navigate(['/login']);
-    //     return false;
-    //   }
   }
 }

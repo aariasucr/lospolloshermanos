@@ -29,20 +29,10 @@ export class LoginComponent implements OnInit {
       .then((userData) => {
         this.userService.performLogin();
         this.router.navigate(["/home"]);
-        console.log(userData);
+        this.notificationService.showSuccessMessage("Bienvenido", "Sesión iniciada");
       })
       .catch((error) => {
         this.notificationService.showErrorMessage("Usuario o contraseña incorrecto", error.message);
       });
-
-    /*if (email == "q@q.com" && password == "123") {
-      this.userService.performLogin();
-      this.router.navigate(["/home"]);
-    } else {
-      this.notificationService.showErrorMessage(
-        "Usuario o contraseña incorrecto",
-        "Error al iniciar sesión"
-      );
-    }*/
   }
 }
