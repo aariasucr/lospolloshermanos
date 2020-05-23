@@ -2,7 +2,6 @@ import {Component, OnInit} from "@angular/core";
 import {Router} from "@angular/router";
 import {NgForm} from "@angular/forms";
 import * as firebase from "firebase";
-import {Notification} from "rxjs";
 import {NotificationService} from "../shared/notification.service";
 import {UserService} from "../shared/user.service";
 
