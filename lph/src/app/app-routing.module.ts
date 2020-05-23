@@ -4,12 +4,14 @@ import {AppComponent} from "./app.component";
 import {LoginComponent} from "./login/login.component";
 import {RouteGuard} from "./shared/route-guard";
 import {RegisterComponent} from "./register/register.component";
+import {ResetPasswordComponent} from "./reset-password/reset-password.component";
 
 const routes: Routes = [
   {path: "", component: AppComponent, canActivate: [RouteGuard]},
   {path: "home", component: AppComponent, canActivate: [RouteGuard]},
   {path: "login", component: LoginComponent},
-  {path: "register", component: RegisterComponent}
+  {path: "register", component: RegisterComponent},
+  {path: "resetPassword", component: ResetPasswordComponent}
 ];
 
 @NgModule({

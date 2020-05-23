@@ -13,11 +13,13 @@ export class NotificationService {
     timeOut: 2000
   };
 
-  showErrorMessage(title: string, message: string) {
+  showErrorMessage(title: string, message: string, tiempo = 2000) {
+    this.toastSettings.timeOut = tiempo;
     this.toast.error(message, title, this.toastSettings);
   }
 
-  showSuccessMessage(title: string, message: string) {
+  showSuccessMessage(title: string, message: string, tiempo = 2000) {
+    this.toastSettings.timeOut = tiempo;
     this.toast.success(message, title, this.toastSettings);
   }
 }

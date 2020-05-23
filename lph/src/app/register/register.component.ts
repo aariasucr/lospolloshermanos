@@ -40,6 +40,9 @@ export class RegisterComponent implements OnInit {
         .auth()
         .createUserWithEmailAndPassword(email, password)
         .then((user) => {
+          user.user.updateProfile({
+            displayName: nombre + " " + apellido
+          });
           this.userService.performLogin();
           this.router.navigate(["/home"]);
           this.notificationService.showSuccessMessage("Bienvenido", "Sesión iniciada");
