@@ -3,7 +3,6 @@ import {CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router} from "
 import {Observable} from "rxjs";
 import {UserService} from "./user.service";
 import * as firebase from "firebase/app";
-import {resolve} from "url";
 
 @Injectable()
 export class RouteGuard implements CanActivate {
