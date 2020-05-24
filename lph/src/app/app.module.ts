@@ -11,6 +11,8 @@ import { ToastrModule } from 'ngx-toastr';
 import { NotificationService } from './shared/notification.service';
 import { HeaderComponent } from './header/header.component';
 import { HomeComponent } from './home/home.component';
+import { RegisterComponent } from './register/register.component';
+import { ResetPasswordComponent } from './reset-password/reset-password.component';
 
 
 @NgModule({
@@ -18,7 +20,9 @@ import { HomeComponent } from './home/home.component';
     AppComponent,
     LoginComponent,
     HeaderComponent,
-    HomeComponent
+    HomeComponent,
+    RegisterComponent,
+    ResetPasswordComponent
   ],
   imports: [
     BrowserModule,

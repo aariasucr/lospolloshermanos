@@ -1,6 +1,5 @@
 import {Component, OnInit} from "@angular/core";
 import * as firebase from "firebase";
-import {from} from "rxjs";
 import {UserService} from "./shared/user.service";
 @Component({
   selector: "app-root",

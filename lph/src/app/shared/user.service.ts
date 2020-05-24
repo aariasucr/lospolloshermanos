@@ -14,8 +14,7 @@ export class UserService {
     this.isLogged = true;
 
     const userData = {
-      username: "prueba",
-      fullName: "nombre prueba"
+      fullName: firebase.auth().currentUser.displayName
     };
 
     this.statusChange.emit(userData);
