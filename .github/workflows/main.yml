@@ -5,18 +5,18 @@ jobs:
     name: Build the app with Angular and NPM
     runs-on: ubuntu-latest
     steps: 
-      -name: Checkout
+      - name: Checkout
         uses: actions/checkout@v1
-
-      -name: Configure Node
+        
+      - name: Configure Node
         uses: actions/setup-node@v1
         with:
           node-version: 12
 
-      -name: Install Dependencies
+      - name: Install Dependencies
         working-directory: lph
         run: npm install
 
-      -name: Create Build
+      - name: Create Build
         working-directory: lph
         run: npm run build
