@@ -7,6 +7,7 @@ import * as firebase from "firebase/app";
 export class UserService {
   private isLogged = false;
   public statusChange: any = new EventEmitter<any>();
+  private userData: Object;
 
   constructor() {}
 
@@ -22,6 +23,14 @@ export class UserService {
 
   isUserLogged() {
     return this.isLogged;
+  }
+
+  setUserData(user){
+    this.userData = user;
+  }
+
+  getUserData(){
+    return this.userData;
   }
 
   performLogout() {

@@ -13,6 +13,7 @@ import { HeaderComponent } from './header/header.component';
 import { HomeComponent } from './home/home.component';
 import { RegisterComponent } from './register/register.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
+import { ProfileComponent } from './profile/profile.component';
 
 
 @NgModule({
@@ -22,7 +23,8 @@ import { ResetPasswordComponent } from './reset-password/reset-password.componen
     HeaderComponent,
     HomeComponent,
     RegisterComponent,
-    ResetPasswordComponent
+    ResetPasswordComponent,
+    ProfileComponent
   ],
   imports: [
     BrowserModule,

@@ -20,7 +20,7 @@ export class RegisterComponent implements OnInit {
   ngOnInit() {}
 
   login() {
-    console.log("click login");
+    //console.log("click login");
     this.router.navigate(["/login"]);
   }
 
@@ -40,10 +40,11 @@ export class RegisterComponent implements OnInit {
         .createUserWithEmailAndPassword(email, password)
         .then((user) => {
           user.user.updateProfile({
-            displayName: nombre + " " + apellido
+            displayName: username,
+            photoURL: "https://firebasestorage.googleapis.com/v0/b/lhp-ci2400.appspot.com/o/images.jpeg?alt=media&token=c4100daf-4c00-4f76-81ed-03e1b53eb377"
           });
           this.userService.performLogin();
-          this.router.navigate(["/home"]);
+          this.router.navigate(["/myprofile"]);
           this.notificationService.showSuccessMessage("Bienvenido", "Sesión iniciada");
         })
         .catch((error) => {
