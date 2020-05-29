@@ -8,19 +8,22 @@ import * as firebase from "firebase";
   styleUrls: ["./profile.component.css"]
 })
 export class ProfileComponent implements OnInit {
-  public userData;
+  public userData = null;
   public profilePicturePath;
   public fullName;
   public followers;
   public following;
   public postsNumber;
+  public posts: Array<string> = [];
 
   database = firebase.database();
 
-  constructor(private userService: UserService) {
-    this.fullName = "nombre";
-    this.profilePicturePath = "";
-    this.userData = this.userService.getUserData();
+  constructor(private userService: UserService) {}
+
+  ngOnInit() {
+    if (this.userData == null) {
+      this.userData = this.userService.getUserData();
+    }
 
     this.getProfilePhoto()
       .then((photo) => {
@@ -54,13 +57,25 @@ export class ProfileComponent implements OnInit {
         console.error("error", error);
       });
 
-    this.getPostsNumber().then((number) => {
-      this.postsNumber = number.val().length;
-    });
-  }
+    this.getPostsNumber()
+      .then((number) => {
+        this.postsNumber = number.val().length;
+        number.val().forEach((element) => {
+          this.posts.push(element["link"]);
+        });
 
-  ngOnInit() {
-    //this.getProfilePhoto()
+        console.log(this.posts);
+      })
+      .catch((error) => {
+        console.error("error", error);
+      });
+
+    /*this.getPosts().then((posted) => {
+      posted.forEach((element) => {
+        console.log("posts", element);
+      });
+      console.log(posted);
+    });*/
   }
 
   getProfilePhoto() {
@@ -133,8 +148,23 @@ export class ProfileComponent implements OnInit {
           return snapshot.val();
         },
         function (errorObject) {
-          console.log("The read failed: " + errorObject);
+          console.error("The read failed: " + errorObject);
         }
       );
   }
+
+  /*getPosts() {
+    return firebase
+      .database()
+      .ref("/users/" + this.userData["user"].displayName + "/posts/")
+      .once(
+        "value",
+        function (snapshot) {
+          return snapshot.val();
+        },
+        function (errorObject) {
+          console.error("The read failed: " + errorObject);
+        }
+      );
+  }*/
 }
