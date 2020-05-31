@@ -25,6 +25,32 @@
             required
           />
         </p>
+        <p class="typeofdata">
+          Nombre de usuario:
+          <input
+            type="name"
+            name="username"
+            id="username"
+            placeholder="Nombre de usuario"
+            class="form-group"
+            tabindex="4"
+            ngModel
+            required
+          />
+        </p>
+        <p class="typeofdata">
+          Correo electónico:
+          <input
+            type="email"
+            name="email"
+            id="email"
+            placeholder="Correo electónico"
+            class="form-group"
+            tabindex="4"
+            ngModel
+            required
+          />
+        </p>
 
         <div>
           <div class="row h-100 justify-content-center align-items-center">
@@ -41,6 +67,14 @@
       <label class="typeofdata">Seleccione una foto </label>
       <div style="margin-inline-start: 43%;">
         <app-file-uploader></app-file-uploader>
+        <button
+          type="submit"
+          class="btn btn-primary"
+          style="margin-top: 4%;"
+          (click)="onChangePhoto()"
+        >
+          Cambiar ahora
+        </button>
       </div>
     </div>
 

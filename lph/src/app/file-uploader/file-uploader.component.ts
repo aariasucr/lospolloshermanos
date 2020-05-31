@@ -1,6 +1,7 @@
 import {Component, OnInit, ViewChild, ElementRef, Output, EventEmitter, Input} from "@angular/core";
 import * as firebase from "firebase";
 import {UserService} from "../shared/user.service";
+import {NotificationService} from "../shared/notification.service";
 
 @Component({
   selector: "app-file-uploader",
@@ -16,6 +17,7 @@ export class FileUploaderComponent implements OnInit {
   fileUrl = "";
   uploadStatus = "";
   public userData;
+  selectedFile;
 
   constructor(private userService: UserService) {}
 
@@ -24,7 +26,6 @@ export class FileUploaderComponent implements OnInit {
   }
 
   onUploadImage() {
-    console.log(this.userData);
     this.filePickerRef.nativeElement.click();
     return;
   }
@@ -33,18 +34,13 @@ export class FileUploaderComponent implements OnInit {
     const fileList: FileList = event.target.files;
 
     if (fileList.length > 0) {
-      const file: File = fileList[0];
-      // Por si nos interesa el tipo de archivo (e.g. image/jpeg)
-      const fileType = file.type;
+      this.selectedFile = fileList[0];
+      const author = firebase.auth().currentUser.uid;
 
-      // const author = firebase.auth().currentUser.uid;
-      const currentDate = new Date();
-      const timestamp = currentDate.getTime();
-
-      const fileName = `${timestamp.toString()}.jpg`;
+      const fileName = `${author.toString()}.jpg`;
 
       const storageRef = firebase.storage().ref();
-      this.uploadTask = storageRef.child(fileName).put(file);
+      this.uploadTask = storageRef.child(fileName).put(this.selectedFile);
 
       this.uploadTask.on(
         firebase.storage.TaskEvent.STATE_CHANGED,
@@ -55,7 +51,7 @@ export class FileUploaderComponent implements OnInit {
         },
         (error) => {
           // Error al hacer upload
-          console.log(error);
+          console.error(error.message);
         },
         () => {
           this.uploadTask.snapshot.ref.getDownloadURL().then((downloadUrl) => {

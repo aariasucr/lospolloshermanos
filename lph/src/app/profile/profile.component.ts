@@ -61,9 +61,12 @@ export class ProfileComponent implements OnInit {
 
     this.getPostsNumber()
       .then((number) => {
-        this.postsNumber = number.val().length;
+        this.postsNumber = 0;
         number.val().forEach((element) => {
-          this.posts.push(element["link"]);
+          if (element["date"] != "") {
+            this.posts.push(element["link"]);
+            this.postsNumber++;
+          }
         });
       })
       .catch((error) => {
@@ -78,7 +81,7 @@ export class ProfileComponent implements OnInit {
   getProfilePhoto() {
     return firebase
       .database()
-      .ref("/users/" + this.userData.displayName + "/profilePhoto")
+      .ref("/users/" + this.userData.uid + "/profilePhoto")
       .once(
         "value",
         function (snapshot) {
@@ -93,7 +96,7 @@ export class ProfileComponent implements OnInit {
   getFullName() {
     return firebase
       .database()
-      .ref("/users/" + this.userData.displayName + "/fullName")
+      .ref("/users/" + this.userData.uid + "/fullName")
       .once(
         "value",
         function (snapshot) {
@@ -108,7 +111,7 @@ export class ProfileComponent implements OnInit {
   getFollowersNumber() {
     return firebase
       .database()
-      .ref("/users/" + this.userData.displayName + "/followers")
+      .ref("/users/" + this.userData.uid + "/followers")
       .once(
         "value",
         function (snapshot) {
@@ -123,7 +126,7 @@ export class ProfileComponent implements OnInit {
   getFollowingNumber() {
     return firebase
       .database()
-      .ref("/users/" + this.userData.displayName + "/following")
+      .ref("/users/" + this.userData.uid + "/following")
       .once(
         "value",
         function (snapshot) {
@@ -138,7 +141,7 @@ export class ProfileComponent implements OnInit {
   getPostsNumber() {
     return firebase
       .database()
-      .ref("/users/" + this.userData.displayName + "/posts/")
+      .ref("/users/" + this.userData.uid + "/posts/")
       .once(
         "value",
         function (snapshot) {
