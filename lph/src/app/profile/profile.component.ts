@@ -1,6 +1,9 @@
 import {Component, OnInit} from "@angular/core";
 import {UserService} from "../shared/user.service";
 import * as firebase from "firebase";
+import {Router} from "@angular/router";
+//import {AngularFireAuth} from "@angular/fire/auth";
+//import {error} from "util";
 
 @Component({
   selector: "app-profile",
@@ -8,7 +11,7 @@ import * as firebase from "firebase";
   styleUrls: ["./profile.component.css"]
 })
 export class ProfileComponent implements OnInit {
-  public userData = null;
+  public userData;
   public profilePicturePath;
   public fullName;
   public followers;
@@ -16,14 +19,13 @@ export class ProfileComponent implements OnInit {
   public postsNumber;
   public posts: Array<string> = [];
 
-  database = firebase.database();
-
-  constructor(private userService: UserService) {}
+  constructor(
+    private userService: UserService,
+    private router: Router //private firebaseAuth: AngularFireAuth
+  ) {}
 
   ngOnInit() {
-    if (this.userData == null) {
-      this.userData = this.userService.getUserData();
-    }
+    this.userData = this.getUser();
 
     this.getProfilePhoto()
       .then((photo) => {
@@ -63,25 +65,20 @@ export class ProfileComponent implements OnInit {
         number.val().forEach((element) => {
           this.posts.push(element["link"]);
         });
-
-        console.log(this.posts);
       })
       .catch((error) => {
         console.error("error", error);
       });
+  }
 
-    /*this.getPosts().then((posted) => {
-      posted.forEach((element) => {
-        console.log("posts", element);
-      });
-      console.log(posted);
-    });*/
+  getUser() {
+    return firebase.auth().currentUser;
   }
 
   getProfilePhoto() {
     return firebase
       .database()
-      .ref("/users/" + this.userData["user"].displayName + "/profilePhoto")
+      .ref("/users/" + this.userData.displayName + "/profilePhoto")
       .once(
         "value",
         function (snapshot) {
@@ -96,7 +93,7 @@ export class ProfileComponent implements OnInit {
   getFullName() {
     return firebase
       .database()
-      .ref("/users/" + this.userData["user"].displayName + "/fullName")
+      .ref("/users/" + this.userData.displayName + "/fullName")
       .once(
         "value",
         function (snapshot) {
@@ -111,7 +108,7 @@ export class ProfileComponent implements OnInit {
   getFollowersNumber() {
     return firebase
       .database()
-      .ref("/users/" + this.userData["user"].displayName + "/followers")
+      .ref("/users/" + this.userData.displayName + "/followers")
       .once(
         "value",
         function (snapshot) {
@@ -126,7 +123,7 @@ export class ProfileComponent implements OnInit {
   getFollowingNumber() {
     return firebase
       .database()
-      .ref("/users/" + this.userData["user"].displayName + "/following")
+      .ref("/users/" + this.userData.displayName + "/following")
       .once(
         "value",
         function (snapshot) {
@@ -141,7 +138,7 @@ export class ProfileComponent implements OnInit {
   getPostsNumber() {
     return firebase
       .database()
-      .ref("/users/" + this.userData["user"].displayName + "/posts/")
+      .ref("/users/" + this.userData.displayName + "/posts/")
       .once(
         "value",
         function (snapshot) {
@@ -153,18 +150,7 @@ export class ProfileComponent implements OnInit {
       );
   }
 
-  /*getPosts() {
-    return firebase
-      .database()
-      .ref("/users/" + this.userData["user"].displayName + "/posts/")
-      .once(
-        "value",
-        function (snapshot) {
-          return snapshot.val();
-        },
-        function (errorObject) {
-          console.error("The read failed: " + errorObject);
-        }
-      );
-  }*/
+  editProfile() {
+    this.router.navigate(["/editmyprofile"]);
+  }
 }

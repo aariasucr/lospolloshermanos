@@ -32,7 +32,7 @@ export class RegisterComponent implements OnInit {
     const password = form.value.password;
     const pass_confirmation = form.value.password_confirmation;
 
-    console.log(nombre, apellido, username, email, password, pass_confirmation);
+    //console.log(nombre, apellido, username, email, password, pass_confirmation);
 
     if (password == pass_confirmation) {
       firebase
@@ -41,7 +41,8 @@ export class RegisterComponent implements OnInit {
         .then((user) => {
           user.user.updateProfile({
             displayName: username,
-            photoURL: "https://firebasestorage.googleapis.com/v0/b/lhp-ci2400.appspot.com/o/images.jpeg?alt=media&token=c4100daf-4c00-4f76-81ed-03e1b53eb377"
+            photoURL:
+              "https://firebasestorage.googleapis.com/v0/b/lhp-ci2400.appspot.com/o/images.jpeg?alt=media&token=c4100daf-4c00-4f76-81ed-03e1b53eb377"
           });
           this.userService.performLogin();
           this.router.navigate(["/myprofile"]);

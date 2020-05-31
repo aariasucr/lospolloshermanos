@@ -1,1 +1,106 @@
-<p>edit-profile works!</p>
+<link
+  href="//netdna.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+  rel="stylesheet"
+  id="bootstrap-css"
+/>
+<script src="//netdna.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-3.4.0.min.js"></script>
+
+<div class="row h-100 justify-content-center align-items-center">
+  <div class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
+    <form class="user" (ngSubmit)="onSubmitData(f)" #f="ngForm">
+      <div id="datosBasicos">
+        <h2>Actualizar perfil</h2>
+        <hr class="colorgraph" />
+        <p class="typeofdata">
+          Nombre:
+          <input
+            type="name"
+            name="name"
+            id="name"
+            placeholder="Nombre y apellido"
+            class="form-group"
+            tabindex="4"
+            ngModel
+            required
+          />
+        </p>
+
+        <div>
+          <div class="row h-100 justify-content-center align-items-center">
+            <button type="submit" class="btn btn-primary">
+              Actualizar
+            </button>
+          </div>
+        </div>
+      </div>
+    </form>
+    <div id="changePhoto">
+      <h4>Cambiar foto de perfil</h4>
+      <hr class="colorgraph" />
+      <label class="typeofdata">Seleccione una foto </label>
+      <div style="margin-inline-start: 43%;">
+        <app-file-uploader></app-file-uploader>
+      </div>
+    </div>
+
+    <form class="user" (ngSubmit)="onSubmitPassword(f2)" #f2="ngForm">
+      <div id="changePassword">
+        <h4>Cambiar contraseña</h4>
+        <hr class="colorgraph" />
+        <p class="typeofdata">
+          Contraseña actual:
+          <input
+            type="password"
+            name="currentPassword"
+            id="currentPassword"
+            placeholder="Contraseña Actual"
+            class="form-group"
+            tabindex="4"
+            ngModel
+            required
+          />
+        </p>
+        <p class="typeofdata">
+          Nueva contraseña:
+          <input
+            type="password"
+            name="newPassword"
+            id="newPassword"
+            placeholder="Nueva contraseña"
+            class="form-group"
+            tabindex="4"
+            ngModel
+            required
+          />
+        </p>
+        <p class="typeofdata">
+          Repetir nueva contraseña:
+          <input
+            type="password"
+            name="newPassword2"
+            id="newPassword2"
+            placeholder="Repetir nueva contraseña"
+            class="form-group"
+            tabindex="4"
+            ngModel
+            required
+          />
+        </p>
+        <div>
+          <div class="row h-100 justify-content-center align-items-center">
+            <button type="submit" class="btn btn-primary" [disabled]="!f2.valid">
+              Cambiar contraseña
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <button type="submit" id="delete">
+          Eliminar cuenta
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

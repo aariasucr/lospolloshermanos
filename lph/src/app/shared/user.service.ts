@@ -13,23 +13,14 @@ export class UserService {
 
   performLogin() {
     this.isLogged = true;
-
     const userData = {
       fullName: firebase.auth().currentUser.displayName
     };
-
     this.statusChange.emit(userData);
   }
 
-  isUserLogged() {
-    return this.isLogged;
-  }
-
-  setUserData(user){
-    this.userData = user;
-  }
-
-  getUserData(){
+  getUserData() {
+    this.userData = firebase.auth().currentUser;
     return this.userData;
   }
 
