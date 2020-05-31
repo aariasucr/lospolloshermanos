@@ -1,7 +1,6 @@
 import {Component, OnInit, ViewChild, ElementRef, Output, EventEmitter, Input} from "@angular/core";
 import * as firebase from "firebase";
 import {UserService} from "../shared/user.service";
-import {NotificationService} from "../shared/notification.service";
 
 @Component({
   selector: "app-file-uploader",

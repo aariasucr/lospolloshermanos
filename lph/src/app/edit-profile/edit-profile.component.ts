@@ -2,9 +2,8 @@ import {Component, OnInit} from "@angular/core";
 import {NgForm} from "@angular/forms";
 import {UserService} from "../shared/user.service";
 import * as firebase from "firebase";
-import {database} from "firebase";
 import {NotificationService} from "../shared/notification.service";
-import {error} from "protractor";
+
 @Component({
   selector: "app-edit-profile",
   templateUrl: "./edit-profile.component.html",
@@ -34,14 +33,14 @@ export class EditProfileComponent implements OnInit {
     }
 
     if (newEmail != "" && newEmail != null) {
-      this.user.updateEmail(newEmail).then(
-        () => {
+      this.user
+        .updateEmail(newEmail)
+        .then(() => {
           this.notificationService.showSuccessMessage("Hecho", "Se cambió el correo electrónico");
-        },
-        (error) => {
+        })
+        .catch((error) => {
           this.notificationService.showSuccessMessage("Error", error.message);
-        }
-      );
+        });
     }
 
     if (newUsername != "" && newUsername != null) {
@@ -82,18 +81,21 @@ export class EditProfileComponent implements OnInit {
       .signInWithEmailAndPassword(this.user.email, currentPass)
       .then((userData) => {
         if (newPass == newPass2) {
-          this.user.updatePassword(newPass).then(
-            () => {
+          this.user
+            .updatePassword(newPass)
+            .then(() => {
               this.notificationService.showSuccessMessage("Hecho", "Se cambió la contraseña");
-            },
-            (error) => {
+            })
+            .catch((error) => {
               this.notificationService.showSuccessMessage("Error", error.message);
-            }
-          );
+            });
         }
       })
-      .catch((error) => {
-        this.notificationService.showErrorMessage("Usuario o contraseña incorrecto", error.message);
+      .catch((error2) => {
+        this.notificationService.showErrorMessage(
+          "Usuario o contraseña incorrecto",
+          error2.message
+        );
       });
   }
 }
