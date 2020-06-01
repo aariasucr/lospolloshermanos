@@ -3,7 +3,7 @@ export interface Post {
   date?: string;
   likes?: number;
   link?: string;
-  key: string;
+  key?: string;
 }
 
 export interface NewAccount {

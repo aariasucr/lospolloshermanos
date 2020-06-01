@@ -44,7 +44,6 @@ export class PostFrameComponent implements OnInit {
     });
   }
 
-  /** Para el formulario feo */
   onSubmit(form: NgForm) {
     const title = form.value.title;
     const content = form.value.content;
@@ -57,8 +56,6 @@ export class PostFrameComponent implements OnInit {
         this.notificationService.showErrorMessage('Error!!!', 'Error creando publicación');
       });
     });
-
-
   }
 
   onImagePicked(imageUrl: string) {
