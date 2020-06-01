@@ -33,4 +33,14 @@ export class UserService {
         this.statusChange.emit(null);
       });
   }
+
+  getUserDataFromFirebase(uid: string) {
+    return firebase
+      .database() // Aquí va a buscar la base de datos; si hubieran más, se debe especificar el nombre de la base
+      .ref('users') // Se quiere ir a una referencia específica.
+      .child(uid) // El hijo de la refrencia anterior
+      .once('value'); // Se quiere sólo un dato
+
+    // Todo lo anterior devuelve una promesa.
+  }
 }

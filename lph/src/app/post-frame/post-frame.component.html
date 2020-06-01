@@ -64,7 +64,7 @@
     });
 </script>
 
-<form class="form-horizontal col-xs-12">
+<form class="form-horizontal col-xs-12" (ngSubmit)="onSubmit(f)" #f="ngForm">
     <fieldset>
 
         <!-- Form Name -->
@@ -78,16 +78,14 @@
             </div>
         </div>
 
-        <!-- File Button -->
-        <div class="control-group">
-            <label class="control-label" for="filebutton">Video File</label>
-            <div class="controls">
-                <input id="filebutton" name="filebutton" class="input-file" type="file">
-            </div>
-        </div>
-
         <!-- Button -->
         <app-file-uploader></app-file-uploader>
+
+        <div class="col-sm-2 mb-3 mb-sm-0">
+            <button type="submit" class="btn btn-success btn-icon-split" [disabled]="!f.valid">
+        Publicar
+      </button>
+        </div>
 
     </fieldset>
 </form>
