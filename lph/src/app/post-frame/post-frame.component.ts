@@ -45,12 +45,9 @@ export class PostFrameComponent implements OnInit {
   }
 
   onSubmit(form: NgForm) {
-    const title = form.value.title;
-    const content = form.value.content;
-
     this.userService.getUserDataFromFirebase(firebase.auth().currentUser.uid)
     .then(userData => {  // Pormesa que devuelve los datos del usuario
-      this.postService.addNewPostAsync(title, content, userData.val().userName, this.uploadedFileUrl).then(results => {
+      this.postService.addNewPostAsync(777, "una fecha ahi cualquiera", 777, this.uploadedFileUrl).then(results => {
         this.notificationService.showSuccessMessage('Todo bien!', 'Publicación Creada');
       }).catch(error => {
         this.notificationService.showErrorMessage('Error!!!', 'Error creando publicación');
