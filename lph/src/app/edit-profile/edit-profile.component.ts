@@ -11,8 +11,11 @@ import {NotificationService} from "../shared/notification.service";
 })
 export class EditProfileComponent implements OnInit {
   public user;
+  public urlImage;
 
-  constructor(private userService: UserService, private notificationService: NotificationService) {}
+  constructor(private userService: UserService, private notificationService: NotificationService) {
+    this.urlImage = "";
+  }
 
   ngOnInit() {
     this.user = this.userService.getUserData();
@@ -49,26 +52,20 @@ export class EditProfileComponent implements OnInit {
     }
   }
 
+  getPhotoUrl(url: string) {
+    this.urlImage = url;
+  }
+
   onChangePhoto() {
-    try {
-      let newPhoto = "";
-      let user = firebase.auth().currentUser;
+    let newPhoto = "";
+    let user = firebase.auth().currentUser;
+    user.updateProfile({photoURL: newPhoto}).then(() => {
       firebase
-        .storage()
-        .ref("/" + user.uid.toString() + ".jpg")
-        .getDownloadURL()
-        .then((url) => {
-          newPhoto = url;
-          user.updateProfile({photoURL: newPhoto});
-          firebase
-            .database()
-            .ref("/users/" + this.user.uid)
-            .update({profilePhoto: newPhoto});
-          this.notificationService.showSuccessMessage("Hecho", "Se cambió la foto de perfil");
-        });
-    } catch (e) {
-      console.error(e);
-    }
+        .database()
+        .ref("/users/" + this.user.uid)
+        .update({profilePhoto: this.urlImage});
+      this.notificationService.showSuccessMessage("Hecho", "Se cambió la foto de perfil");
+    });
   }
 
   onSubmitPassword(form: NgForm) {

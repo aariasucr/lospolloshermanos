@@ -35,8 +35,18 @@ export class FileUploaderComponent implements OnInit {
     if (fileList.length > 0) {
       this.selectedFile = fileList[0];
       const author = firebase.auth().currentUser.uid;
+      const current = new Date();
 
-      const fileName = `${author.toString()}.jpg`;
+      current.setHours(0);
+
+      current.setMinutes(0);
+
+      current.setSeconds(0);
+
+      current.setMilliseconds(0);
+
+      const timestamp = current.getTime();
+      const fileName = `${author.toString() + timestamp.toString()}.jpg`;
 
       const storageRef = firebase.storage().ref();
       this.uploadTask = storageRef.child(fileName).put(this.selectedFile);
