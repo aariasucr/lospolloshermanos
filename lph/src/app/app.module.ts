@@ -16,6 +16,7 @@ import {ResetPasswordComponent} from "./reset-password/reset-password.component"
 import {ProfileComponent} from "./profile/profile.component";
 import {EditProfileComponent} from "./edit-profile/edit-profile.component";
 import {FileUploaderComponent} from "./file-uploader/file-uploader.component";
+import { PostFrameComponent } from './post-frame/post-frame.component';
 //import {AngularFirestore} from "@angular/fire/firestore";
 
 @NgModule({
@@ -28,7 +29,8 @@ import {FileUploaderComponent} from "./file-uploader/file-uploader.component";
     ResetPasswordComponent,
     ProfileComponent,
     EditProfileComponent,
-    FileUploaderComponent
+    FileUploaderComponent,
+    PostFrameComponent
   ],
   imports: [
     BrowserModule,

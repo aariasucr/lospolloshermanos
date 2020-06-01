@@ -51,7 +51,8 @@ export class RegisterComponent implements OnInit {
             date: "",
             likes: 0,
             link:
-              "https://firebasestorage.googleapis.com/v0/b/lhp-ci2400.appspot.com/o/foto_inicial.jpg?alt=media&token=66d442c6-0bc9-4c84-b751-89507ae9db3a"
+              "https://firebasestorage.googleapis.com/v0/b/lhp-ci2400.appspot.com/o/foto_inicial.jpg?alt=media&token=66d442c6-0bc9-4c84-b751-89507ae9db3a",
+            key: "solo_una_llave"
           };
           let newPosts: Array<Post> = [newPost];
           let db: NewAccount;
