@@ -22,7 +22,10 @@ export class AppComponent implements OnInit {
       appId: "1:109795544705:web:06f0b2f9c9c8a533380780",
       measurementId: "G-70M8BRKPMF"
     };
-    firebase.initializeApp(firebaseConfig);
+
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
+    }
 
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
