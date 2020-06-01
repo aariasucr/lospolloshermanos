@@ -432,7 +432,6 @@ section {
 }
 
 .list {
-    position: fixed;
     background: rgba(255, 255, 255, 0.85);
     position: fixed;
     bottom: 5em;
@@ -445,7 +444,6 @@ section {
     -o-transition: all 0.3s cubic-bezier(0.18, 0.89, 0.22, 1.28);
     transition: all 0.3s cubic-bezier(0.18, 0.89, 0.22, 1.28);
     opacity: 0;
-    border-radius: 4px;
     -webkit-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1), 0 0 56px rgba(0, 0, 0, 0.075);
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1), 0 0 56px rgba(0, 0, 0, 0.075);
     text-align: center;
