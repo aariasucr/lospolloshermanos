@@ -64,23 +64,34 @@
     });
 </script>
 
-<div class='lil-bar'>
-    <div class='bar-cont'>
-        <a href='#' role="button"><i class="fa fa-user-plus"></i></a>
-        <a href='#' onclick='return false;' class='list-order' role="button"><i class="fa fa-ellipsis-h"></i></a>
-    </div>
-</div>
-<div class="list">
-    <ul>
-        <li>
-            <a href="https://goo.gl/TChSJ4" target='_blank'><img src="https://goo.gl/aVijkX" class="avatar avatar-50">uncle_oreo</a>
-        </li>
-        <li><a href='#'>Log in</a></li>
-        <li><a href='#'>Sign up</a></li>
-        <li><a href='#'>Report this user</a></li>
-        <li class='collapse'><a href='#'>Collapse the bar</a></li>
-    </ul>
-</div>
+<form class="form-horizontal col-xs-12">
+    <fieldset>
+
+        <!-- Form Name -->
+        <legend>Agrega un nuevo post</legend>
+
+        <!-- Textarea -->
+        <div class="control-group">
+            <label class="control-label" for="Description">Description</label>
+            <div class="controls">
+                <textarea id="Description" name="Description" placeholder="Escribe lo que piensas"></textarea>
+            </div>
+        </div>
+
+        <!-- File Button -->
+        <div class="control-group">
+            <label class="control-label" for="filebutton">Video File</label>
+            <div class="controls">
+                <input id="filebutton" name="filebutton" class="input-file" type="file">
+            </div>
+        </div>
+
+        <!-- Button -->
+        <app-file-uploader></app-file-uploader>
+
+    </fieldset>
+</form>
+
 <section>
     <div class='insta fade-scroll'>
         <div class='top-insta'>
@@ -88,7 +99,7 @@
             <a href='https://www.google.com' target='_blank' class='user'>Keylor_Morataya</a>
             <span class='dot'></span>
         </div>
-        <div class='post'>
+        <div class='post' width="100" height="100">
             <div class="overlay">
                 <span></span>
             </div>
