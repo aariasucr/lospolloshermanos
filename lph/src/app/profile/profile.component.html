@@ -1,0 +1,58 @@
+<header class="clearfix feed-header" data-role="banner">
+  <div id="datos" class="profile-user">
+    <div class="row-fluid">
+      <div class="span6">
+        <div id="profilepicture" class="pull-left" style="margin-right: 15px; float: left;">
+          <img
+            src="{{ profilePicturePath }}"
+            class="img-polaroid"
+            width="250"
+            height="250"
+            alt="profile photo"
+          />
+        </div>
+      </div>
+      <div id="listaDatos" style="display: inline-block;">
+        <div>
+          <h2>{{ fullName }}</h2>
+        </div>
+
+        <ul class="inline user-counts-list" id="listaDatos" style="list-style: none;">
+          <li>
+            <strong>Publicaciones: </strong> <span class="count"> {{ postsNumber }} </span>
+          </li>
+          <li>
+            <strong>Seguidores: </strong>
+            <a class="count" href="/resetPassword"> {{ followers }} </a>
+          </li>
+          <li>
+            <strong> Siguiendo: </strong>
+            <a class="count" href="/resetPassword"> {{ following }} </a>
+          </li>
+        </ul>
+      </div>
+      <button
+        class="boton_personalizado"
+        style="float: right;"
+        type="button"
+        (click)="editProfile()"
+      >
+        Editar perfil
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="feed-photos">
+  <div class="row-fluid">
+    <div class="span12">
+      <ul style="list-style: none; display: inline-block;" *ngFor="let post of posts">
+        <li style="list-style: none;">
+          <a href="#" class="thumbnail">
+            <img src="{{ post }}" width="293" height="293" alt="post" />
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

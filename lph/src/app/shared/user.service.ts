@@ -7,21 +7,21 @@ import * as firebase from "firebase/app";
 export class UserService {
   private isLogged = false;
   public statusChange: any = new EventEmitter<any>();
+  private userData: Object;
 
   constructor() {}
 
   performLogin() {
     this.isLogged = true;
-
     const userData = {
       fullName: firebase.auth().currentUser.displayName
     };
-
     this.statusChange.emit(userData);
   }
 
-  isUserLogged() {
-    return this.isLogged;
+  getUserData() {
+    this.userData = firebase.auth().currentUser;
+    return this.userData;
   }
 
   performLogout() {

@@ -1,0 +1,42 @@
+#datosBasicos {
+  padding: 1%;
+  background-color: #ddd;
+  border-radius: 1em;
+}
+
+.form-group {
+  padding: 1%;
+  width: 45%;
+}
+
+.typeofdata {
+  margin-inline-start: 5%;
+}
+
+#changePhoto {
+  margin-block: 3%;
+  padding: 1%;
+  background-color: #ddd;
+  border-radius: 1em;
+}
+
+#changePassword {
+  margin-block: 3%;
+  padding: 1%;
+  background-color: #ddd;
+  border-radius: 1em;
+}
+
+#delete {
+  margin: 5%;
+  margin-inline-start: 42%;
+  background-color: red;
+  color: white;
+  border-radius: 6px;
+  border: 4px solid darkred;
+}
+
+#delete:hover {
+  color: black;
+  background-color: #ffffff;
+}

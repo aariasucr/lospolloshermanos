@@ -1,0 +1,25 @@
+input[type="file"] {
+  display: none;
+}
+
+.upload {
+  padding: 1%;
+}
+
+.btnSubirFoto {
+  background-color: #4c9df3;
+  color: white;
+  border-radius: 6px;
+  border: 4px solid #4c9df3;
+}
+
+.btnSubirFoto:hover {
+  color: #1883ba;
+  background-color: #ffffff;
+}
+
+.preview-img {
+  width: 100px;
+  display: block;
+  padding: 10px;
+}

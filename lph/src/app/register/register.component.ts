@@ -4,6 +4,7 @@ import {NgForm} from "@angular/forms";
 import * as firebase from "firebase";
 import {NotificationService} from "../shared/notification.service";
 import {UserService} from "../shared/user.service";
+import {Post, NewAccount} from "../shared/model";
 
 @Component({
   selector: "app-register",
@@ -20,7 +21,7 @@ export class RegisterComponent implements OnInit {
   ngOnInit() {}
 
   login() {
-    console.log("click login");
+    //console.log("click login");
     this.router.navigate(["/login"]);
   }
 
@@ -32,21 +33,47 @@ export class RegisterComponent implements OnInit {
     const password = form.value.password;
     const pass_confirmation = form.value.password_confirmation;
 
-    console.log(nombre, apellido, username, email, password, pass_confirmation);
-
     if (password == pass_confirmation) {
       firebase
         .auth()
         .createUserWithEmailAndPassword(email, password)
         .then((user) => {
           user.user.updateProfile({
-            displayName: nombre + " " + apellido
+            displayName: username,
+            photoURL:
+              "https://firebasestorage.googleapis.com/v0/b/lhp-ci2400.appspot.com/o/foto_inicial.jpg?alt=media&token=66d442c6-0bc9-4c84-b751-89507ae9db3a"
           });
           this.userService.performLogin();
-          this.router.navigate(["/home"]);
+          let newUser = firebase.auth().currentUser;
+
+          let newPost: Post = {
+            comments: 0,
+            date: "",
+            likes: 0,
+            link:
+              "https://firebasestorage.googleapis.com/v0/b/lhp-ci2400.appspot.com/o/foto_inicial.jpg?alt=media&token=66d442c6-0bc9-4c84-b751-89507ae9db3a"
+          };
+          let newPosts: Array<Post> = [newPost];
+          let db: NewAccount;
+          db = {
+            followers: 0,
+            following: 0,
+            fullName: nombre + " " + apellido,
+            profilePhoto:
+              "https://firebasestorage.googleapis.com/v0/b/lhp-ci2400.appspot.com/o/foto_inicial.jpg?alt=media&token=66d442c6-0bc9-4c84-b751-89507ae9db3a",
+            posts: newPosts
+          };
+
+          firebase
+            .database()
+            .ref("/users/" + newUser.uid.toString())
+            .set(db);
+
+          this.router.navigate(["/myprofile"]);
           this.notificationService.showSuccessMessage("Bienvenido", "Sesión iniciada");
         })
         .catch((error) => {
+          console.log(error.message);
           this.notificationService.showErrorMessage("Error", error.message);
         });
     } else {

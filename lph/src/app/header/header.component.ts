@@ -15,7 +15,6 @@ export class HeaderComponent implements OnInit {
 
   ngOnInit() {
     this.userService.statusChange.subscribe((userData) => {
-      console.log("userData", userData);
       if (userData) {
         this.isLogged = true;
         this.userName = userData.username;
