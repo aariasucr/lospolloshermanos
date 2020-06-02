@@ -16,7 +16,7 @@ export class ProfileComponent implements OnInit {
   public fullName;
   public followers;
   public following;
-  public postsNumber;
+  public postsNumber = 0;
   public posts: Array<string> = [];
 
   constructor(
@@ -59,19 +59,17 @@ export class ProfileComponent implements OnInit {
         console.error("error", error);
       });
 
-    this.getPostsNumber()
-      .then((number) => {
-        this.postsNumber = 0;
-        number.val().forEach((element) => {
-          if (element["date"] != "") {
-            this.posts.push(element["link"]);
-            this.postsNumber++;
-          }
+    this.userService.getUserPosts().then((userPosts) => {
+      try {
+        userPosts.forEach((element) => {
+          let p = element.val();
+          this.posts.push(p["img"]);
+          this.postsNumber++;
         });
-      })
-      .catch((error) => {
-        console.error("error", error);
-      });
+      } catch (e) {
+        console.error(e);
+      }
+    });
   }
 
   getUser() {
@@ -138,10 +136,10 @@ export class ProfileComponent implements OnInit {
       );
   }
 
-  getPostsNumber() {
+  getPosts() {
     return firebase
       .database()
-      .ref("/users/" + this.userData.uid + "/posts/")
+      .ref("/posts/" + this.userData.uid.toString())
       .once(
         "value",
         function (snapshot) {
