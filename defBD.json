@@ -1,0 +1,48 @@
+"lph": {
+	posts{
+		idUsuario {
+			idPost{
+			datos...	
+			}		
+		}	
+	},
+
+	users{
+		idUsuario{
+			datos sin posts	
+		}
+	},
+	
+	comentarios{
+			idPost{
+				idComentario{
+					idUsuarioQueEscribióComentario,
+					comentario,
+					fecha y hora		
+				}
+			}		
+	},
+
+	mensajes{
+		idUsuarioPerfilActual{
+			idUsuarioAmigo{
+				ultimoMensajeEnCOnversacion			
+			}	
+		}
+	},
+
+	conversacion{
+		idUsuarioPerfilActual{
+			idUsuarioAmigo{
+				[
+					{
+						mensaje,
+						idEmisor,
+						idReceptor,
+						fecha y hora					
+					}
+				]	
+			}	
+		}
+	}
+}
