@@ -7,7 +7,7 @@ import {RegisterComponent} from "./register/register.component";
 import {ResetPasswordComponent} from "./reset-password/reset-password.component";
 import {ProfileComponent} from "./profile/profile.component";
 import {EditProfileComponent} from "./edit-profile/edit-profile.component";
-import { HomeComponent } from "./home/home.component";
+import {HomeComponent} from "./home/home.component";
 
 const routes: Routes = [
   {path: "", component: AppComponent, canActivate: [RouteGuard]},

@@ -22,12 +22,14 @@
             <strong>Publicaciones: </strong> <span class="count"> {{ postsNumber }} </span>
           </li>
           <li>
-            <strong>Seguidores: </strong>
-            <a class="count" href="/resetPassword"> {{ followers }} </a>
+            <a href="javascript:void(0)" class="count" (click)="openFollowers(mymodal)">
+              Seguidores: {{ followers }}
+            </a>
           </li>
           <li>
-            <strong> Siguiendo: </strong>
-            <a class="count" href="/resetPassword"> {{ following }} </a>
+            <a class="count" href="javascript:void(0)" (click)="openFollowing(mymodal)">
+              Siguiendo: {{ following }}
+            </a>
           </li>
         </ul>
       </div>
@@ -56,3 +58,46 @@
     </div>
   </div>
 </div>
+
+<ng-template #mymodal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">{{ modalTitle }}</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div *ngIf="modalTitle === 'Seguidores'; then listFollowers; else listFollowing"></div>
+  </div>
+</ng-template>
+<ng-template #listFollowers>
+  <ul *ngFor="let follower of followersList">
+    <li style="list-style: none;">
+      <div>
+        <img
+          src="{{ follower.photoUrl }}"
+          alt="{{ follower.name }} profile photo"
+          width="50"
+          height="50"
+        />
+        <a class="friedName" href="#">{{ follower.name }}</a>
+      </div>
+    </li>
+  </ul>
+</ng-template>
+<ng-template #listFollowing>
+  <ul *ngFor="let following of followingList">
+    <li style="list-style: none;">
+      <div>
+        <img
+          src="{{ following.photoUrl }}"
+          alt="{{ following.name }} profile photo"
+          width="50"
+          height="50"
+        />
+        <a class="friedName" href="#">{{ following.name }}</a>
+        <button type="button" class="btnUnfollow">Dejar de seguir</button>
+      </div>
+    </li>
+  </ul>
+</ng-template>

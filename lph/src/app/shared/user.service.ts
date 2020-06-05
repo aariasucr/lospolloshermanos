@@ -39,6 +39,37 @@ export class UserService {
     return firebase
       .database()
       .ref("/posts/" + this.user.uid.toString())
+      .orderByChild("created")
+      .once(
+        "value",
+        function (snapshot) {
+          return snapshot.val();
+        },
+        function (errorObject) {
+          console.error("The read failed: " + errorObject);
+        }
+      );
+  }
+
+  getUserFollowers() {
+    return firebase
+      .database()
+      .ref("/followers/" + this.user.uid)
+      .once(
+        "value",
+        function (snapshot) {
+          return snapshot.val();
+        },
+        function (errorObject) {
+          console.error("The read failed: " + errorObject);
+        }
+      );
+  }
+
+  getUserFollowing() {
+    return firebase
+      .database()
+      .ref("/following/" + this.user.uid)
       .once(
         "value",
         function (snapshot) {

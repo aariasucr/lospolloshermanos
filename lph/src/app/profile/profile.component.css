@@ -34,6 +34,10 @@
   background-color: #ffffff;
 }
 
+.strong {
+  color: #007bff;
+}
+
 .profile-user {
   position: relative;
   max-width: 964px;
@@ -57,4 +61,25 @@
   max-width: 25%;
   padding: 4px;
   line-height: 1.5;
+}
+
+.btnUnfollow {
+  margin-inline-start: 20%;
+  padding: revert;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 15px;
+  color: black;
+  background-color: wheat;
+  border-radius: 6px;
+  border: 2px solid black;
+}
+
+.btnUnfollow:hover {
+  color: black;
+  background-color: rgb(255, 70, 70);
+}
+
+.friedName {
+  margin: 5%;
 }

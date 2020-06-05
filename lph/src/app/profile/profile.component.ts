@@ -2,6 +2,8 @@ import {Component, OnInit} from "@angular/core";
 import {UserService} from "../shared/user.service";
 import * as firebase from "firebase";
 import {Router} from "@angular/router";
+import {ModalService} from "../shared/modal.service";
+import {Friend} from "../shared/model";
 //import {AngularFireAuth} from "@angular/fire/auth";
 //import {error} from "util";
 
@@ -18,9 +20,13 @@ export class ProfileComponent implements OnInit {
   public following;
   public postsNumber = 0;
   public posts: Array<string> = [];
+  modalTitle = "";
+  public followersList: Array<Friend> = [];
+  public followingList: Array<Friend> = [];
 
   constructor(
     private userService: UserService,
+    private modalService: ModalService,
     private router: Router //private firebaseAuth: AngularFireAuth
   ) {}
 
@@ -43,21 +49,13 @@ export class ProfileComponent implements OnInit {
         console.error("error", error);
       });
 
-    this.getFollowersNumber()
-      .then((number) => {
-        this.followers = number.val();
-      })
-      .catch((error) => {
-        console.error("error", error);
-      });
+    this.userService.getUserFollowers().then((followers) => {
+      this.followers = followers.val().length;
+    });
 
-    this.getFollowingNumber()
-      .then((number) => {
-        this.following = number.val();
-      })
-      .catch((error) => {
-        console.error("error", error);
-      });
+    this.userService.getUserFollowing().then((following) => {
+      this.following = following.val().length;
+    });
 
     this.userService.getUserPosts().then((userPosts) => {
       try {
@@ -106,52 +104,67 @@ export class ProfileComponent implements OnInit {
       );
   }
 
-  getFollowersNumber() {
-    return firebase
-      .database()
-      .ref("/users/" + this.userData.uid + "/followers")
-      .once(
-        "value",
-        function (snapshot) {
-          return snapshot.val();
-        },
-        function (errorObject) {
-          console.error("The read failed: " + errorObject);
-        }
-      );
-  }
-
-  getFollowingNumber() {
-    return firebase
-      .database()
-      .ref("/users/" + this.userData.uid + "/following")
-      .once(
-        "value",
-        function (snapshot) {
-          return snapshot.val();
-        },
-        function (errorObject) {
-          console.error("The read failed: " + errorObject);
-        }
-      );
-  }
-
-  getPosts() {
-    return firebase
-      .database()
-      .ref("/posts/" + this.userData.uid.toString())
-      .once(
-        "value",
-        function (snapshot) {
-          return snapshot.val();
-        },
-        function (errorObject) {
-          console.error("The read failed: " + errorObject);
-        }
-      );
-  }
-
   editProfile() {
     this.router.navigate(["/editmyprofile"]);
+  }
+
+  openFollowers(mymodal) {
+    this.modalTitle = "Seguidores";
+    let list = [];
+    this.userService.getUserFollowers().then((seguidores) => {
+      seguidores.val().forEach((element) => {
+        firebase
+          .database()
+          .ref("/users/" + element)
+          .once(
+            "value",
+            function (snapshot) {
+              console.log(snapshot.val());
+              let friend: Friend = {
+                id: element,
+                name: snapshot.val()["fullName"],
+                photoUrl: snapshot.val()["profilePhoto"]
+              };
+              list.push(friend);
+              console.log("friend", friend);
+            },
+            function (errorObject) {
+              console.error("The read failed: " + errorObject);
+            }
+          );
+      });
+    });
+    this.followersList = list;
+    this.modalService.open(mymodal);
+  }
+
+  openFollowing(mymodal) {
+    this.modalTitle = "Siguiendo";
+    let list = [];
+    this.userService.getUserFollowing().then((siguiendo) => {
+      siguiendo.val().forEach((element) => {
+        firebase
+          .database()
+          .ref("/users/" + element)
+          .once(
+            "value",
+            function (snapshot) {
+              console.log(snapshot.val());
+              let friend: Friend = {
+                id: element,
+                name: snapshot.val()["fullName"],
+                photoUrl: snapshot.val()["profilePhoto"]
+              };
+              list.push(friend);
+              console.log("friend", friend);
+            },
+            function (errorObject) {
+              console.error("The read failed: " + errorObject);
+            }
+          );
+      });
+    });
+    this.followingList = list;
+    this.modalService.open(mymodal);
   }
 }

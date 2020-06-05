@@ -12,3 +12,9 @@ export interface NewAccount {
   fullName: string;
   profilePhoto: string;
 }
+
+export interface Friend {
+  id: string;
+  name: string;
+  photoUrl: string;
+}
