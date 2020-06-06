@@ -8,7 +8,6 @@ export class UserService {
   private isLogged = false;
   public statusChange: any = new EventEmitter<any>();
   private user;
-  private userData: Object;
 
   constructor() {}
 
@@ -35,10 +34,10 @@ export class UserService {
       });
   }
 
-  getUserPosts() {
+  getUserPosts(userId: string = this.user.uid) {
     return firebase
       .database()
-      .ref("/posts/" + this.user.uid.toString())
+      .ref("/posts/" + userId)
       .orderByChild("created")
       .once(
         "value",
@@ -51,10 +50,10 @@ export class UserService {
       );
   }
 
-  getUserFollowers() {
+  getUserFollowers(userId: string = this.user.uid) {
     return firebase
       .database()
-      .ref("/followers/" + this.user.uid)
+      .ref("/followers/" + userId)
       .once(
         "value",
         function (snapshot) {
@@ -66,10 +65,10 @@ export class UserService {
       );
   }
 
-  getUserFollowing() {
+  getUserFollowing(userId: string = this.user.uid) {
     return firebase
       .database()
-      .ref("/following/" + this.user.uid)
+      .ref("/following/" + userId)
       .once(
         "value",
         function (snapshot) {

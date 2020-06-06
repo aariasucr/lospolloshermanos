@@ -27,6 +27,7 @@
   background-color: #f3f3f3;
   border-radius: 6px;
   border: 2px solid black;
+  margin-left: 1%;
 }
 
 .boton_personalizado:hover {
@@ -64,7 +65,7 @@
 }
 
 .btnUnfollow {
-  margin-inline-start: 20%;
+  margin-inline-start: 10%;
   padding: revert;
   text-decoration: none;
   font-weight: 600;
@@ -81,5 +82,8 @@
 }
 
 .friedName {
+  font-weight: 600;
+  font-size: 18px;
   margin: 5%;
+  text-overflow: ellipsis;
 }

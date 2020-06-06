@@ -33,17 +33,25 @@
           </li>
         </ul>
       </div>
-      <button
-        class="boton_personalizado"
-        style="float: right;"
-        type="button"
-        (click)="editProfile()"
-      >
-        Editar perfil
-      </button>
+      <div *ngIf="route === '/myprofile'; then miperfil; else friendsProfile"></div>
     </div>
   </div>
 </header>
+
+<ng-template #miperfil>
+  <button class="boton_personalizado" style="float: right;" type="button" (click)="editProfile()">
+    Editar perfil
+  </button>
+</ng-template>
+
+<ng-template #friendsProfile>
+  <button id="bntMessage" class="boton_personalizado" style="float: right;" type="button">
+    Enviar mensaje
+  </button>
+  <button class="boton_personalizado" style="float: right;" type="button">
+    Seguir
+  </button>
+</ng-template>
 
 <div class="feed-photos">
   <div class="row-fluid">
@@ -80,7 +88,12 @@
           width="50"
           height="50"
         />
-        <a class="friedName" href="#">{{ follower.name }}</a>
+        <a
+          class="friedName"
+          routerLink="user/{{ follower.id }}"
+          (click)="goToFriendsProfile(follower.id)"
+          >{{ follower.name }}</a
+        >
       </div>
     </li>
   </ul>
@@ -95,7 +108,12 @@
           width="50"
           height="50"
         />
-        <a class="friedName" href="#">{{ following.name }}</a>
+        <a
+          class="friedName"
+          routerLink="user/{{ following.id }}"
+          (click)="goToFriendsProfile(following.id)"
+          >{{ following.name }}</a
+        >
         <button type="button" class="btnUnfollow">Dejar de seguir</button>
       </div>
     </li>

@@ -21,7 +21,6 @@ export class RegisterComponent implements OnInit {
   ngOnInit() {}
 
   login() {
-    //console.log("click login");
     this.router.navigate(["/login"]);
   }
 

@@ -28,8 +28,7 @@ export class LoginComponent implements OnInit {
       .signInWithEmailAndPassword(email, password)
       .then((userData) => {
         this.userService.performLogin();
-        this.router.navigate(["/myprofile"]); //por ahora para probar
-        //this.router.navigate(["/home"]);
+        this.router.navigate(["/home"]);
         this.notificationService.showSuccessMessage("Bienvenido", "Sesión iniciada");
       })
       .catch((error) => {
