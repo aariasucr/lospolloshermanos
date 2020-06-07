@@ -19,6 +19,7 @@ import {FileUploaderComponent} from "./file-uploader/file-uploader.component";
 import {PostFrameComponent} from "./post-frame/post-frame.component";
 //import {AngularFirestore} from "@angular/fire/firestore";
 import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
+import {ModalService} from "./shared/modal.service";
 
 @NgModule({
   declarations: [
@@ -41,7 +42,7 @@ import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
     BrowserAnimationsModule,
     ToastrModule.forRoot()
   ],
-  providers: [UserService, RouteGuard, NotificationService],
+  providers: [UserService, RouteGuard, NotificationService, ModalService],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

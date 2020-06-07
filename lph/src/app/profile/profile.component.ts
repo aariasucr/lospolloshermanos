@@ -1,4 +1,4 @@
-import {Component, OnInit} from "@angular/core";
+import {Component, OnInit, OnDestroy} from "@angular/core";
 import {UserService} from "../shared/user.service";
 import * as firebase from "firebase";
 import {Router} from "@angular/router";
@@ -14,7 +14,7 @@ import {NotificationService} from "../shared/notification.service";
   templateUrl: "./profile.component.html",
   styleUrls: ["./profile.component.css"]
 })
-export class ProfileComponent implements OnInit {
+export class ProfileComponent implements OnInit, OnDestroy {
   public userData;
   public profilePicturePath;
   public fullName;
@@ -38,7 +38,23 @@ export class ProfileComponent implements OnInit {
     this.route = router.url;
   }
 
+  ngOnDestroy() {
+    this.postsNumber = 0;
+    this.posts = [];
+    this.followersList = [];
+    this.followingList = [];
+    this.followers = 0;
+    this.following = 0;
+  }
+
   ngOnInit() {
+    this.postsNumber = 0;
+    this.posts = [];
+    this.followersList = [];
+    this.followingList = [];
+    this.followers = 0;
+    this.following = 0;
+
     this.userData = this.getUser();
     this.isFollowing = this.isFollowingTo();
     this.followUnfollowBtn = "Seguir";
@@ -361,7 +377,10 @@ export class ProfileComponent implements OnInit {
           function (errorObject) {
             console.error("The read failed: " + errorObject);
           }
-        );
+        )
+        .then(() => {
+          this.ngOnInit();
+        });
 
       let followingArray: Array<string> = [];
       firebase
@@ -384,7 +403,10 @@ export class ProfileComponent implements OnInit {
           function (errorObject) {
             console.error("The read failed: " + errorObject);
           }
-        );
+        )
+        .then(() => {
+          this.ngOnInit();
+        });
       this.notificationService.showSuccessMessage("Éxito", "Ha empezado a seguir a");
       this.followUnfollowBtn = "Dejar de seguir";
     } else if (this.followUnfollowBtn == "Dejar de seguir") {
@@ -407,7 +429,10 @@ export class ProfileComponent implements OnInit {
           function (errorObject) {
             console.error("The read failed: " + errorObject);
           }
-        );
+        )
+        .then(() => {
+          this.ngOnInit();
+        });
 
       let followingArray: Array<string> = [];
       firebase
@@ -428,8 +453,11 @@ export class ProfileComponent implements OnInit {
           function (errorObject) {
             console.error("The read failed: " + errorObject);
           }
-        );
-      this.notificationService.showSuccessMessage("Éxito", "Ha dejado de seguir a");
+        )
+        .then(() => {
+          this.ngOnInit();
+        });
+      this.notificationService.showSuccessMessage("Éxito", "Ha dejado de seguir");
       this.followUnfollowBtn = "Seguir";
     }
   }
@@ -476,8 +504,11 @@ export class ProfileComponent implements OnInit {
         function (errorObject) {
           console.error("The read failed: " + errorObject);
         }
-      );
-    this.notificationService.showSuccessMessage("Éxito", "Ha dejado de seguir a");
+      )
+      .then(() => {
+        this.ngOnInit();
+      });
+    this.notificationService.showSuccessMessage("Éxito", "Ha dejado de seguir");
     this.followUnfollowBtn = "Seguir";
     this.modalService.close();
   }
