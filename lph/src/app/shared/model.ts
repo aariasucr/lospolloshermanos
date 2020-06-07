@@ -7,8 +7,6 @@ export interface Post {
 }
 
 export interface NewAccount {
-  followers: number;
-  following: number;
   fullName: string;
   profilePhoto: string;
 }

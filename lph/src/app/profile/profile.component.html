@@ -45,11 +45,16 @@
 </ng-template>
 
 <ng-template #friendsProfile>
-  <button id="bntMessage" class="boton_personalizado" style="float: right;" type="button">
+  <button class="boton_personalizado" style="float: right;" type="button">
     Enviar mensaje
   </button>
-  <button class="boton_personalizado" style="float: right;" type="button">
-    Seguir
+  <button
+    class="boton_personalizado"
+    style="float: right;"
+    type="button"
+    (click)="startToFollowUnfollow()"
+  >
+    {{ followUnfollowBtn }}
   </button>
 </ng-template>
 
@@ -114,7 +119,15 @@
           (click)="goToFriendsProfile(following.id)"
           >{{ following.name }}</a
         >
-        <button type="button" class="btnUnfollow">Dejar de seguir</button>
+
+        <button
+          *ngIf="route === '/myprofile'"
+          type="button"
+          class="btnUnfollow"
+          (click)="unfollowFromModal(following.id)"
+        >
+          Dejar de seguir
+        </button>
       </div>
     </li>
   </ul>

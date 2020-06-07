@@ -4,7 +4,7 @@ import {NgForm} from "@angular/forms";
 import * as firebase from "firebase";
 import {NotificationService} from "../shared/notification.service";
 import {UserService} from "../shared/user.service";
-import {Post, NewAccount} from "../shared/model";
+import {NewAccount} from "../shared/model";
 
 @Component({
   selector: "app-register",
@@ -47,8 +47,6 @@ export class RegisterComponent implements OnInit {
 
           let db: NewAccount;
           db = {
-            followers: 0,
-            following: 0,
             fullName: nombre + " " + apellido,
             profilePhoto:
               "https://firebasestorage.googleapis.com/v0/b/lhp-ci2400.appspot.com/o/foto_inicial.jpg?alt=media&token=66d442c6-0bc9-4c84-b751-89507ae9db3a"
@@ -58,6 +56,21 @@ export class RegisterComponent implements OnInit {
             .database()
             .ref("/users/" + newUser.uid.toString())
             .set(db);
+
+          /*firebase
+            .database()
+            .ref("/posts/" + newUser.uid.toString())
+            .set([]);
+
+          firebase
+            .database()
+            .ref("/followers/" + newUser.uid.toString())
+            .set([]);
+
+          firebase
+            .database()
+            .ref("/following/" + newUser.uid.toString())
+            .set([]);*/
 
           this.router.navigate(["/home"]);
           this.notificationService.showSuccessMessage("Bienvenido", "Sesión iniciada");
