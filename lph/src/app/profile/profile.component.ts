@@ -4,7 +4,6 @@ import * as firebase from "firebase";
 import {Router} from "@angular/router";
 import {ModalService} from "../shared/modal.service";
 import {Friend} from "../shared/model";
-import {ThrowStmt} from "@angular/compiler";
 import {NotificationService} from "../shared/notification.service";
 //import {AngularFireAuth} from "@angular/fire/auth";
 //import {error} from "util";
@@ -14,19 +13,19 @@ import {NotificationService} from "../shared/notification.service";
   templateUrl: "./profile.component.html",
   styleUrls: ["./profile.component.css"]
 })
-export class ProfileComponent implements OnInit, OnDestroy {
+export class ProfileComponent implements OnInit {
   public userData;
   public profilePicturePath;
   public fullName;
-  public followers = 0;
-  public following = 0;
-  public postsNumber = 0;
-  public posts: Array<string> = [];
+  public followers;
+  public following;
+  public postsNumber;
+  public posts: Array<string>;
   modalTitle = "";
-  public followersList: Array<Friend> = [];
-  public followingList: Array<Friend> = [];
+  public followersList: Array<Friend>;
+  public followingList: Array<Friend>;
   public route = "";
-  public isFollowing: Boolean;
+  public isFollowing: boolean;
   public followUnfollowBtn: string;
 
   constructor(
@@ -36,15 +35,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
     private router: Router //private firebaseAuth: AngularFireAuth
   ) {
     this.route = router.url;
-  }
-
-  ngOnDestroy() {
-    this.postsNumber = 0;
-    this.posts = [];
-    this.followersList = [];
-    this.followingList = [];
-    this.followers = 0;
-    this.following = 0;
   }
 
   ngOnInit() {
@@ -354,112 +344,68 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
   startToFollowUnfollow() {
     let id = this.router.url.replace("/user/", "");
-    let currentUser = this.userData.uid;
     if (this.followUnfollowBtn == "Seguir") {
-      let followersArray: Array<string> = [];
-      firebase
-        .database()
-        .ref("/followers/" + id)
-        .once(
-          "value",
-          function (snapshot) {
-            followersArray = snapshot.val();
-            if (followersArray != null) {
-              followersArray.push(currentUser);
-            } else {
-              followersArray = [currentUser];
-            }
-            firebase
-              .database()
-              .ref("/followers/" + id)
-              .set(followersArray);
-          },
-          function (errorObject) {
-            console.error("The read failed: " + errorObject);
-          }
-        )
-        .then(() => {
-          this.ngOnInit();
-        });
-
-      let followingArray: Array<string> = [];
-      firebase
-        .database()
-        .ref("/following/" + currentUser)
-        .once(
-          "value",
-          function (snapshot) {
-            followingArray = snapshot.val();
-            if (followingArray != null) {
-              followingArray.push(id);
-            } else {
-              followingArray = [id];
-            }
-            firebase
-              .database()
-              .ref("/following/" + currentUser)
-              .set(followingArray);
-          },
-          function (errorObject) {
-            console.error("The read failed: " + errorObject);
-          }
-        )
-        .then(() => {
-          this.ngOnInit();
-        });
-      this.notificationService.showSuccessMessage("Éxito", "Ha empezado a seguir a");
-      this.followUnfollowBtn = "Dejar de seguir";
+      this.follow(id);
     } else if (this.followUnfollowBtn == "Dejar de seguir") {
-      let followersArray: Array<string> = [];
-      firebase
-        .database()
-        .ref("/followers/" + id)
-        .once(
-          "value",
-          function (snapshot) {
-            followersArray = snapshot.val();
-            if (followersArray != null) {
-              followersArray.splice(followingArray.indexOf(currentUser));
-            }
-            firebase
-              .database()
-              .ref("/followers/" + id)
-              .set(followersArray);
-          },
-          function (errorObject) {
-            console.error("The read failed: " + errorObject);
-          }
-        )
-        .then(() => {
-          this.ngOnInit();
-        });
-
-      let followingArray: Array<string> = [];
-      firebase
-        .database()
-        .ref("/following/" + currentUser)
-        .once(
-          "value",
-          function (snapshot) {
-            followingArray = snapshot.val();
-            if (followingArray != null) {
-              followingArray.splice(followingArray.indexOf(id));
-            }
-            firebase
-              .database()
-              .ref("/following/" + currentUser)
-              .set(followingArray);
-          },
-          function (errorObject) {
-            console.error("The read failed: " + errorObject);
-          }
-        )
-        .then(() => {
-          this.ngOnInit();
-        });
-      this.notificationService.showSuccessMessage("Éxito", "Ha dejado de seguir");
-      this.followUnfollowBtn = "Seguir";
+      this.unfollowFromModal(id);
     }
+  }
+
+  follow(id: string) {
+    let currentUser = this.userData.uid;
+    let followersArray: Array<string> = [];
+    firebase
+      .database()
+      .ref("/followers/" + id)
+      .once(
+        "value",
+        function (snapshot) {
+          followersArray = snapshot.val();
+          if (followersArray != null) {
+            followersArray.push(currentUser);
+          } else {
+            followersArray = [currentUser];
+          }
+          firebase
+            .database()
+            .ref("/followers/" + id)
+            .set(followersArray);
+        },
+        function (errorObject) {
+          console.error("The read failed: " + errorObject);
+        }
+      )
+      .then(() => {
+        this.ngOnInit();
+      });
+
+    let followingArray: Array<string> = [];
+    firebase
+      .database()
+      .ref("/following/" + currentUser)
+      .once(
+        "value",
+        function (snapshot) {
+          followingArray = snapshot.val();
+          if (followingArray != null) {
+            followingArray.push(id);
+          } else {
+            followingArray = [id];
+          }
+          firebase
+            .database()
+            .ref("/following/" + currentUser)
+            .set(followingArray);
+        },
+        function (errorObject) {
+          console.error("The read failed: " + errorObject);
+        }
+      )
+      .then(() => {
+        this.ngOnInit();
+      });
+    this.notificationService.showSuccessMessage("Éxito", "Ha empezado a seguir a");
+    this.followUnfollowBtn = "Dejar de seguir";
   }
 
   unfollowFromModal(id: string) {
