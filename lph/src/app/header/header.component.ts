@@ -1,5 +1,6 @@
 import {Component, OnInit} from "@angular/core";
 import {UserService} from "../shared/user.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: "app-header",
@@ -11,7 +12,7 @@ export class HeaderComponent implements OnInit {
   userName: string;
   fullName: string;
 
-  constructor(private userService: UserService) {}
+  constructor(private userService: UserService, private router: Router) {}
 
   ngOnInit() {
     this.userService.statusChange.subscribe((userData) => {
@@ -26,6 +27,7 @@ export class HeaderComponent implements OnInit {
   }
 
   logout() {
+    this.router.navigate(["/logout"]);
     this.userService.performLogout();
   }
 }

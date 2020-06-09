@@ -16,8 +16,10 @@ import {ResetPasswordComponent} from "./reset-password/reset-password.component"
 import {ProfileComponent} from "./profile/profile.component";
 import {EditProfileComponent} from "./edit-profile/edit-profile.component";
 import {FileUploaderComponent} from "./file-uploader/file-uploader.component";
-import { PostFrameComponent } from './post-frame/post-frame.component';
+import {PostFrameComponent} from "./post-frame/post-frame.component";
 //import {AngularFirestore} from "@angular/fire/firestore";
+import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
+import {ModalService} from "./shared/modal.service";
 
 @NgModule({
   declarations: [
@@ -36,10 +38,11 @@ import { PostFrameComponent } from './post-frame/post-frame.component';
     BrowserModule,
     AppRoutingModule,
     FormsModule,
+    NgbModule,
     BrowserAnimationsModule,
     ToastrModule.forRoot()
   ],
-  providers: [UserService, RouteGuard, NotificationService],
+  providers: [UserService, RouteGuard, NotificationService, ModalService],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

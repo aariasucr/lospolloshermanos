@@ -12,6 +12,14 @@
 			datos sin posts	
 		}
 	},
+
+	followers:{
+		idUsuario:["12"]
+	},
+
+	following:{
+		idUsuario:["3"]
+	}
 	
 	comentarios{
 			idPost{
@@ -23,26 +31,31 @@
 			}		
 	},
 
-	mensajes{
-		idUsuarioPerfilActual{
-			idUsuarioAmigo{
-				ultimoMensajeEnCOnversacion			
-			}	
-		}
+	chatRooms:{
+	  idChat1:{
+		miembro1:"123",
+		miembro2:"456"
+		messages: [
+		  ...
+		]
+	  }
+	},
+	conversationsPerUser:{
+	  "123":[
+		"idChat1"
+	  ],
+	  "456":[
+		"idChat1"
+	  ]
 	},
 
-	conversacion{
-		idUsuarioPerfilActual{
-			idUsuarioAmigo{
-				[
-					{
-						mensaje,
-						idEmisor,
-						idReceptor,
-						fecha y hora					
-					}
-				]	
-			}	
+	notificaciones:{
+		"idUsuario":{
+			"mensajes": "0",
+			"nuevoSeguidor": "0",
+			"likesNuevo": "0",
+			"comentariosNuevos": "0"
 		}
 	}
+
 }
