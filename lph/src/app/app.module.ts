@@ -20,6 +20,7 @@ import {PostFrameComponent} from "./post-frame/post-frame.component";
 //import {AngularFirestore} from "@angular/fire/firestore";
 import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
 import {ModalService} from "./shared/modal.service";
+import { MessagesComponent } from './messages/messages.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import {ModalService} from "./shared/modal.service";
     ProfileComponent,
     EditProfileComponent,
     FileUploaderComponent,
-    PostFrameComponent
+    PostFrameComponent,
+    MessagesComponent
   ],
   imports: [
     BrowserModule,

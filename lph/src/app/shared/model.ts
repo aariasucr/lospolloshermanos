@@ -16,3 +16,10 @@ export interface Friend {
   name: string;
   photoUrl: string;
 }
+
+export interface Message {
+  senderId: string;
+  datetime: Date;
+  timestamp: number;
+  message: string;
+}

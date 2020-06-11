@@ -36,7 +36,9 @@
 		miembro1:"123",
 		miembro2:"456"
 		messages: [
-		  ...
+		  sender: "xxxx",
+		  fecha y hora: "xxxx",
+		  mensaje: "sdjbfkeb"
 		]
 	  }
 	},

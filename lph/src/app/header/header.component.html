@@ -15,10 +15,13 @@
   <div class="collapse navbar-collapse" id="navbarsExampleDefault">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item">
-        <a class="nav-link" routerLink="/myprofile" tabindex="-1" aria-disabled="true">Profile</a>
+        <a class="nav-link" routerLink="/myprofile" tabindex="-1" aria-disabled="true">Mi perfil</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="/logout" (click)="logout()">Logout</a>
+        <a class="nav-link" routerLink="/messages" tabindex="-1" aria-disabled="true">Mensajes</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/logout" (click)="logout()">Salir</a>
       </li>
     </ul>
     <form class="form-inline my-2 my-lg-0">
