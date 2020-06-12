@@ -1,11 +1,11 @@
-import {Component, OnInit} from "@angular/core";
-import {UserService} from "../shared/user.service";
-import {Router} from "@angular/router";
+import {Component, OnInit} from '@angular/core';
+import {UserService} from '../shared/user.service';
+import {Router} from '@angular/router';
 
 @Component({
-  selector: "app-header",
-  templateUrl: "./header.component.html",
-  styleUrls: ["./header.component.css"]
+  selector: 'app-header',
+  templateUrl: './header.component.html',
+  styleUrls: ['./header.component.css']
 })
 export class HeaderComponent implements OnInit {
   isLogged = false;
@@ -27,7 +27,7 @@ export class HeaderComponent implements OnInit {
   }
 
   logout() {
-    this.router.navigate(["/logout"]);
+    this.router.navigate(['/logout']);
     this.userService.performLogout();
   }
 }

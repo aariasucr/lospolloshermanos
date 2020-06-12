@@ -1,14 +1,17 @@
-import {Injectable} from "@angular/core";
-import {CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router} from "@angular/router";
-import {Observable} from "rxjs";
-import {UserService} from "./user.service";
-import * as firebase from "firebase/app";
+import {Injectable} from '@angular/core';
+import {CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router} from '@angular/router';
+import {Observable} from 'rxjs';
+// import {UserService} from './user.service';
+/** [FB] Actualización Firebase */
+// import * as firebase from 'firebase/app';
+import {AngularFireAuth} from '@angular/fire/auth';
 
 @Injectable()
 export class RouteGuard implements CanActivate {
-  constructor(private router: Router, private userService: UserService) {}
+  constructor(private router: Router, private firebaseAuth: AngularFireAuth) {}
 
-  canActivate(
+  /** [FB] Actualización */
+  /*canActivate(
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): Observable<boolean> | Promise<boolean> | boolean {
@@ -17,7 +20,23 @@ export class RouteGuard implements CanActivate {
         if (user) {
           resolve(true);
         } else {
-          this.router.navigate(["/login"]);
+          this.router.navigate(['/login']);
+          resolve(false);
+        }
+      });
+    });
+  }*/
+
+  canActivate(
+    next: ActivatedRouteSnapshot,
+    state: RouterStateSnapshot
+  ): Observable<boolean> | Promise<boolean> | boolean {
+    return new Promise((resolve, reject) => {
+      this.firebaseAuth.onAuthStateChanged(user => {
+        if (user) {
+          resolve(true);
+        } else {
+          this.router.navigate(['/login']);
           resolve(false);
         }
       });
