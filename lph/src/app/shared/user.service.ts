@@ -28,6 +28,7 @@ export class UserService {
     this.getUserDataFromFirebase(uid).then(result => {
       this.isLogged = true;
       this.user = result.val();
+      console.log('***************************', this.user);
       this.statusChange.emit(this.user);
     });
   }

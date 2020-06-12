@@ -40,24 +40,25 @@ export class RegisterComponent implements OnInit {
     if (password === passConfirmation) {
      this.firebaseAuth
         .createUserWithEmailAndPassword(email, password)
-        .then((user) => {
-          user.user.updateProfile({
+        .then((userData) => {
+          userData.user.updateProfile({
             displayName: username,
             photoURL:
+              // tslint:disable-next-line: max-line-length
               'https://firebasestorage.googleapis.com/v0/b/lhp-ci2400.appspot.com/o/foto_inicial.jpg?alt=media&token=66d442c6-0bc9-4c84-b751-89507ae9db3a'
           });
-          this.userService.performLogin();
-          let newUser = firebase.auth().currentUser;
-
+          const newUserId = userData.user.uid;
+          this.userService.performLogin(newUserId);
           let db: NewAccount;
           db = {
             fullName: nombre + ' ' + apellido,
             profilePhoto:
+              // tslint:disable-next-line: max-line-length
               'https://firebasestorage.googleapis.com/v0/b/lhp-ci2400.appspot.com/o/foto_inicial.jpg?alt=media&token=66d442c6-0bc9-4c84-b751-89507ae9db3a'
           };
 
           this.firebaseDatabase.database
-            .ref('/users/' + newUser.uid.toString())
+            .ref('/users/' + newUserId.toString())
             .set(db);
 
           /*firebase

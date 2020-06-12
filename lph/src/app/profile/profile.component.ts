@@ -5,7 +5,7 @@ import {ModalService} from '../shared/modal.service';
 import {Friend} from '../shared/model';
 import {NotificationService} from '../shared/notification.service';
 /** [FB] Actualización */
-import * as firebase from 'firebase';
+// import * as firebase from 'firebase';
 import {AngularFireDatabase} from '@angular/fire/database';
 import {AngularFireAuth} from '@angular/fire/auth';
 
@@ -15,7 +15,7 @@ import {AngularFireAuth} from '@angular/fire/auth';
   styleUrls: ['./profile.component.css']
 })
 export class ProfileComponent implements OnInit {
-  public userData;
+  public userDataId;
   public profilePicturePath;
   public fullName;
   public followers;
@@ -47,11 +47,10 @@ export class ProfileComponent implements OnInit {
     this.followingList = [];
     this.followers = 0;
     this.following = 0;
-
-    this.userData = this.getUser();
     this.isFollowing = this.isFollowingTo();
     this.followUnfollowBtn = 'Seguir';
 
+    /** Cambiar forma de conseguir las cosas */
     this.getProfilePhoto()
       .then((photo) => {
         this.profilePicturePath = photo.val();
@@ -74,7 +73,12 @@ export class ProfileComponent implements OnInit {
   }
 
   getUser() {
-    return firebase.auth().currentUser;
+    this.firebaseAuth.currentUser.then(userData => {
+      this.userDataId = userData.uid;
+    })
+    .catch(error => {
+      console.error('error', error);
+    });
   }
 
   getNumberFollowersAndFollowing() {
@@ -91,7 +95,7 @@ export class ProfileComponent implements OnInit {
         }
       });
     } else {
-      let userId = this.route.replace('/user', '');
+      const userId = this.route.replace('/user', '');
       this.userService.getUserFollowing(userId).then((following) => {
         if (following.val() != null) {
           this.following = following.val().length;
@@ -120,7 +124,7 @@ export class ProfileComponent implements OnInit {
         }
       });
     } else if (this.route.includes('user')) {
-      let userId = this.route.replace('/user', '');
+      const userId = this.route.replace('/user', '');
       this.userService.getUserPosts(userId).then((userPosts) => {
         try {
           userPosts.forEach((element) => {
@@ -137,9 +141,8 @@ export class ProfileComponent implements OnInit {
 
   getProfilePhoto() {
     if (this.route === '/myprofile') {
-      return firebase
-        .database()
-        .ref('/users/' + this.userData.uid + '/profilePhoto')
+      return this.firebaseDatabase.database
+        .ref('/users/' + this.userDataId + '/profilePhoto')
         .once(
           'value',
           snapshot => {
@@ -150,9 +153,8 @@ export class ProfileComponent implements OnInit {
           }
         );
     } else if (this.route.includes('user')) {
-      let userId = this.route.replace('/user', '');
-      return firebase
-        .database()
+      const userId = this.route.replace('/user', '');
+      return this.firebaseDatabase.database
         .ref('/users/' + userId + '/profilePhoto')
         .once(
           'value',
@@ -169,12 +171,11 @@ export class ProfileComponent implements OnInit {
   getFullName() {
     let id = '';
     if (this.route === '/myprofile') {
-      id = this.userData.uid;
+      id = this.userDataId;
     } else if (this.route.includes('user')) {
       id = this.route.replace('/user', '');
     }
-    return firebase
-      .database()
+    this.firebaseDatabase.database
       .ref('/users/' + id + '/fullName')
       .once(
         'value',
@@ -196,15 +197,14 @@ export class ProfileComponent implements OnInit {
     let list = [];
     let id = '';
     if (this.route === '/myprofile') {
-      id = this.userData.uid;
+      id = this.userDataId;
     } else if (this.route.includes('user')) {
       id = this.route.replace('/user', '');
     }
     this.userService.getUserFollowers(id).then((seguidores) => {
       if (seguidores.val() != null) {
         seguidores.val().forEach((element) => {
-          firebase
-            .database()
+          this.firebaseDatabase.database
             .ref('/users/' + element)
             .once(
               'value',
@@ -233,7 +233,7 @@ export class ProfileComponent implements OnInit {
     let list = [];
     let id = '';
     if (this.route == '/myprofile') {
-      id = this.userData.uid;
+      id = this.userDataId;
     } else if (this.route.includes('user')) {
       id = this.route.replace('/user', '');
     }
@@ -241,8 +241,7 @@ export class ProfileComponent implements OnInit {
     this.userService.getUserFollowing(id).then((siguiendo) => {
       if (siguiendo.val() != null) {
         siguiendo.val().forEach((element) => {
-          firebase
-            .database()
+          this.firebaseDatabase.database
             .ref('/users/' + element)
             .once(
               'value',
@@ -267,7 +266,7 @@ export class ProfileComponent implements OnInit {
   }
 
   goToFriendsProfile(friendURl: string) {
-    if (friendURl == this.userData.uid) {
+    if (friendURl === this.userDataId) {
       friendURl = '/myprofile';
     } else {
       friendURl = 'user/' + friendURl;
@@ -306,10 +305,9 @@ export class ProfileComponent implements OnInit {
   }
 
   follow(id: string) {
-    let currentUser = this.userData.uid;
+    const currentUser = this.userDataId;
     let followersArray: Array<string> = [];
-    firebase
-      .database()
+    this.firebaseDatabase.database
       .ref('/followers/' + id)
       .once(
         'value',
@@ -320,8 +318,7 @@ export class ProfileComponent implements OnInit {
           } else {
             followersArray = [currentUser];
           }
-          firebase
-            .database()
+          this.firebaseDatabase.database
             .ref('/followers/' + id)
             .set(followersArray);
         },
@@ -334,8 +331,7 @@ export class ProfileComponent implements OnInit {
       });
 
     let followingArray: Array<string> = [];
-    firebase
-      .database()
+    this.firebaseDatabase.database
       .ref('/following/' + currentUser)
       .once(
         'value',
@@ -346,8 +342,7 @@ export class ProfileComponent implements OnInit {
           } else {
             followingArray = [id];
           }
-          firebase
-            .database()
+          this.firebaseDatabase.database
             .ref('/following/' + currentUser)
             .set(followingArray);
         },
@@ -363,10 +358,9 @@ export class ProfileComponent implements OnInit {
   }
 
   unfollowFromModal(id: string) {
-    let currentUser = this.userData.uid;
+    const currentUser = this.userDataId;
     let followersArray: Array<string> = [];
-    firebase
-      .database()
+    this.firebaseDatabase.database
       .ref('/followers/' + id)
       .once(
         'value',
@@ -375,8 +369,7 @@ export class ProfileComponent implements OnInit {
           if (followersArray != null) {
             followersArray.splice(followingArray.indexOf(currentUser));
           }
-          firebase
-            .database()
+          this.firebaseDatabase.database
             .ref('/followers/' + id)
             .set(followersArray);
         },
@@ -386,8 +379,7 @@ export class ProfileComponent implements OnInit {
       );
 
     let followingArray: Array<string> = [];
-    firebase
-      .database()
+    this.firebaseDatabase.database
       .ref('/following/' + currentUser)
       .once(
         'value',
@@ -396,8 +388,7 @@ export class ProfileComponent implements OnInit {
           if (followingArray != null) {
             followingArray.splice(followingArray.indexOf(id));
           }
-          firebase
-            .database()
+          this.firebaseDatabase.database
             .ref('/following/' + currentUser)
             .set(followingArray);
         },
