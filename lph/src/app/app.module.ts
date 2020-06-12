@@ -20,7 +20,11 @@ import {PostFrameComponent} from "./post-frame/post-frame.component";
 //import {AngularFirestore} from "@angular/fire/firestore";
 import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
 import {ModalService} from "./shared/modal.service";
-import { MessagesComponent } from './messages/messages.component';
+import {MessagesComponent} from "./messages/messages.component";
+import {AngularFireModule} from "@angular/fire";
+import {AngularFireDatabaseModule} from "@angular/fire/database";
+import {ChatService} from "./shared/chat.service";
+import {environment} from "src/environments/environment";
 
 @NgModule({
   declarations: [
@@ -42,9 +46,11 @@ import { MessagesComponent } from './messages/messages.component';
     FormsModule,
     NgbModule,
     BrowserAnimationsModule,
-    ToastrModule.forRoot()
+    ToastrModule.forRoot(),
+    AngularFireModule.initializeApp(environment.firebaseConfig),
+    AngularFireDatabaseModule
   ],
-  providers: [UserService, RouteGuard, NotificationService, ModalService],
+  providers: [UserService, RouteGuard, NotificationService, ModalService, ChatService],
   bootstrap: [AppComponent]
 })
 export class AppModule {}
