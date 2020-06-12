@@ -13,6 +13,7 @@ export class UserService {
   private isLogged = false;
   public statusChange: any = new EventEmitter<any>();
   private user;
+  private userId;
 
   constructor(private firebaseAuth: AngularFireAuth,
               private firebaseDatabase: AngularFireDatabase) {}
@@ -25,6 +26,7 @@ export class UserService {
     this.user = firebase.auth().currentUser;
     this.statusChange.emit(userData);*/
     /** [FB] de aquí para abajo */
+    this.userId = uid;
     this.getUserDataFromFirebase(uid).then(result => {
       this.isLogged = true;
       this.user = result.val();
@@ -52,7 +54,7 @@ export class UserService {
       });
   }
 
-  getUserPosts(userId: string = this.user.uid) {
+  getUserPosts(userId: string = this.userId) {
     return this.firebaseDatabase.database
       .ref('/posts/' + userId)
       .orderByChild('created')
@@ -67,7 +69,7 @@ export class UserService {
       );
   }
 
-  getUserFollowers(userId: string = this.user.uid) {
+  getUserFollowers(userId: string = this.userId) {
     return this.firebaseDatabase.database
       .ref('/followers/' + userId)
       .once(
@@ -95,7 +97,7 @@ export class UserService {
         }
       );
   }*/
-  getUserFollowing(userId: string = this.user.uid) {
+  getUserFollowing(userId: string = this.userId) {
     return this.firebaseDatabase.database
       .ref('/following/' + userId)
       .once(

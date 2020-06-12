@@ -51,21 +51,22 @@ export class ProfileComponent implements OnInit {
     this.followUnfollowBtn = 'Seguir';
 
     /** Cambiar forma de conseguir las cosas */
-    this.getProfilePhoto()
-      .then((photo) => {
+    this.getProfilePhoto();
+      /*.then((photo) => {
         this.profilePicturePath = photo.val();
+        console.log('------------------', this.profilePicturePath);
       })
       .catch((error) => {
         console.error('error', error);
-      });
+      });*/
 
-    this.getFullName()
+    /*this.getFullName()
       .then((name) => {
         this.fullName = name.val();
       })
       .catch((error) => {
         console.error('error', error);
-      });
+      });*/
 
     this.getNumberFollowersAndFollowing();
 
@@ -146,7 +147,11 @@ export class ProfileComponent implements OnInit {
         .once(
           'value',
           snapshot => {
-            return snapshot.val();
+            // console.log('--------------------', snapshot.val());
+            this.profilePicturePath = snapshot.val();
+            // console.log('--------------------', snapshot.val());
+            //return snapshot.val();
+
           },
           errorObject => {
             console.error('The read failed: ' + errorObject);
@@ -159,7 +164,11 @@ export class ProfileComponent implements OnInit {
         .once(
           'value',
           snapshot => {
-            return snapshot.val();
+            console.log('--------------------', snapshot.val());
+            this.profilePicturePath = snapshot.val();
+            // console.log('--------------------', snapshot.val());
+            // return snapshot.val();
+            //console.log('--------------------', this.profilePicturePath);
           },
           errorObject => {
             console.error('The read failed: ' + errorObject);
