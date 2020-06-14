@@ -6,7 +6,6 @@ import {ChatService} from "../shared/chat.service";
 import {AngularFireDatabase} from "@angular/fire/database";
 import {DatePipe} from "@angular/common";
 import {NgForm} from "@angular/forms";
-
 @Component({
   selector: "app-messages",
   templateUrl: "./chat.component.html",
@@ -30,18 +29,20 @@ export class ChatComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.userData = "not set";
     this.reversed = false;
     this.selectedChat = "";
     this.messagesArray = [];
-    this.userData = this.userService.getUserData();
-    this.getUserChatRooms().subscribe((rooms: Array<string>) => {
-      //console.log("rooms", rooms);
-      this.userchatRooms = rooms;
+    this.userData = firebase.auth().currentUser.uid;
 
+    this.getUserChatRooms().subscribe((rooms: Array<string>) => {
+      console.log("click al inicio");
+      this.userchatRooms = rooms;
       rooms.forEach((room) => {
         this.getUserChats(room).subscribe((messageList) => {
           this.previews = [];
-          //console.log(messageList);
+          this.getPreviews();
+          console.log("message list", messageList);
           let lista = [];
           messageList.forEach((element) => {
             let oneMessage: Message;
@@ -53,7 +54,6 @@ export class ChatComponent implements OnInit {
             };
             lista.push(oneMessage);
           });
-          this.getPreviews();
         });
       });
     });
@@ -61,7 +61,7 @@ export class ChatComponent implements OnInit {
 
   getUserChatRooms() {
     return this.db
-      .list("/conversationsPerUser/" + this.userData.uid, (ref) => {
+      .list("/conversationsPerUser/" + this.userData, (ref) => {
         return ref;
       })
       .valueChanges();
@@ -76,7 +76,7 @@ export class ChatComponent implements OnInit {
   }
 
   getPreviews() {
-    let myid = this.userData.uid;
+    let myid = this.userData;
     let pr: Array<PreviewMessage> = [];
     this.userchatRooms.forEach((room) => {
       firebase
@@ -126,8 +126,9 @@ export class ChatComponent implements OnInit {
           }
         );
     });
+
     this.previews = pr;
-    //console.log("get p", this.previews);
+    console.log("previ", this.previews);
   }
 
   openChat(idchat: string) {
@@ -149,7 +150,7 @@ export class ChatComponent implements OnInit {
       let nMessage: Message = {
         datetime: n,
         message: mensaje,
-        sender: this.userData.uid,
+        sender: this.userData,
         timestamp: stamp
       };
 

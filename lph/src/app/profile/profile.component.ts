@@ -1,34 +1,33 @@
-import {Component, OnInit} from '@angular/core';
-import {UserService} from '../shared/user.service';
+import {Component, OnInit} from "@angular/core";
+import {UserService} from "../shared/user.service";
 // import * as firebase from 'firebase';
-import {Router} from '@angular/router';
-import {ModalService} from '../shared/modal.service';
-import {Friend, Message} from '../shared/model';
+import {Router} from "@angular/router";
+import {ModalService} from "../shared/modal.service";
+import {Friend, Message} from "../shared/model";
 import {NgForm} from "@angular/forms";
 import {DatePipe} from "@angular/common";
-import {NotificationService} from '../shared/notification.service';
-import {AngularFireDatabase} from '@angular/fire/database';
-import {AngularFireAuth} from '@angular/fire/auth';
+import {NotificationService} from "../shared/notification.service";
+import {AngularFireDatabase} from "@angular/fire/database";
+import {AngularFireAuth} from "@angular/fire/auth";
 import {ChatService} from "../shared/chat.service";
-import {fromEvent} from "rxjs";
 
 @Component({
-  selector: 'app-profile',
-  templateUrl: './profile.component.html',
-  styleUrls: ['./profile.component.css']
+  selector: "app-profile",
+  templateUrl: "./profile.component.html",
+  styleUrls: ["./profile.component.css"]
 })
 export class ProfileComponent implements OnInit {
   public userDataId;
-  public profilePicturePath = '';
+  public profilePicturePath = "";
   public fullName;
   public followers;
   public following;
   public postsNumber;
   public posts: Array<string>;
-  modalTitle = '';
+  modalTitle = "";
   public followersList: Array<Friend>;
   public followingList: Array<Friend>;
-  public route = '';
+  public route = "";
   public isFollowing: boolean;
   public followUnfollowBtn: string;
 
@@ -38,7 +37,6 @@ export class ProfileComponent implements OnInit {
     private chatService: ChatService,
     private modalService: ModalService,
     private notificationService: NotificationService,
-    private router: Router //private firebaseAuth: AngularFireAuth
     private router: Router,
     private firebaseDatabase: AngularFireDatabase,
     private firebaseAuth: AngularFireAuth
@@ -54,31 +52,32 @@ export class ProfileComponent implements OnInit {
     this.followers = 0;
     this.following = 0;
     this.isFollowing = this.isFollowingTo();
-    this.followUnfollowBtn = 'Seguir';
+    this.followUnfollowBtn = "Seguir";
 
-    this.firebaseAuth.currentUser.then(userData => {
-      console.log('mn jndsvjk sd.vznkjvfdnkldz vk.d.vlkd', userData.uid);
-      this.userDataId = userData.uid;
+    this.firebaseAuth.currentUser
+      .then((userData) => {
+        //console.log("mn jndsvjk sd.vznkjvfdnkldz vk.d.vlkd", userData.uid);
+        this.userDataId = userData.uid;
 
-      this.getProfilePhoto(this.userDataId)
-      .then((photo) => {
-        this.profilePicturePath = photo.val();
+        this.getProfilePhoto(this.userDataId)
+          .then((photo) => {
+            this.profilePicturePath = photo.val();
+          })
+          .catch((error) => {
+            console.error("error", error);
+          });
+
+        this.getFullName(this.userDataId)
+          .then((name) => {
+            this.fullName = name.val();
+          })
+          .catch((error) => {
+            console.error("error", error);
+          });
       })
       .catch((error) => {
-        console.error('error', error);
+        console.error("error", error);
       });
-
-      this.getFullName(this.userDataId)
-      .then((name) => {
-        this.fullName = name.val();
-      })
-      .catch((error) => {
-        console.error('error', error);
-      });
-    })
-    .catch(error => {
-      console.error('error', error);
-    });
     /** Cambiar forma de conseguir las cosas */
     /*this.getProfilePhoto()
       .then((photo) => {
@@ -104,17 +103,18 @@ export class ProfileComponent implements OnInit {
   }
 
   getUser() {
-    this.firebaseAuth.currentUser.then(userData => {
-      console.log('mn jndsvjk sd.vznkjvfdnkldz vk.d.vlkd', userData.uid);
-      this.userDataId = userData.uid;
-    })
-    .catch(error => {
-      console.error('error', error);
-    });
+    this.firebaseAuth.currentUser
+      .then((userData) => {
+        console.log("mn jndsvjk sd.vznkjvfdnkldz vk.d.vlkd", userData.uid);
+        this.userDataId = userData.uid;
+      })
+      .catch((error) => {
+        console.error("error", error);
+      });
   }
 
   getNumberFollowersAndFollowing() {
-    if (this.route === '/myprofile') {
+    if (this.route === "/myprofile") {
       this.userService.getUserFollowing().then((following) => {
         if (following.val() != null) {
           this.following = following.val().length;
@@ -127,7 +127,7 @@ export class ProfileComponent implements OnInit {
         }
       });
     } else {
-      const userId = this.route.replace('/user', '');
+      const userId = this.route.replace("/user", "");
       this.userService.getUserFollowing(userId).then((following) => {
         if (following.val() != null) {
           this.following = following.val().length;
@@ -143,25 +143,25 @@ export class ProfileComponent implements OnInit {
   }
 
   getPosts() {
-    if (this.route === '/myprofile') {
+    if (this.route === "/myprofile") {
       this.userService.getUserPosts().then((userPosts) => {
         try {
           userPosts.forEach((element) => {
             let p = element.val();
-            this.posts.push(p['img']);
+            this.posts.push(p["img"]);
             this.postsNumber++;
           });
         } catch (e) {
           console.error(e);
         }
       });
-    } else if (this.route.includes('user')) {
-      const userId = this.route.replace('/user', '');
+    } else if (this.route.includes("user")) {
+      const userId = this.route.replace("/user", "");
       this.userService.getUserPosts(userId).then((userPosts) => {
         try {
           userPosts.forEach((element) => {
             let p = element.val();
-            this.posts.push(p['img']);
+            this.posts.push(p["img"]);
             this.postsNumber++;
           });
         } catch (e) {
@@ -172,87 +172,79 @@ export class ProfileComponent implements OnInit {
   }
 
   getProfilePhoto(userId: string) {
-    if (this.route === '/myprofile') {
-      return this.firebaseDatabase.database
-        .ref('/users/' + userId + '/profilePhoto')
-        .once(
-          'value',
-          snapshot => {
-            return snapshot.val();
-          },
-          errorObject => {
-            console.error('The read failed: ' + errorObject);
-          }
-        );
-    } else if (this.route.includes('user')) {
-      const userId = this.route.replace('/user', '');
-      return this.firebaseDatabase.database
-        .ref('/users/' + userId + '/profilePhoto')
-        .once(
-          'value',
-          snapshot => {
-            return snapshot.val();
-          },
-          errorObject => {
-            console.error('The read failed: ' + errorObject);
-          }
-        );
+    if (this.route === "/myprofile") {
+      return this.firebaseDatabase.database.ref("/users/" + userId + "/profilePhoto").once(
+        "value",
+        (snapshot) => {
+          return snapshot.val();
+        },
+        (errorObject) => {
+          console.error("The read failed: " + errorObject);
+        }
+      );
+    } else if (this.route.includes("user")) {
+      const userId = this.route.replace("/user", "");
+      return this.firebaseDatabase.database.ref("/users/" + userId + "/profilePhoto").once(
+        "value",
+        (snapshot) => {
+          return snapshot.val();
+        },
+        (errorObject) => {
+          console.error("The read failed: " + errorObject);
+        }
+      );
     }
   }
 
   getFullName(userId: string) {
-    let id = '';
-    if (this.route === '/myprofile') {
+    let id = "";
+    if (this.route === "/myprofile") {
       id = userId;
-    } else if (this.route.includes('user')) {
-      id = this.route.replace('/user', '');
+    } else if (this.route.includes("user")) {
+      id = this.route.replace("/user", "");
     }
 
-    return this.firebaseDatabase.database
-      .ref('/users/' + id + '/fullName')
-      .once(
-        'value',
-        snapshot => {
-          return snapshot.val();
-        },
-        errorObject => {
-          console.error('The read failed: ' + errorObject);
-        }
-      );
+    return this.firebaseDatabase.database.ref("/users/" + id + "/fullName").once(
+      "value",
+      (snapshot) => {
+        return snapshot.val();
+      },
+      (errorObject) => {
+        console.error("The read failed: " + errorObject);
+      }
+    );
   }
 
   editProfile() {
-    this.router.navigate(['/editmyprofile']);
+    this.router.navigate(["/editmyprofile"]);
   }
 
   openFollowers(mymodal) {
-    this.modalTitle = 'Seguidores';
+    this.modalTitle = "Seguidores";
     let list = [];
-    let id = '';
-    if (this.route === '/myprofile') {
+    let id = "";
+    if (this.route === "/myprofile") {
       id = this.userDataId;
-    } else if (this.route.includes('user')) {
-      id = this.route.replace('/user', '');
+    } else if (this.route.includes("user")) {
+      id = this.route.replace("/user", "");
     }
     this.userService.getUserFollowers(id).then((seguidores) => {
       if (seguidores.val() != null) {
         seguidores.val().forEach((element) => {
-          this.firebaseDatabase.database
-            .ref('/users/' + element)
-            .once(
-              'value',
-              snapshot => {
-                const friend: Friend = {
-                  id: element,
-                  name: snapshot.val()['fullName'],
-                  photoUrl: snapshot.val()['profilePhoto']
-                };
-                list.push(friend);
-              },
-              errorObject => {
-                console.error('The read failed: ' + errorObject);
-              }
-            );
+          this.firebaseDatabase.database.ref("/users/" + element).once(
+            "value",
+            (snapshot) => {
+              const friend: Friend = {
+                id: element,
+                name: snapshot.val()["fullName"],
+                photoUrl: snapshot.val()["profilePhoto"]
+              };
+              list.push(friend);
+            },
+            (errorObject) => {
+              console.error("The read failed: " + errorObject);
+            }
+          );
         });
       }
     });
@@ -262,34 +254,32 @@ export class ProfileComponent implements OnInit {
   }
 
   openFollowing(mymodal) {
-    this.modalTitle = 'Siguiendo';
+    this.modalTitle = "Siguiendo";
     let list = [];
-    let id = '';
-    if (this.route === '/myprofile') {
+    let id = "";
+    if (this.route === "/myprofile") {
       id = this.userDataId;
-    } else if (this.route.includes('user')) {
-      id = this.route.replace('/user', '');
+    } else if (this.route.includes("user")) {
+      id = this.route.replace("/user", "");
     }
 
     this.userService.getUserFollowing(id).then((siguiendo) => {
       if (siguiendo.val() != null) {
         siguiendo.val().forEach((element) => {
-          this.firebaseDatabase.database
-            .ref('/users/' + element)
-            .once(
-              'value',
-              snapshot => {
-                const friend: Friend = {
-                  id: element,
-                  name: snapshot.val()['fullName'],
-                  photoUrl: snapshot.val()['profilePhoto']
-                };
-                list.push(friend);
-              },
-              errorObject => {
-                console.error('The read failed: ' + errorObject);
-              }
-            );
+          this.firebaseDatabase.database.ref("/users/" + element).once(
+            "value",
+            (snapshot) => {
+              const friend: Friend = {
+                id: element,
+                name: snapshot.val()["fullName"],
+                photoUrl: snapshot.val()["profilePhoto"]
+              };
+              list.push(friend);
+            },
+            (errorObject) => {
+              console.error("The read failed: " + errorObject);
+            }
+          );
         });
       }
     });
@@ -300,9 +290,9 @@ export class ProfileComponent implements OnInit {
 
   goToFriendsProfile(friendURl: string) {
     if (friendURl === this.userDataId) {
-      friendURl = '/myprofile';
+      friendURl = "/myprofile";
     } else {
-      friendURl = 'user/' + friendURl;
+      friendURl = "user/" + friendURl;
     }
     this.router.navigate([friendURl]);
     this.modalService.close();
@@ -310,15 +300,15 @@ export class ProfileComponent implements OnInit {
 
   isFollowingTo(): boolean {
     let f = false;
-    if (this.route.includes('user/')) {
-      let url = this.route.replace('/user/', '');
+    if (this.route.includes("user/")) {
+      let url = this.route.replace("/user/", "");
       this.userService.getUserFollowing().then((following) => {
         if (following.val() != null) {
           let i = 0;
           while (i < following.val().length && !f) {
             if (following.val()[i] === url) {
               f = true;
-              this.followUnfollowBtn = 'Dejar de seguir';
+              this.followUnfollowBtn = "Dejar de seguir";
             }
             i++;
           }
@@ -329,10 +319,10 @@ export class ProfileComponent implements OnInit {
   }
 
   startToFollowUnfollow() {
-    let id = this.router.url.replace('/user/', '');
-    if (this.followUnfollowBtn === 'Seguir') {
+    let id = this.router.url.replace("/user/", "");
+    if (this.followUnfollowBtn === "Seguir") {
       this.follow(id);
-    } else if (this.followUnfollowBtn === 'Dejar de seguir') {
+    } else if (this.followUnfollowBtn === "Dejar de seguir") {
       this.unfollowFromModal(id);
     }
   }
@@ -341,22 +331,20 @@ export class ProfileComponent implements OnInit {
     const currentUser = this.userDataId;
     let followersArray: Array<string> = [];
     this.firebaseDatabase.database
-      .ref('/followers/' + id)
+      .ref("/followers/" + id)
       .once(
-        'value',
-        snapshot => {
+        "value",
+        (snapshot) => {
           followersArray = snapshot.val();
           if (followersArray != null) {
             followersArray.push(currentUser);
           } else {
             followersArray = [currentUser];
           }
-          this.firebaseDatabase.database
-            .ref('/followers/' + id)
-            .set(followersArray);
+          this.firebaseDatabase.database.ref("/followers/" + id).set(followersArray);
         },
-        errorObject => {
-          console.error('The read failed: ' + errorObject);
+        (errorObject) => {
+          console.error("The read failed: " + errorObject);
         }
       )
       .then(() => {
@@ -365,75 +353,67 @@ export class ProfileComponent implements OnInit {
 
     let followingArray: Array<string> = [];
     this.firebaseDatabase.database
-      .ref('/following/' + currentUser)
+      .ref("/following/" + currentUser)
       .once(
-        'value',
-        snapshot => {
+        "value",
+        (snapshot) => {
           followingArray = snapshot.val();
           if (followingArray != null) {
             followingArray.push(id);
           } else {
             followingArray = [id];
           }
-          this.firebaseDatabase.database
-            .ref('/following/' + currentUser)
-            .set(followingArray);
+          this.firebaseDatabase.database.ref("/following/" + currentUser).set(followingArray);
         },
-        errorObject => {
-          console.error('The read failed: ' + errorObject);
+        (errorObject) => {
+          console.error("The read failed: " + errorObject);
         }
       )
       .then(() => {
         this.ngOnInit();
       });
-    this.notificationService.showSuccessMessage('Éxito', 'Ha empezado a seguir a');
-    this.followUnfollowBtn = 'Dejar de seguir';
+    this.notificationService.showSuccessMessage("Éxito", "Ha empezado a seguir a");
+    this.followUnfollowBtn = "Dejar de seguir";
   }
 
   unfollowFromModal(id: string) {
     const currentUser = this.userDataId;
     let followersArray: Array<string> = [];
-    this.firebaseDatabase.database
-      .ref('/followers/' + id)
-      .once(
-        'value',
-        snapshot => {
-          followersArray = snapshot.val();
-          if (followersArray != null) {
-            followersArray.splice(followingArray.indexOf(currentUser));
-          }
-          this.firebaseDatabase.database
-            .ref('/followers/' + id)
-            .set(followersArray);
-        },
-        errorObject => {
-          console.error('The read failed: ' + errorObject);
+    this.firebaseDatabase.database.ref("/followers/" + id).once(
+      "value",
+      (snapshot) => {
+        followersArray = snapshot.val();
+        if (followersArray != null) {
+          followersArray.splice(followingArray.indexOf(currentUser));
         }
-      );
+        this.firebaseDatabase.database.ref("/followers/" + id).set(followersArray);
+      },
+      (errorObject) => {
+        console.error("The read failed: " + errorObject);
+      }
+    );
 
     let followingArray: Array<string> = [];
     this.firebaseDatabase.database
-      .ref('/following/' + currentUser)
+      .ref("/following/" + currentUser)
       .once(
-        'value',
-        snapshot => {
+        "value",
+        (snapshot) => {
           followingArray = snapshot.val();
           if (followingArray != null) {
             followingArray.splice(followingArray.indexOf(id));
           }
-          this.firebaseDatabase.database
-            .ref('/following/' + currentUser)
-            .set(followingArray);
+          this.firebaseDatabase.database.ref("/following/" + currentUser).set(followingArray);
         },
-        errorObject => {
-          console.error('The read failed: ' + errorObject);
+        (errorObject) => {
+          console.error("The read failed: " + errorObject);
         }
       )
       .then(() => {
         this.ngOnInit();
       });
-    this.notificationService.showSuccessMessage('Éxito', 'Ha dejado de seguir');
-    this.followUnfollowBtn = 'Seguir';
+    this.notificationService.showSuccessMessage("Éxito", "Ha dejado de seguir");
+    this.followUnfollowBtn = "Seguir";
     this.modalService.close();
   }
 
@@ -453,21 +433,20 @@ export class ProfileComponent implements OnInit {
       let nMessage: Message = {
         datetime: n,
         message: mensaje,
-        sender: this.userData.uid,
+        sender: this.userDataId,
         timestamp: stamp
       };
       let messagesList: Array<Message> = [];
       let conversations: Array<string> = [];
       let roomsArray: Array<string> = [];
-      let id = this.userData.uid;
+      let id = this.userDataId;
       let friendId = this.router.url.replace("/user/", "");
 
-      let roomName = this.userData.uid + "_" + friendId;
-      let otherRoomName = friendId + "_" + this.userData.uid;
+      let roomName = this.userDataId + "_" + friendId;
+      let otherRoomName = friendId + "_" + this.userDataId;
 
       //Verifica el nombre de la sala de chat si existe, si no crea una
-      firebase
-        .database()
+      this.firebaseDatabase.database
         .ref("/conversationsPerUser/" + id)
         .once("value", function (snapshot) {
           if (snapshot.val() != null) {
@@ -479,23 +458,15 @@ export class ProfileComponent implements OnInit {
             });
           }
 
-          firebase
-            .database()
-            .ref("/chatRooms/" + roomName + "/timestamp")
-            .set(stamp);
+          this.firebaseDatabase.database.ref("/chatRooms/" + roomName + "/timestamp").set(stamp);
 
           let users = {user1: id, user2: friendId};
-          firebase
-            .database()
-            .ref("/chatRooms/" + roomName + "/users")
-            .set(users);
+          this.firebaseDatabase.database.ref("/chatRooms/" + roomName + "/users").set(users);
           messagesList.push(nMessage);
-          firebase
-            .database()
+          this.firebaseDatabase.database
             .ref("/chatRooms/" + roomName + "/messages")
             .set(messagesList);
-          firebase
-            .database()
+          this.firebaseDatabase.database
             .ref("/conversationsPerUser/" + id)
             .once("value", function (snapshot) {
               if (snapshot.val() != null) {
@@ -504,15 +475,13 @@ export class ProfileComponent implements OnInit {
               if (!conversations.includes(roomName)) {
                 conversations.push(roomName);
                 console.log("conv", conversations);
-                firebase
-                  .database()
+                this.firebaseDatabase.database
                   .ref("/conversationsPerUser/" + id)
                   .set(conversations);
               }
 
               conversations = [];
-              firebase
-                .database()
+              this.firebaseDatabase.database
                 .ref("/conversationsPerUser/" + friendId)
                 .once("value", function (snapshot) {
                   if (snapshot.val() != null) {
@@ -521,8 +490,7 @@ export class ProfileComponent implements OnInit {
                   if (!conversations.includes(roomName)) {
                     conversations.push(roomName);
                     console.log("conv amigo", conversations);
-                    firebase
-                      .database()
+                    this.firebaseDatabase.database
                       .ref("/conversationsPerUser/" + friendId)
                       .set(conversations);
                   }

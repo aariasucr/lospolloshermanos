@@ -22,15 +22,14 @@ import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
 import {ModalService} from "./shared/modal.service";
 import {ChatComponent} from "./chat/chat.component";
 import {ChatService} from "./shared/chat.service";
-import {environment} from "src/environments/environment";
 import {DatePipe} from "@angular/common";
 /** Añadido del servicio de firebase, se debe, antes, haber instalado: npm i @angular/fire --save */
-import {AngularFireModule} from '@angular/fire';                          // Recibe la configuración de firebase, es el módulo central.
-import {AngularFireDatabaseModule} from '@angular/fire/database';         // Para la base de datos realtime
-import {AngularFireAuthModule} from '@angular/fire/auth';                 // Para las funcionalidades de autenticación.
-import {AngularFireStorageModule} from '@angular/fire/storage';           // Para las funcionalidades del storage
+import {AngularFireModule} from "@angular/fire"; // Recibe la configuración de firebase, es el módulo central.
+import {AngularFireDatabaseModule} from "@angular/fire/database"; // Para la base de datos realtime
+import {AngularFireAuthModule} from "@angular/fire/auth"; // Para las funcionalidades de autenticación.
+import {AngularFireStorageModule} from "@angular/fire/storage"; // Para las funcionalidades del storage
 /** Para no subir credenciales a git: */
-import { environment } from 'src/environments/environment';
+import {environment} from "src/environments/environment";
 
 @NgModule({
   declarations: [
@@ -58,12 +57,7 @@ import { environment } from 'src/environments/environment';
     AngularFireAuthModule,
     AngularFireStorageModule
   ],
-  providers: [
-    UserService,
-    RouteGuard,
-    NotificationService,
-    ModalService, ChatService, DatePipe
-  ],
+  providers: [UserService, RouteGuard, NotificationService, ModalService, ChatService, DatePipe],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

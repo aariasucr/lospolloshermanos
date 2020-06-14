@@ -6,8 +6,10 @@
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <!--Créditos: https://bootsnipp.com/snippets/1ea0N -->
-<html>
+<!DOCTYPE html>
+<html lang="en">
   <head>
+    <title>LPH</title>
     <link
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css"
       type="text/css"
@@ -53,7 +55,7 @@
                 <div *ngFor="let m of messagesArray">
                   <div *ngIf="selectedChat !== ''">
                     <ng-container
-                      [ngTemplateOutlet]="m.sender == userData.uid ? outgoing_msg : incoming_msg"
+                      [ngTemplateOutlet]="m.sender == userData ? outgoing_msg : incoming_msg"
                       [ngTemplateOutletContext]="{mensaje: m}"
                     >
                     </ng-container>
