@@ -1,7 +1,5 @@
 import {Injectable, EventEmitter} from '@angular/core';
-/** [FB] Actualización firebase */
-// import * as firebase from 'firebase/app';
-import { UserData } from './model';  // [FB] para administración de datos de usuario
+import { UserData } from './model';
 import {AngularFireAuth} from '@angular/fire/auth';
 import {AngularFireDatabase} from '@angular/fire/database';
 
@@ -17,20 +15,12 @@ export class UserService {
 
   constructor(private firebaseAuth: AngularFireAuth,
               private firebaseDatabase: AngularFireDatabase) {}
-  // [FB]antes no recibía parámeto
+
   performLogin(uid: string) {
-    /*this.isLogged = true;
-    const userData = {
-      fullName: firebase.auth().currentUser.displayName
-    };
-    this.user = firebase.auth().currentUser;
-    this.statusChange.emit(userData);*/
-    /** [FB] de aquí para abajo */
     this.userId = uid;
     this.getUserDataFromFirebase(uid).then(result => {
       this.isLogged = true;
       this.user = result.val();
-      console.log('***************************', this.user);
       this.statusChange.emit(this.user);
     });
   }
@@ -39,7 +29,6 @@ export class UserService {
     return this.user;
   }
 
-  /** [FB]Agregado por Firebase */
   isUserLogged() {
     return this.isLogged;
   }
@@ -82,21 +71,7 @@ export class UserService {
         }
       );
   }
-  /* [FB] Ejemplo a tomar para regresar todo a la normalidad
-  getUserFollowing(userId: string = this.user.uid) {
-    return firebase
-      .database()
-      .ref('/following/' + userId)
-      .once(
-        'value',
-        function(snapshot) {
-          return snapshot.val();
-        },
-        function(errorObject) {
-          console.error('The read failed: ' + errorObject);
-        }
-      );
-  }*/
+
   getUserFollowing(userId: string = this.userId) {
     return this.firebaseDatabase.database
       .ref('/following/' + userId)

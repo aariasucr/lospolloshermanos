@@ -53,11 +53,18 @@ export class ProfileComponent implements OnInit {
     this.firebaseAuth.currentUser.then(userData => {
       console.log('mn jndsvjk sd.vznkjvfdnkldz vk.d.vlkd', userData.uid);
       this.userDataId = userData.uid;
+
       this.getProfilePhoto(this.userDataId)
       .then((photo) => {
-        console.log('jqdbluwhdbiuwhfiuehlaefbuefbiulaebfiueraufaleub',photo);
         this.profilePicturePath = photo.val();
-        console.log('------------------', this.profilePicturePath);
+      })
+      .catch((error) => {
+        console.error('error', error);
+      });
+
+      this.getFullName(this.userDataId)
+      .then((name) => {
+        this.fullName = name.val();
       })
       .catch((error) => {
         console.error('error', error);
@@ -158,19 +165,14 @@ export class ProfileComponent implements OnInit {
     }
   }
 
-  getProfilePhoto(userData: string) {
-    //console.log('--------------------', this.userDataId);
+  getProfilePhoto(userId: string) {
     if (this.route === '/myprofile') {
       return this.firebaseDatabase.database
-        .ref('/users/' + userData + '/profilePhoto')
+        .ref('/users/' + userId + '/profilePhoto')
         .once(
           'value',
           snapshot => {
-            // console.log('--------------------', snapshot.val());
-            //this.profilePicturePath = snapshot.val()['profilePhoto'];
-            // console.log('--------------------', snapshot.val());
             return snapshot.val();
-
           },
           errorObject => {
             console.error('The read failed: ' + errorObject);
@@ -183,11 +185,7 @@ export class ProfileComponent implements OnInit {
         .once(
           'value',
           snapshot => {
-            console.log('--------------------', snapshot.val());
-            // this.profilePicturePath = snapshot.val();
-            // console.log('--------------------', snapshot.val());
             return snapshot.val();
-            //console.log('--------------------', this.profilePicturePath);
           },
           errorObject => {
             console.error('The read failed: ' + errorObject);
@@ -196,14 +194,15 @@ export class ProfileComponent implements OnInit {
     }
   }
 
-  getFullName() {
+  getFullName(userId: string) {
     let id = '';
     if (this.route === '/myprofile') {
-      id = this.userDataId;
+      id = userId;
     } else if (this.route.includes('user')) {
       id = this.route.replace('/user', '');
     }
-    this.firebaseDatabase.database
+
+    return this.firebaseDatabase.database
       .ref('/users/' + id + '/fullName')
       .once(
         'value',

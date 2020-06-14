@@ -11,23 +11,6 @@ export class PostService {
   constructor(private firebaseDatabase: AngularFireDatabase,
               private firebaseAuth: AngularFireAuth) {}
 
-  /** [FB] Actaulización */
-  /* addNewPostAsync(numberComm: number, date: string, numberLikes: number, imgUrl: string) {
-    const firebaseUserId = firebase.auth().currentUser.uid;
-    const newPostKey = firebase.database().ref().child(`posts/${firebaseUserId}`).push().key;
-
-    const newPostEntry = {
-      numberComm: numberComm,
-      date: date,
-      numberLikes: numberLikes,
-      img: imgUrl
-    };
-
-    const updates = {};
-    updates[`posts/${firebaseUserId}/${newPostKey}`] = newPostEntry;
-    return firebase.database().ref().update(updates);
-  }*/
-
   addNewPostAsync(content: string, author: string, imgUrl: string) {
     return this.firebaseAuth.currentUser.then(userData => {
       const firebaseUserId = userData.uid;

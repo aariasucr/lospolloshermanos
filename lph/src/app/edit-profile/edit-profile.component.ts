@@ -2,8 +2,6 @@ import {Component, OnInit} from '@angular/core';
 import {NgForm} from '@angular/forms';
 import {UserService} from '../shared/user.service';
 import {NotificationService} from '../shared/notification.service';
-// [FB] cambio por actualización
-// import * as firebase from 'firebase';
 import {AngularFireAuth} from '@angular/fire/auth';
 import {AngularFireDatabase} from '@angular/fire/database';
 
@@ -31,16 +29,6 @@ export class EditProfileComponent implements OnInit {
     const nombre: string = form.value.name;
     const newEmail: string = form.value.email;
     const newUsername: string = form.value.username;
-
-    /** [FB] Actualización */
-    /*if (nombre.length != 0) {
-      console.log('entra a nombre');
-      firebase
-        .database()
-        .ref('/users/' + this.user.uid)
-        .update({fullName: nombre});
-      this.notificationService.showSuccessMessage('Hecho', 'Nombre actualizado');
-    }*/
 
     if (nombre.length !== 0) {
       console.log('entra a nombre');
@@ -70,18 +58,6 @@ export class EditProfileComponent implements OnInit {
   getPhotoUrl(url: string) {
     this.urlImage = url;
   }
-
-  /*onChangePhoto() {
-    let newPhoto = '';
-    let user = firebase.auth().currentUser;
-    user.updateProfile({photoURL: newPhoto}).then(() => {
-      firebase
-        .database()
-        .ref('/users/' + this.user.uid)
-        .update({profilePhoto: this.urlImage});
-      this.notificationService.showSuccessMessage('Hecho', 'Se cambió la foto de perfil');
-    });
-  }*/
 
   onChangePhoto() {
     this.firebaseAuth.currentUser.then(user => {

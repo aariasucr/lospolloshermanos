@@ -1,7 +1,6 @@
 import {Component, OnInit, ViewChild, ElementRef, Output, EventEmitter, Input} from '@angular/core';
 import * as firebase from 'firebase';    // Aquí es el único lugar donde se deja por el uso de la constante STATE_CHANGED
 import {UserService} from '../shared/user.service';
-/** [FB] Actualización del sevice de firebase */
 import {AngularFireStorage} from '@angular/fire/storage';
 
 @Component({

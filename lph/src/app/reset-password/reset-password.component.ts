@@ -2,8 +2,6 @@ import {Component, OnInit} from '@angular/core';
 import {NgForm} from '@angular/forms';
 import {NotificationService} from '../shared/notification.service';
 import {Router} from '@angular/router';
-/** [FB] Actualización */
-// import * as firebase from 'firebase';
 import {AngularFireAuth} from '@angular/fire/auth';
 
 @Component({
