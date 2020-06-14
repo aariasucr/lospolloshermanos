@@ -20,7 +20,7 @@ import {PostFrameComponent} from "./post-frame/post-frame.component";
 //import {AngularFirestore} from "@angular/fire/firestore";
 import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
 import {ModalService} from "./shared/modal.service";
-import {MessagesComponent} from "./messages/messages.component";
+import {ChatComponent} from "./chat/chat.component";
 import {AngularFireModule} from "@angular/fire";
 import {AngularFireDatabaseModule} from "@angular/fire/database";
 import {ChatService} from "./shared/chat.service";
@@ -38,7 +38,7 @@ import {environment} from "src/environments/environment";
     EditProfileComponent,
     FileUploaderComponent,
     PostFrameComponent,
-    MessagesComponent
+    ChatComponent
   ],
   imports: [
     BrowserModule,

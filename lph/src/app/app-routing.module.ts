@@ -8,7 +8,8 @@ import {ResetPasswordComponent} from "./reset-password/reset-password.component"
 import {ProfileComponent} from "./profile/profile.component";
 import {EditProfileComponent} from "./edit-profile/edit-profile.component";
 import {HomeComponent} from "./home/home.component";
-import {MessagesComponent} from "./messages/messages.component";
+import {ChatComponent} from "./chat/chat.component";
+import {ChatService} from "./shared/chat.service";
 
 const routes: Routes = [
   {path: "", component: AppComponent, canActivate: [RouteGuard]},
@@ -19,7 +20,7 @@ const routes: Routes = [
   {path: "login", component: LoginComponent},
   {path: "logout", component: LoginComponent},
   {path: "register", component: RegisterComponent},
- {path: "messages", component: MessagesComponent},
+  {path: "messages", component: ChatComponent},
   {path: "resetPassword", component: ResetPasswordComponent}
 ];
 

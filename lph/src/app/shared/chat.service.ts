@@ -11,9 +11,9 @@ export class ChatService {
     return this.db.object(chatId).valueChanges();
   }
 
-  getMessages(chat = "") {
+  getMessages(chat: string) {
     return this.db
-      .list("/chatRooms/chat1/messages", (ref) => {
+      .list("/chatRooms/" + chat + "/messages", (ref) => {
         return ref.orderByChild("timestamp");
       })
       .valueChanges();

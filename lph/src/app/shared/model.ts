@@ -23,3 +23,11 @@ export interface Message {
   timestamp: number;
   message: string;
 }
+
+export interface PreviewMessage {
+  idChat: string;
+  name: string;
+  date: string;
+  photo: string;
+  lastMessage: string;
+}
