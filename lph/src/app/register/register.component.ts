@@ -4,8 +4,6 @@ import {NgForm} from '@angular/forms';
 import {NotificationService} from '../shared/notification.service';
 import {UserService} from '../shared/user.service';
 import {NewAccount} from '../shared/model';
-/** [FB] Actualización */
-/** import * as firebase from 'firebase'; */
 import {AngularFireDatabase} from '@angular/fire/database';
 import {AngularFireAuth} from '@angular/fire/auth';
 
