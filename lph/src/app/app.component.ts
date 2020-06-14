@@ -1,6 +1,7 @@
-import {Component, OnInit} from '@angular/core';
-import * as firebase from 'firebase';
-import {UserService} from './shared/user.service';
+import {Component, OnInit} from "@angular/core";
+import * as firebase from "firebase";
+import {UserService} from "./shared/user.service";
+import {environment} from "src/environments/environment";
 /** Anadido de servicio de firebase */
 import {AngularFireAuth} from '@angular/fire/auth';
 @Component({

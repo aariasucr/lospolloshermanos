@@ -17,6 +17,20 @@ export interface Friend {
   photoUrl: string;
 }
 
+export interface Message {
+  sender: string;
+  datetime: string;
+  timestamp: number;
+  message: string;
+}
+
+export interface PreviewMessage {
+  idChat: string;
+  name: string;
+  date: string;
+  photo: string;
+  lastMessage: string;
+}
 export interface UserData {
   name: string;
   photoUrl: string;
