@@ -1,32 +1,41 @@
-import {Injectable, EventEmitter} from "@angular/core";
-import * as firebase from "firebase/app";
+import {Injectable, EventEmitter} from '@angular/core';
+import { UserData } from './model';
+import {AngularFireAuth} from '@angular/fire/auth';
+import {AngularFireDatabase} from '@angular/fire/database';
+
 
 @Injectable({
-  providedIn: "root"
+  providedIn: 'root'
 })
 export class UserService {
   private isLogged = false;
   public statusChange: any = new EventEmitter<any>();
   private user;
+  private userId;
 
-  constructor() {}
+  constructor(private firebaseAuth: AngularFireAuth,
+              private firebaseDatabase: AngularFireDatabase) {}
 
-  performLogin() {
-    this.isLogged = true;
-    const userData = {
-      fullName: firebase.auth().currentUser.displayName
-    };
-    this.user = firebase.auth().currentUser;
-    this.statusChange.emit(userData);
+  performLogin(uid: string) {
+    this.userId = uid;
+    this.getUserDataFromFirebase(uid).then(result => {
+      this.isLogged = true;
+      this.user = result.val();
+      this.statusChange.emit(this.user);
+    });
   }
 
   getUserData() {
     return this.user;
   }
 
+  isUserLogged() {
+    return this.isLogged;
+  }
+
+
   performLogout() {
-    firebase
-      .auth()
+    this.firebaseAuth
       .signOut()
       .then(() => {
         this.isLogged = false;
@@ -34,59 +43,53 @@ export class UserService {
       });
   }
 
-  getUserPosts(userId: string = this.user.uid) {
-    return firebase
-      .database()
-      .ref("/posts/" + userId)
-      .orderByChild("created")
+  getUserPosts(userId: string = this.userId) {
+    return this.firebaseDatabase.database
+      .ref('/posts/' + userId)
+      .orderByChild('created')
       .once(
-        "value",
-        function (snapshot) {
+        'value',
+        snapshot => {
           return snapshot.val();
         },
-        function (errorObject) {
-          console.error("The read failed: " + errorObject);
+        errorObject => {
+          console.error('The read failed: ' + errorObject);
         }
       );
   }
 
-  getUserFollowers(userId: string = this.user.uid) {
-    return firebase
-      .database()
-      .ref("/followers/" + userId)
+  getUserFollowers(userId: string = this.userId) {
+    return this.firebaseDatabase.database
+      .ref('/followers/' + userId)
       .once(
-        "value",
-        function (snapshot) {
+        'value',
+        snapshot => {
           return snapshot.val();
         },
-        function (errorObject) {
-          console.error("The read failed: " + errorObject);
+        errorObject => {
+          console.error('The read failed: ' + errorObject);
         }
       );
   }
 
-  getUserFollowing(userId: string = this.user.uid) {
-    return firebase
-      .database()
-      .ref("/following/" + userId)
+  getUserFollowing(userId: string = this.userId) {
+    return this.firebaseDatabase.database
+      .ref('/following/' + userId)
       .once(
-        "value",
-        function (snapshot) {
+        'value',
+        snapshot => {
           return snapshot.val();
         },
-        function (errorObject) {
-          console.error("The read failed: " + errorObject);
+        errorObject => {
+          console.error('The read failed: ' + errorObject);
         }
       );
   }
 
   getUserDataFromFirebase(uid: string) {
-    return firebase
-      .database() // Aquí va a buscar la base de datos; si hubieran más, se debe especificar el nombre de la base
-      .ref("users") // Se quiere ir a una referencia específica.
-      .child(uid) // El hijo de la refrencia anterior
-      .once("value"); // Se quiere sólo un dato
-
-    // Todo lo anterior devuelve una promesa.
+    return this.firebaseDatabase.database
+      .ref('users')
+      .child(uid)
+      .once('value');
   }
 }

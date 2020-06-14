@@ -31,3 +31,8 @@ export interface PreviewMessage {
   photo: string;
   lastMessage: string;
 }
+export interface UserData {
+  name: string;
+  photoUrl: string;
+}
+
