@@ -44,3 +44,7 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
+
+
+#Para la configuración de las credenciales. Para que no se suban a git
+#src/environments/firebase.environment.ts

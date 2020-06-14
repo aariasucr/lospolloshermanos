@@ -1,103 +1,83 @@
 <header class="clearfix feed-header" data-role="banner">
-  <div id="datos" class="profile-user">
-    <div class="row-fluid">
-      <div class="span6">
-        <div id="profilepicture" class="pull-left" style="margin-right: 15px; float: left;">
-          <img
-            src="{{ profilePicturePath }}"
-            class="img-polaroid"
-            width="250"
-            height="250"
-            alt="profile photo"
-          />
-        </div>
-      </div>
-      <div id="listaDatos" style="display: inline-block;">
-        <div>
-          <h2>{{ fullName }}</h2>
-        </div>
+    <div id="datos" class="profile-user">
+        <div class="row-fluid">
+            <div class="span6">
+                <div id="profilepicture" class="pull-left" style="margin-right: 15px; float: left;">
+                    <img [src]="profilePicturePath" class="img-polaroid" width="250" height="250" alt="profile photo" />
+                </div>
+            </div>
+            <div id="listaDatos" style="display: inline-block;">
+                <div>
+                    <h2>{{ fullName }}</h2>
+                </div>
 
-        <ul class="inline user-counts-list" id="listaDatos" style="list-style: none;">
-          <li>
-            <strong>Publicaciones: </strong> <span class="count"> {{ postsNumber }} </span>
-          </li>
-          <li>
-            <a href="javascript:void(0)" class="count" (click)="openFollowers(mymodal)">
+                <ul class="inline user-counts-list" id="listaDatos" style="list-style: none;">
+                    <li>
+                        <strong>Publicaciones: </strong> <span class="count"> {{ postsNumber }} </span>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)" class="count" (click)="openFollowers(mymodal)">
               Seguidores: {{ followers }}
             </a>
-          </li>
-          <li>
-            <a class="count" href="javascript:void(0)" (click)="openFollowing(mymodal)">
+                    </li>
+                    <li>
+                        <a class="count" href="javascript:void(0)" (click)="openFollowing(mymodal)">
               Siguiendo: {{ following }}
             </a>
-          </li>
-        </ul>
-      </div>
-      <div *ngIf="route === '/myprofile'; then miperfil; else friendsProfile"></div>
+                    </li>
+                </ul>
+            </div>
+            <div *ngIf="route === '/myprofile'; then miperfil; else friendsProfile"></div>
+        </div>
     </div>
-  </div>
 </header>
 
 <ng-template #miperfil>
-  <button class="boton_personalizado" style="float: right;" type="button" (click)="editProfile()">
+    <button class="boton_personalizado" style="float: right;" type="button" (click)="editProfile()">
     Editar perfil
   </button>
 </ng-template>
 
 <ng-template #friendsProfile>
-  <button class="boton_personalizado" style="float: right;" type="button">
+    <button class="boton_personalizado" style="float: right;" type="button">
     Enviar mensaje
   </button>
-  <button
-    class="boton_personalizado"
-    style="float: right;"
-    type="button"
-    (click)="startToFollowUnfollow()"
-  >
+    <button class="boton_personalizado" style="float: right;" type="button" (click)="startToFollowUnfollow()">
     {{ followUnfollowBtn }}
   </button>
 </ng-template>
 
 <div class="feed-photos">
-  <div class="row-fluid">
-    <div class="span12">
-      <ul style="list-style: none; display: inline-block;" *ngFor="let post of posts">
-        <li style="list-style: none;">
-          <a href="#" class="thumbnail">
-            <img src="{{ post }}" width="293" height="293" alt="post" />
-          </a>
-        </li>
-      </ul>
+    <div class="row-fluid">
+        <div class="span12">
+            <ul style="list-style: none; display: inline-block;" *ngFor="let post of posts">
+                <li style="list-style: none;">
+                    <a href="#" class="thumbnail">
+                        <img src="{{ post }}" width="293" height="293" alt="post" />
+                    </a>
+                </li>
+            </ul>
+        </div>
     </div>
-  </div>
 </div>
 
 <ng-template #mymodal let-modal>
-  <div class="modal-header">
-    <h4 class="modal-title">{{ modalTitle }}</h4>
-    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+    <div class="modal-header">
+        <h4 class="modal-title">{{ modalTitle }}</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
       <span aria-hidden="true">&times;</span>
     </button>
-  </div>
-  <div class="modal-body">
-    <div *ngIf="modalTitle === 'Seguidores'; then listFollowers; else listFollowing"></div>
-  </div>
+    </div>
+    <div class="modal-body">
+        <div *ngIf="modalTitle === 'Seguidores'; then listFollowers; else listFollowing"></div>
+    </div>
 </ng-template>
 <ng-template #listFollowers>
-  <ul *ngFor="let follower of followersList">
-    <li style="list-style: none;">
-      <div>
-        <img
-          src="{{ follower.photoUrl }}"
-          alt="{{ follower.name }} profile photo"
-          width="50"
-          height="50"
-        />
-        <a
-          class="friedName"
-          routerLink="user/{{ follower.id }}"
-          (click)="goToFriendsProfile(follower.id)"
-          >{{ follower.name }}</a
+    <ul *ngFor="let follower of followersList">
+        <li style="list-style: none;">
+            <div>
+                <img src="{{ follower.photoUrl }}" alt="{{ follower.name }} profile photo" width="50" height="50" />
+                <a class="friedName" routerLink="user/{{ follower.id }}" (click)="goToFriendsProfile(follower.id)">{{ follower.name }}</a
         >
       </div>
     </li>

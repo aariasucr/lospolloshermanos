@@ -16,3 +16,9 @@ export interface Friend {
   name: string;
   photoUrl: string;
 }
+
+export interface UserData {
+  name: string;
+  photoUrl: string;
+}
+

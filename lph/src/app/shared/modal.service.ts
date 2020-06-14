@@ -1,8 +1,8 @@
-import {Injectable} from "@angular/core";
-import {NgbModal, ModalDismissReasons, NgbModalOptions} from "@ng-bootstrap/ng-bootstrap";
+import {Injectable} from '@angular/core';
+import {NgbModal, ModalDismissReasons, NgbModalOptions} from '@ng-bootstrap/ng-bootstrap';
 
 @Injectable({
-  providedIn: "root"
+  providedIn: 'root'
 })
 export class ModalService {
   closeResult: string;
@@ -27,9 +27,9 @@ export class ModalService {
 
   private getDismissReason(reason: any): string {
     if (reason === ModalDismissReasons.ESC) {
-      return "by pressing ESC";
+      return 'by pressing ESC';
     } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-      return "by clicking on a backdrop";
+      return 'by clicking on a backdrop';
     } else {
       return `with: ${reason}`;
     }

@@ -1,24 +1,26 @@
-import {Component, OnInit, ViewChild, ElementRef, Output, EventEmitter, Input} from "@angular/core";
-import * as firebase from "firebase";
-import {UserService} from "../shared/user.service";
+import {Component, OnInit, ViewChild, ElementRef, Output, EventEmitter, Input} from '@angular/core';
+import * as firebase from 'firebase';    // Aquí es el único lugar donde se deja por el uso de la constante STATE_CHANGED
+import {UserService} from '../shared/user.service';
+/** [FB] Actualización del sevice de firebase */
+import {AngularFireStorage} from '@angular/fire/storage';
 
 @Component({
-  selector: "app-file-uploader",
-  templateUrl: "./file-uploader.component.html",
-  styleUrls: ["./file-uploader.component.css"]
+  selector: 'app-file-uploader',
+  templateUrl: './file-uploader.component.html',
+  styleUrls: ['./file-uploader.component.css']
 })
 export class FileUploaderComponent implements OnInit {
-  @ViewChild("filePicker", {static: false}) filePickerRef: ElementRef<HTMLInputElement>;
+  @ViewChild('filePicker', {static: false}) filePickerRef: ElementRef<HTMLInputElement>;
   @Output() imagePick = new EventEmitter<string>();
-  @Input() author = "";
+  @Input() author = '';
 
   uploadTask: firebase.storage.UploadTask;
-  fileUrl = "";
-  uploadStatus = "";
+  fileUrl = '';
+  uploadStatus = '';
   public userData;
   selectedFile;
 
-  constructor(private userService: UserService) {}
+  constructor(private userService: UserService, private firebaseStorage: AngularFireStorage) {}
 
   ngOnInit() {
     this.userData = this.userService.getUserData();
@@ -48,7 +50,9 @@ export class FileUploaderComponent implements OnInit {
       const timestamp = current.getTime();
       const fileName = `posts/${this.author}/${author.toString() + timestamp.toString()}.jpg`;
 
-      const storageRef = firebase.storage().ref();
+      /** [FB] Actualización */
+      // const storageRef = firebase.storage().ref();
+      const storageRef = this.firebaseStorage.storage.ref();
       this.uploadTask = storageRef.child(fileName).put(this.selectedFile);
 
       this.uploadTask.on(
@@ -56,7 +60,7 @@ export class FileUploaderComponent implements OnInit {
         (snapshot) => {
           // Upload en progreso, calculamos el porcentaje de completitud
           this.uploadStatus =
-            ((snapshot.bytesTransferred / snapshot.totalBytes) * 100).toString() + "%";
+            ((snapshot.bytesTransferred / snapshot.totalBytes) * 100).toString() + '%';
         },
         (error) => {
           // Error al hacer upload
@@ -64,7 +68,7 @@ export class FileUploaderComponent implements OnInit {
         },
         () => {
           this.uploadTask.snapshot.ref.getDownloadURL().then((downloadUrl) => {
-            this.uploadStatus = "";
+            this.uploadStatus = '';
             this.fileUrl = downloadUrl;
             this.imagePick.emit(downloadUrl);
           });
