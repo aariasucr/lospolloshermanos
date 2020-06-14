@@ -127,7 +127,7 @@ export class ProfileComponent implements OnInit {
         }
       });
     } else {
-      const userId = this.route.replace("/user", "");
+      let userId = this.route.replace("/user", "");
       this.userService.getUserFollowing(userId).then((following) => {
         if (following.val() != null) {
           this.following = following.val().length;
@@ -156,7 +156,7 @@ export class ProfileComponent implements OnInit {
         }
       });
     } else if (this.route.includes("user")) {
-      const userId = this.route.replace("/user", "");
+      let userId = this.route.replace("/user", "");
       this.userService.getUserPosts(userId).then((userPosts) => {
         try {
           userPosts.forEach((element) => {
@@ -183,7 +183,7 @@ export class ProfileComponent implements OnInit {
         }
       );
     } else if (this.route.includes("user")) {
-      const userId = this.route.replace("/user", "");
+      let userId = this.route.replace("/user", "");
       return this.firebaseDatabase.database.ref("/users/" + userId + "/profilePhoto").once(
         "value",
         (snapshot) => {
@@ -445,6 +445,8 @@ export class ProfileComponent implements OnInit {
       let roomName = this.userDataId + "_" + friendId;
       let otherRoomName = friendId + "_" + this.userDataId;
 
+      let db = this.firebaseDatabase.database;
+
       //Verifica el nombre de la sala de chat si existe, si no crea una
       this.firebaseDatabase.database
         .ref("/conversationsPerUser/" + id)
@@ -458,45 +460,49 @@ export class ProfileComponent implements OnInit {
             });
           }
 
-          this.firebaseDatabase.database.ref("/chatRooms/" + roomName + "/timestamp").set(stamp);
+          db.ref("/chatRooms/" + roomName + "/timestamp").set(stamp);
 
           let users = {user1: id, user2: friendId};
-          this.firebaseDatabase.database.ref("/chatRooms/" + roomName + "/users").set(users);
-          messagesList.push(nMessage);
-          this.firebaseDatabase.database
-            .ref("/chatRooms/" + roomName + "/messages")
-            .set(messagesList);
-          this.firebaseDatabase.database
-            .ref("/conversationsPerUser/" + id)
-            .once("value", function (snapshot) {
+          db.ref("/chatRooms/" + roomName + "/users").set(users);
+          db.ref("/chatRooms/" + roomName + "/messages").once("value", function (snapshot) {
+            if (snapshot.val() != null) {
+              messagesList = snapshot.val();
+            }
+            messagesList.push(nMessage);
+            console.log("message list", messagesList);
+            db.ref("/chatRooms/" + roomName + "/messages").set(messagesList);
+          });
+
+          db.ref("/conversationsPerUser/" + id).once("value", function (snapshot) {
+            if (snapshot.val() != null) {
+              conversations = snapshot.val();
+            }
+            if (!conversations.includes(roomName)) {
+              conversations.push(roomName);
+              console.log("conv", conversations);
+              db.ref("/conversationsPerUser/" + id).set(conversations);
+            }
+
+            conversations = [];
+            db.ref("/conversationsPerUser/" + friendId).once("value", function (snapshot) {
               if (snapshot.val() != null) {
                 conversations = snapshot.val();
               }
               if (!conversations.includes(roomName)) {
                 conversations.push(roomName);
-                console.log("conv", conversations);
+                console.log("conv amigo", conversations);
                 this.firebaseDatabase.database
-                  .ref("/conversationsPerUser/" + id)
+                  .ref("/conversationsPerUser/" + friendId)
                   .set(conversations);
               }
-
-              conversations = [];
-              this.firebaseDatabase.database
-                .ref("/conversationsPerUser/" + friendId)
-                .once("value", function (snapshot) {
-                  if (snapshot.val() != null) {
-                    conversations = snapshot.val();
-                  }
-                  if (!conversations.includes(roomName)) {
-                    conversations.push(roomName);
-                    console.log("conv amigo", conversations);
-                    this.firebaseDatabase.database
-                      .ref("/conversationsPerUser/" + friendId)
-                      .set(conversations);
-                  }
-                });
             });
+          });
         });
     }
+    this.notificationService.showSuccessMessage(
+      "Mensaje enviado",
+      "Su mensaje ha sido enviado con éxito."
+    );
+    this.modalService.close();
   }
 }

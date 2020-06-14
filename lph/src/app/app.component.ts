@@ -1,16 +1,14 @@
 import {Component, OnInit} from "@angular/core";
-import * as firebase from "firebase";
 import {UserService} from "./shared/user.service";
-import {environment} from "src/environments/environment";
 /** Anadido de servicio de firebase */
-import {AngularFireAuth} from '@angular/fire/auth';
+import {AngularFireAuth} from "@angular/fire/auth";
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  selector: "app-root",
+  templateUrl: "./app.component.html",
+  styleUrls: ["./app.component.css"]
 })
 export class AppComponent implements OnInit {
-  title = 'lph';
+  title = "lph";
 
   constructor(private userService: UserService, private firebaseAuth: AngularFireAuth) {}
 
@@ -38,9 +36,9 @@ export class AppComponent implements OnInit {
       }
     }); */
 
-    this.firebaseAuth.onAuthStateChanged(user => {
+    this.firebaseAuth.onAuthStateChanged((user) => {
       if (user) {
-        this.userService.performLogin(user.uid);  // Se le ingresa el primary Key que viene desde firebase
+        this.userService.performLogin(user.uid); // Se le ingresa el primary Key que viene desde firebase
       } else {
         this.userService.performLogout();
       }

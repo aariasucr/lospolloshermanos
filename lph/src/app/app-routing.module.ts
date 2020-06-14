@@ -9,7 +9,6 @@ import {ProfileComponent} from "./profile/profile.component";
 import {EditProfileComponent} from "./edit-profile/edit-profile.component";
 import {HomeComponent} from "./home/home.component";
 import {ChatComponent} from "./chat/chat.component";
-import {ChatService} from "./shared/chat.service";
 
 const routes: Routes = [
   {path: "", component: AppComponent, canActivate: [RouteGuard]},
