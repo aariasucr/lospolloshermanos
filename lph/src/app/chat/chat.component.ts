@@ -43,7 +43,7 @@ export class ChatComponent implements OnInit {
           this.previews = [];
           this.getPreviews();
           console.log("message list", messageList);
-          let lista = [];
+          //let lista = [];
           messageList.forEach((element) => {
             let oneMessage: Message;
             oneMessage = {
@@ -52,7 +52,7 @@ export class ChatComponent implements OnInit {
               sender: element["sender"],
               timestamp: element["timestamp"]
             };
-            lista.push(oneMessage);
+            //lista.push(oneMessage);
           });
         });
       });
