@@ -3,6 +3,7 @@
 // 3. Levantar la app de nuevo
 // Aquí se pone lo que antes se ponía en el app.component
 
+/*
 export const firebase = {
   config: {
     apiKey: 'AIzaSyCp0uZpvmob9CKnj3ss4s5O9PHfaYqr_vg',
@@ -14,4 +15,4 @@ export const firebase = {
       appId: '1:109795544705:web:06f0b2f9c9c8a533380780',
       measurementId: 'G-70M8BRKPMF'
   }
-};
+};*/
