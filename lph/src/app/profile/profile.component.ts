@@ -50,9 +50,10 @@ export class ProfileComponent implements OnInit {
     this.isFollowing = this.isFollowingTo();
     this.followUnfollowBtn = 'Seguir';
 
-    this.getUser();
-    /** Cambiar forma de conseguir las cosas */
-    this.getProfilePhoto()
+    this.firebaseAuth.currentUser.then(userData => {
+      console.log('mn jndsvjk sd.vznkjvfdnkldz vk.d.vlkd', userData.uid);
+      this.userDataId = userData.uid;
+      this.getProfilePhoto(this.userDataId)
       .then((photo) => {
         console.log('jqdbluwhdbiuwhfiuehlaefbuefbiulaebfiueraufaleub',photo);
         this.profilePicturePath = photo.val();
@@ -61,6 +62,20 @@ export class ProfileComponent implements OnInit {
       .catch((error) => {
         console.error('error', error);
       });
+    })
+    .catch(error => {
+      console.error('error', error);
+    });
+    /** Cambiar forma de conseguir las cosas */
+    /*this.getProfilePhoto()
+      .then((photo) => {
+        console.log('jqdbluwhdbiuwhfiuehlaefbuefbiulaebfiueraufaleub',photo);
+        this.profilePicturePath = photo.val();
+        console.log('------------------', this.profilePicturePath);
+      })
+      .catch((error) => {
+        console.error('error', error);
+      });*/
 
     /*this.getFullName()
       .then((name) => {
@@ -143,11 +158,11 @@ export class ProfileComponent implements OnInit {
     }
   }
 
-  getProfilePhoto() {
+  getProfilePhoto(userData: string) {
     //console.log('--------------------', this.userDataId);
     if (this.route === '/myprofile') {
       return this.firebaseDatabase.database
-        .ref('/users/' + this.userDataId + '/profilePhoto')
+        .ref('/users/' + userData + '/profilePhoto')
         .once(
           'value',
           snapshot => {
