@@ -1,3 +1,18 @@
+<link
+  href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"
+  rel="stylesheet"
+  id="bootstrap-css"
+/>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+<head>
+  <link
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css"
+    type="text/css"
+    rel="stylesheet"
+  />
+</head>
 <header class="clearfix feed-header" data-role="banner">
   <div id="datos" class="profile-user">
     <div class="row-fluid">
@@ -45,7 +60,12 @@
 </ng-template>
 
 <ng-template #friendsProfile>
-  <button class="boton_personalizado" style="float: right;" type="button">
+  <button
+    class="boton_personalizado"
+    style="float: right;"
+    type="button"
+    (click)="openModalMessage(sendMessageModal)"
+  >
     Enviar mensaje
   </button>
   <button
@@ -83,6 +103,7 @@
     <div *ngIf="modalTitle === 'Seguidores'; then listFollowers; else listFollowing"></div>
   </div>
 </ng-template>
+
 <ng-template #listFollowers>
   <ul *ngFor="let follower of followersList">
     <li style="list-style: none;">
@@ -103,6 +124,7 @@
     </li>
   </ul>
 </ng-template>
+
 <ng-template #listFollowing>
   <ul *ngFor="let following of followingList">
     <li style="list-style: none;">
@@ -131,4 +153,32 @@
       </div>
     </li>
   </ul>
+</ng-template>
+
+<ng-template #sendMessageModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">Enviar mensaje directo</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="input_msg_write">
+      <form class="user" (ngSubmit)="sendMessage(f)" #f="ngForm">
+        <textarea
+          name="msg"
+          id="msg"
+          type="text"
+          #message
+          ngModel
+          class="write_msg"
+          placeholder="Escribir mensaje"
+        >
+        </textarea>
+        <button class="msg_send_btn" type="submit" title="Enviar">
+          <i class="fa fa-paper-plane-o" aria-hidden="true"></i>
+        </button>
+      </form>
+    </div>
+  </div>
 </ng-template>

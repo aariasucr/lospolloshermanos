@@ -20,7 +20,7 @@ const routes: Routes = [
   {path: "login", component: LoginComponent},
   {path: "logout", component: LoginComponent},
   {path: "register", component: RegisterComponent},
-  {path: "messages", component: ChatComponent},
+  {path: "messages", component: ChatComponent, canActivate: [RouteGuard]},
   {path: "resetPassword", component: ResetPasswordComponent}
 ];
 

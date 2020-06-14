@@ -18,8 +18,8 @@ export interface Friend {
 }
 
 export interface Message {
-  senderId: string;
-  datetime: Date;
+  sender: string;
+  datetime: string;
   timestamp: number;
   message: string;
 }

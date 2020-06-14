@@ -25,6 +25,7 @@ import {AngularFireModule} from "@angular/fire";
 import {AngularFireDatabaseModule} from "@angular/fire/database";
 import {ChatService} from "./shared/chat.service";
 import {environment} from "src/environments/environment";
+import {DatePipe} from "@angular/common";
 
 @NgModule({
   declarations: [
@@ -50,7 +51,7 @@ import {environment} from "src/environments/environment";
     AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFireDatabaseModule
   ],
-  providers: [UserService, RouteGuard, NotificationService, ModalService, ChatService],
+  providers: [UserService, RouteGuard, NotificationService, ModalService, ChatService, DatePipe],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

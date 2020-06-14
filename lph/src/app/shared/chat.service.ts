@@ -14,7 +14,8 @@ export class ChatService {
   getMessages(chat: string) {
     return this.db
       .list("/chatRooms/" + chat + "/messages", (ref) => {
-        return ref.orderByChild("timestamp");
+        return ref;
+        //.orderByChild("timestamp");
       })
       .valueChanges();
   }

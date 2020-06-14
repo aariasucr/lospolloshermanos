@@ -4,6 +4,8 @@ import {UserService} from "../shared/user.service";
 import {Message, PreviewMessage} from "../shared/model";
 import {ChatService} from "../shared/chat.service";
 import {AngularFireDatabase} from "@angular/fire/database";
+import {DatePipe} from "@angular/common";
+import {NgForm} from "@angular/forms";
 
 @Component({
   selector: "app-messages",
@@ -23,7 +25,8 @@ export class ChatComponent implements OnInit {
   constructor(
     private userService: UserService,
     private chatService: ChatService,
-    private db: AngularFireDatabase
+    private db: AngularFireDatabase,
+    private datePipe: DatePipe
   ) {}
 
   ngOnInit() {
@@ -44,7 +47,7 @@ export class ChatComponent implements OnInit {
             oneMessage = {
               datetime: element["datetime"],
               message: element["mensaje"],
-              senderId: element["sender"],
+              sender: element["sender"],
               timestamp: element["timestamp"]
             };
             lista.push(oneMessage);
@@ -59,45 +62,17 @@ export class ChatComponent implements OnInit {
   getUserChatRooms() {
     return this.db
       .list("/conversationsPerUser/" + this.userData.uid, (ref) => {
-        return ref.orderByChild("timestamp");
+        return ref;
       })
       .valueChanges();
-    /*return firebase
-      .database()
-      .ref("/conversationsPerUser/" + this.userData.uid)
-      .once(
-        "value",
-        function (snapshot) {
-          return snapshot.val();
-        },
-        function (errorObject) {
-          console.error("The read failed: " + errorObject);
-        }
-      );*/
   }
 
   getUserChats(idChat: string) {
     return this.db
       .list("/chatRooms/" + idChat + "/messages", (ref) => {
-        return ref.orderByChild("timestamp");
+        return ref;
       })
       .valueChanges();
-    /*return this.chatService.getMessages(idChat).subscribe((messagesList) => {
-      let localList: Array<Message> = new Array<Message>();
-      messagesList.forEach((element) => {
-        let oneMessage: Message;
-        oneMessage = {
-          datetime: element["datetime"],
-          message: element["mensaje"],
-          senderId: element["sender"],
-          timestamp: element["timestamp"]
-        };
-        localList.push(oneMessage);
-      });
-      this.messagesArray = localList;
-      console.log("metodo", localList);
-      return localList;
-    });*/
   }
 
   getPreviews() {
@@ -107,6 +82,7 @@ export class ChatComponent implements OnInit {
       firebase
         .database()
         .ref("chatRooms/" + room)
+        .orderByChild("timestamp")
         .once(
           "value",
           function (snapshot) {
@@ -118,17 +94,17 @@ export class ChatComponent implements OnInit {
             if (snapshot.val().users["user1"] == myid) {
               user = snapshot.val().users["user2"];
             }
-            let prev = firebase
+            firebase
               .database()
               .ref("/users/" + user)
-              .orderByChild("timestamp")
               .once(
                 "value",
                 function (users) {
                   _photo = users.val()["profilePhoto"];
                   _name = users.val()["fullName"];
                   let lista = snapshot.val().messages;
-                  _lastmessage = lista[lista.length - 1].mensaje;
+                  console.log("lista de mensajes", lista);
+                  _lastmessage = lista[lista.length - 1].message;
                   _date = lista[lista.length - 1].datetime;
                   let preview: PreviewMessage = {
                     idChat: room,
@@ -137,7 +113,6 @@ export class ChatComponent implements OnInit {
                     name: _name,
                     photo: _photo
                   };
-                  //return preview;
                   pr.push(preview);
                 },
                 function (errorObject) {
@@ -151,7 +126,6 @@ export class ChatComponent implements OnInit {
         );
     });
     this.previews = pr;
-    console.log("lb", this.previews);
   }
 
   openChat(idchat: string) {
@@ -163,7 +137,35 @@ export class ChatComponent implements OnInit {
     });
   }
 
-  newMessage(message) {
-    console.log(message);
+  sendNewMessage(form: NgForm) {
+    const mensaje = form.value.msg;
+    form.resetForm();
+    if (this.selectedChat !== "") {
+      let now = new Date();
+      let n = this.datePipe.transform(now, "dd-MM-yyyy HH:mm");
+      const current = new Date();
+      current.setHours(0);
+      current.setMinutes(0);
+      current.setSeconds(0);
+      current.setMilliseconds(0);
+      const stamp = current.getTime();
+      let nMessage: Message = {
+        datetime: n,
+        message: mensaje,
+        sender: this.userData.uid,
+        timestamp: stamp
+      };
+
+      firebase
+        .database()
+        .ref("/chatRooms/" + this.selectedChat + "/timestamp")
+        .set(stamp)
+        .then(() => {
+          this.messagesArray.push(nMessage);
+          this.db
+            .object("/chatRooms/" + this.selectedChat + "/messages")
+            .update(this.messagesArray);
+        });
+    }
   }
 }

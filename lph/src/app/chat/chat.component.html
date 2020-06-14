@@ -47,29 +47,36 @@
               </div>
             </div>
           </div>
-          <div class="mesgs">
-            <div class="msg_history">
-              <div *ngFor="let m of messagesArray">
-                <div *ngIf="selectedChat !== ''">
-                  <ng-container
-                    [ngTemplateOutlet]="m.sender == userData.uid ? outgoing_msg : incoming_msg"
-                    [ngTemplateOutletContext]="{mensaje: m}"
-                  >
-                  </ng-container>
+          <div *ngIf="selectedChat !== ''">
+            <div class="mesgs">
+              <div class="msg_history">
+                <div *ngFor="let m of messagesArray">
+                  <div *ngIf="selectedChat !== ''">
+                    <ng-container
+                      [ngTemplateOutlet]="m.sender == userData.uid ? outgoing_msg : incoming_msg"
+                      [ngTemplateOutletContext]="{mensaje: m}"
+                    >
+                    </ng-container>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div class="type_msg">
-              <div class="input_msg_write">
-                <input type="text" #message class="write_msg" placeholder="Escribir mensaje" />
-                <button
-                  class="msg_send_btn"
-                  type="button"
-                  title="Enviar"
-                  (click)="newMessage(message.value)"
-                >
-                  <i class="fa fa-paper-plane-o" aria-hidden="true"></i>
-                </button>
+              <div class="type_msg">
+                <div class="input_msg_write">
+                  <form class="user" (ngSubmit)="sendNewMessage(f)" #f="ngForm">
+                    <input
+                      name="msg"
+                      id="msg"
+                      type="text"
+                      #message
+                      ngModel
+                      class="write_msg"
+                      placeholder="Escribir mensaje"
+                    />
+                    <button class="msg_send_btn" type="submit" title="Enviar">
+                      <i class="fa fa-paper-plane-o" aria-hidden="true"></i>
+                    </button>
+                  </form>
+                </div>
               </div>
             </div>
           </div>
@@ -82,7 +89,7 @@
 <ng-template #outgoing_msg let-mensaje="mensaje">
   <div class="outgoing_msg">
     <div class="sent_msg">
-      <p>{{ mensaje.mensaje }}</p>
+      <p>{{ mensaje.message }}</p>
       <span class="time_date"> {{ mensaje.datetime }}</span>
     </div>
   </div>
@@ -92,7 +99,7 @@
   <div class="incoming_msg">
     <div class="received_msg">
       <div class="received_withd_msg">
-        <p>{{ mensaje.mensaje }}</p>
+        <p>{{ mensaje.message }}</p>
         <span class="time_date">{{ mensaje.datetime }}</span>
       </div>
     </div>
