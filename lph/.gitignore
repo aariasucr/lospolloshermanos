@@ -47,4 +47,4 @@ Thumbs.db
 
 
 #Para la configuración de las credenciales. Para que no se suban a git
-src/environments/firebase.environment.ts
+#src/environments/firebase.environment.ts

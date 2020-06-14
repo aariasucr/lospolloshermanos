@@ -16,7 +16,7 @@ import {AngularFireAuth} from '@angular/fire/auth';
 })
 export class ProfileComponent implements OnInit {
   public userDataId;
-  public profilePicturePath;
+  public profilePicturePath = '';
   public fullName;
   public followers;
   public following;
@@ -50,15 +50,17 @@ export class ProfileComponent implements OnInit {
     this.isFollowing = this.isFollowingTo();
     this.followUnfollowBtn = 'Seguir';
 
+    this.getUser();
     /** Cambiar forma de conseguir las cosas */
-    this.getProfilePhoto();
-      /*.then((photo) => {
+    this.getProfilePhoto()
+      .then((photo) => {
+        console.log('jqdbluwhdbiuwhfiuehlaefbuefbiulaebfiueraufaleub',photo);
         this.profilePicturePath = photo.val();
         console.log('------------------', this.profilePicturePath);
       })
       .catch((error) => {
         console.error('error', error);
-      });*/
+      });
 
     /*this.getFullName()
       .then((name) => {
@@ -75,6 +77,7 @@ export class ProfileComponent implements OnInit {
 
   getUser() {
     this.firebaseAuth.currentUser.then(userData => {
+      console.log('mn jndsvjk sd.vznkjvfdnkldz vk.d.vlkd', userData.uid);
       this.userDataId = userData.uid;
     })
     .catch(error => {
@@ -141,6 +144,7 @@ export class ProfileComponent implements OnInit {
   }
 
   getProfilePhoto() {
+    //console.log('--------------------', this.userDataId);
     if (this.route === '/myprofile') {
       return this.firebaseDatabase.database
         .ref('/users/' + this.userDataId + '/profilePhoto')
@@ -148,9 +152,9 @@ export class ProfileComponent implements OnInit {
           'value',
           snapshot => {
             // console.log('--------------------', snapshot.val());
-            this.profilePicturePath = snapshot.val();
+            //this.profilePicturePath = snapshot.val()['profilePhoto'];
             // console.log('--------------------', snapshot.val());
-            //return snapshot.val();
+            return snapshot.val();
 
           },
           errorObject => {
@@ -165,9 +169,9 @@ export class ProfileComponent implements OnInit {
           'value',
           snapshot => {
             console.log('--------------------', snapshot.val());
-            this.profilePicturePath = snapshot.val();
+            // this.profilePicturePath = snapshot.val();
             // console.log('--------------------', snapshot.val());
-            // return snapshot.val();
+            return snapshot.val();
             //console.log('--------------------', this.profilePicturePath);
           },
           errorObject => {
@@ -241,7 +245,7 @@ export class ProfileComponent implements OnInit {
     this.modalTitle = 'Siguiendo';
     let list = [];
     let id = '';
-    if (this.route == '/myprofile') {
+    if (this.route === '/myprofile') {
       id = this.userDataId;
     } else if (this.route.includes('user')) {
       id = this.route.replace('/user', '');

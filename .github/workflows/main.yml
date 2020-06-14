@@ -12,6 +12,10 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 12
+      
+      - name: Genear archivo de configuracion de firebase
+        working-directory: lph/src/environments
+        run: echo -n -e "${{secrets.FIREBASE_CONFIG}}" > firebase.environment.ts
 
       - name: Install Dependencies
         working-directory: lph
