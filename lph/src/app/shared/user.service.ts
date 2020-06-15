@@ -86,7 +86,7 @@ export class UserService {
       );
   }
 
-  getProfilePhoto(userId: string, route: string) {
+  getProfilePhoto(userId: string, route: string = '/myprofile') {
     if (route === '/myprofile') {
       return this.firebaseDatabase.database
         .ref('/users/' + userId + '/profilePhoto')
@@ -115,7 +115,7 @@ export class UserService {
     }
   }
 
-  getFullName(userId: string, route: string) {
+  getFullName(userId: string, route: string = '/myprofile') {
     let id = '';
     if (route === '/myprofile') {
       id = userId;

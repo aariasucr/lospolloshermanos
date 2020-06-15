@@ -14,7 +14,7 @@ import {AngularFireAuth} from '@angular/fire/auth';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
-  private posts: Post[] = [];
+  posts: Post[] = [];
   postRef: any;
   user = '';
   uploadedFileUrl = '';
@@ -31,7 +31,8 @@ export class HomeComponent implements OnInit {
         this.user = userData.uid; // Aquí se saca el user id que viene en una promesa desde firebase
 
         this.firebaseDatabase
-          .list(`posts/${this.user}`, (ref) => ref.limitToLast(100).orderByChild('created')) // crearle esta característica a los post
+          // .list(`posts/${this.user}`, (ref) => ref.limitToLast(100).orderByChild('created')) // crearle esta característica a los post
+          .list(`posts/${this.user}`, (ref) => ref.limitToLast(10))
           .snapshotChanges()
           .subscribe((data) => {  // Cuando se detecte algún cambio en la base, va a ir a traer ese cambio de forma reactiva.
             console.log(data);

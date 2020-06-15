@@ -153,4 +153,6 @@
         </div>
     </div>
 </div>
-<app-post-frame></app-post-frame>
+<section *ngFor="let post of this.posts">
+    <app-post-frame></app-post-frame>
+</section>

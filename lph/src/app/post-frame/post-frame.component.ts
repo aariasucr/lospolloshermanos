@@ -2,9 +2,10 @@ import {Component, OnInit} from '@angular/core';
 import {Post} from '../shared/model';
 import {PostService} from '../shared/post.service';
 import {NotificationService} from '../shared/notification.service';
-import {NgForm} from '@angular/forms';
 import * as firebase from 'firebase';
 import {UserService} from '../shared/user.service';
+import {AngularFireDatabase} from '@angular/fire/database';
+import {AngularFireAuth} from '@angular/fire/auth';
 
 @Component({
   selector: 'app-post-frame',
@@ -17,26 +18,41 @@ export class PostFrameComponent implements OnInit {
   postRef: any;
   author = '';
   uploadedFileUrl = '';
+  public userDataId;
+  public profilePicturePath = '';
+  public fullName;
 
   constructor(
     private postService: PostService,
     private notificationService: NotificationService,
-    private userService: UserService
+    private userService: UserService,
+    private firebaseDatabase: AngularFireDatabase,
+    private firebaseAuth: AngularFireAuth
   ) {}
 
   ngOnInit() {
-    this.author = firebase.auth().currentUser.uid;
-    // console.log(`autor: ${this.author}`);
+    this.firebaseAuth.currentUser.then(userData => {
+      this.userDataId = userData.uid;
 
-    /** Con firebase */
-    this.postRef = firebase.database().ref('posts').child(this.author).limitToLast(10);
-    // .orderByChild('created');               esto también se ocupa en la nueva estructura
+      this.userService.getProfilePhoto(this.userDataId)
+      .then((photo) => {
+        console.log('*****************************', photo.val());
+        this.profilePicturePath = photo.val();
+      })
+      .catch((error) => {
+        console.error('error', error);
+      });
 
-    this.postRef.on('child_added', (data) => {
-      // console.log(data);
-      const newPost: Post = data.val();
-      newPost.created = 20200530221;
-      this.posts.push(newPost);
+      this.userService.getFullName(this.userDataId)
+      .then((name) => {
+        this.fullName = name.val();
+      })
+      .catch((error) => {
+        console.error('error', error);
+      });
+    })
+    .catch(error => {
+      console.error('error', error);
     });
   }
 }
