@@ -86,6 +86,56 @@ export class UserService {
       );
   }
 
+  getProfilePhoto(userId: string, route: string) {
+    if (route === '/myprofile') {
+      return this.firebaseDatabase.database
+        .ref('/users/' + userId + '/profilePhoto')
+        .once(
+          'value',
+          snapshot => {
+            return snapshot.val();
+          },
+          errorObject => {
+            console.error('The read failed: ' + errorObject);
+          }
+        );
+    } else if (route.includes('user')) {
+      const userIdConst = route.replace('/user', '');
+      return this.firebaseDatabase.database
+        .ref('/users/' + userIdConst + '/profilePhoto')
+        .once(
+          'value',
+          snapshot => {
+            return snapshot.val();
+          },
+          errorObject => {
+            console.error('The read failed: ' + errorObject);
+          }
+        );
+    }
+  }
+
+  getFullName(userId: string, route: string) {
+    let id = '';
+    if (route === '/myprofile') {
+      id = userId;
+    } else if (route.includes('user')) {
+      id = route.replace('/user', '');
+    }
+
+    return this.firebaseDatabase.database
+      .ref('/users/' + id + '/fullName')
+      .once(
+        'value',
+        snapshot => {
+          return snapshot.val();
+        },
+        errorObject => {
+          console.error('The read failed: ' + errorObject);
+        }
+      );
+  }
+
   getUserDataFromFirebase(uid: string) {
     return this.firebaseDatabase.database
       .ref('users')

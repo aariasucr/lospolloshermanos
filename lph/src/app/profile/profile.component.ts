@@ -54,7 +54,7 @@ export class ProfileComponent implements OnInit {
       console.log('mn jndsvjk sd.vznkjvfdnkldz vk.d.vlkd', userData.uid);
       this.userDataId = userData.uid;
 
-      this.getProfilePhoto(this.userDataId)
+      this.userService.getProfilePhoto(this.userDataId, this.route)
       .then((photo) => {
         this.profilePicturePath = photo.val();
       })
@@ -62,7 +62,7 @@ export class ProfileComponent implements OnInit {
         console.error('error', error);
       });
 
-      this.getFullName(this.userDataId)
+      this.userService.getFullName(this.userDataId, this.route)
       .then((name) => {
         this.fullName = name.val();
       })
@@ -73,24 +73,6 @@ export class ProfileComponent implements OnInit {
     .catch(error => {
       console.error('error', error);
     });
-    /** Cambiar forma de conseguir las cosas */
-    /*this.getProfilePhoto()
-      .then((photo) => {
-        console.log('jqdbluwhdbiuwhfiuehlaefbuefbiulaebfiueraufaleub',photo);
-        this.profilePicturePath = photo.val();
-        console.log('------------------', this.profilePicturePath);
-      })
-      .catch((error) => {
-        console.error('error', error);
-      });*/
-
-    /*this.getFullName()
-      .then((name) => {
-        this.fullName = name.val();
-      })
-      .catch((error) => {
-        console.error('error', error);
-      });*/
 
     this.getNumberFollowersAndFollowing();
 
@@ -163,56 +145,6 @@ export class ProfileComponent implements OnInit {
         }
       });
     }
-  }
-
-  getProfilePhoto(userId: string) {
-    if (this.route === '/myprofile') {
-      return this.firebaseDatabase.database
-        .ref('/users/' + userId + '/profilePhoto')
-        .once(
-          'value',
-          snapshot => {
-            return snapshot.val();
-          },
-          errorObject => {
-            console.error('The read failed: ' + errorObject);
-          }
-        );
-    } else if (this.route.includes('user')) {
-      const userId = this.route.replace('/user', '');
-      return this.firebaseDatabase.database
-        .ref('/users/' + userId + '/profilePhoto')
-        .once(
-          'value',
-          snapshot => {
-            return snapshot.val();
-          },
-          errorObject => {
-            console.error('The read failed: ' + errorObject);
-          }
-        );
-    }
-  }
-
-  getFullName(userId: string) {
-    let id = '';
-    if (this.route === '/myprofile') {
-      id = userId;
-    } else if (this.route.includes('user')) {
-      id = this.route.replace('/user', '');
-    }
-
-    return this.firebaseDatabase.database
-      .ref('/users/' + id + '/fullName')
-      .once(
-        'value',
-        snapshot => {
-          return snapshot.val();
-        },
-        errorObject => {
-          console.error('The read failed: ' + errorObject);
-        }
-      );
   }
 
   editProfile() {
