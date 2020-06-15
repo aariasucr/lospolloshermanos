@@ -51,7 +51,6 @@ export class ProfileComponent implements OnInit {
     this.followUnfollowBtn = 'Seguir';
 
     this.firebaseAuth.currentUser.then(userData => {
-      console.log('mn jndsvjk sd.vznkjvfdnkldz vk.d.vlkd', userData.uid);
       this.userDataId = userData.uid;
 
       this.userService.getProfilePhoto(this.userDataId, this.route)
@@ -77,16 +76,6 @@ export class ProfileComponent implements OnInit {
     this.getNumberFollowersAndFollowing();
 
     this.getPosts();
-  }
-
-  getUser() {
-    this.firebaseAuth.currentUser.then(userData => {
-      console.log('mn jndsvjk sd.vznkjvfdnkldz vk.d.vlkd', userData.uid);
-      this.userDataId = userData.uid;
-    })
-    .catch(error => {
-      console.error('error', error);
-    });
   }
 
   getNumberFollowersAndFollowing() {
