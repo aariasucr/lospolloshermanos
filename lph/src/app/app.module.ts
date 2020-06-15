@@ -30,6 +30,7 @@ import {AngularFireAuthModule} from "@angular/fire/auth"; // Para las funcionali
 import {AngularFireStorageModule} from "@angular/fire/storage"; // Para las funcionalidades del storage
 /** Para no subir credenciales a git: */
 import {environment} from "src/environments/environment";
+import {CommentService} from "./shared/comment.service";
 
 @NgModule({
   declarations: [
@@ -57,7 +58,15 @@ import {environment} from "src/environments/environment";
     AngularFireAuthModule,
     AngularFireStorageModule
   ],
-  providers: [UserService, RouteGuard, NotificationService, ModalService, ChatService, DatePipe],
+  providers: [
+    UserService,
+    RouteGuard,
+    NotificationService,
+    ModalService,
+    ChatService,
+    DatePipe,
+    CommentService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

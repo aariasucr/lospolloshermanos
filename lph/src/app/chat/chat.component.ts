@@ -6,6 +6,7 @@ import {ChatService} from "../shared/chat.service";
 import {AngularFireDatabase} from "@angular/fire/database";
 import {DatePipe} from "@angular/common";
 import {NgForm} from "@angular/forms";
+import {CommentService} from "../shared/comment.service";
 @Component({
   selector: "app-messages",
   templateUrl: "./chat.component.html",
@@ -25,6 +26,7 @@ export class ChatComponent implements OnInit {
     private userService: UserService,
     private chatService: ChatService,
     private db: AngularFireDatabase,
+    private commentService: CommentService,
     private datePipe: DatePipe
   ) {}
 
@@ -34,15 +36,16 @@ export class ChatComponent implements OnInit {
     this.selectedChat = "";
     this.messagesArray = [];
     this.userData = firebase.auth().currentUser.uid;
+    this.previews = [];
 
     this.getUserChatRooms().subscribe((rooms: Array<string>) => {
-      console.log("click al inicio");
+      //console.log("click al inicio");
       this.userchatRooms = rooms;
       rooms.forEach((room) => {
         this.getUserChats(room).subscribe((messageList) => {
           this.previews = [];
           this.getPreviews();
-          console.log("message list", messageList);
+          //console.log("message list", messageList);
           //let lista = [];
           messageList.forEach((element) => {
             let oneMessage: Message;
@@ -128,7 +131,7 @@ export class ChatComponent implements OnInit {
     });
 
     this.previews = pr;
-    console.log("previ", this.previews);
+    //console.log("previ", this.previews);
   }
 
   openChat(idchat: string) {
@@ -162,6 +165,9 @@ export class ChatComponent implements OnInit {
           this.messagesArray.push(nMessage);
           this.db.object("/chatRooms/" + this.selectedChat + "/messages").set(this.messagesArray);
         });
+      let friendId = this.selectedChat.replace(this.userData, "");
+      friendId = friendId.replace("_", "");
+      this.commentService.newMessage(friendId);
     }
   }
 }
