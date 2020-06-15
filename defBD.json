@@ -1,63 +1,83 @@
-"lph": {
-	posts{
-		idUsuario {
-			idPost{
-			datos...	
-			}		
-		}	
-	},
+{
+    "posts": {
+        "idUsuario": {
+            "idPost": {
+                "postPhoto": "image",
+                "postDescription": "User's description created",
+                "created": 123124231432,
+                "creationDate": "Mon Apr 20 2020 17:49:03 GMT-0600 (Central Standard Time)",
+                "likeCounter": 0,
+                "commentCounter": 0
+            }
+        }
+    },
 
-	users{
-		idUsuario{
-			datos sin posts	
-		}
-	},
+    "users": {
+        "idUsuario": {
+            "fullName": "name_of_the_user",
+            "profilePhoto": "https://firebasestorage.googleapis.com/v0/b/lhp-ci2400.appspot.com/o/posts%2F2SYMvre2sRerkIbNqFam81KEGH521590991200000.jpg?alt=media&token=3f3d6fdb-7f64-4251-9d8f-bb9ee77ee8e5"
+        }
+    },
 
-	followers:{
-		idUsuario:["12"]
-	},
+    "followers": {
+        "idUsuario": ["12"]
+    },
 
-	following:{
-		idUsuario:["3"]
-	}
-	
-	comentarios{
-			idPost{
-				idComentario{
-					idUsuarioQueEscribióComentario,
-					comentario,
-					fecha y hora		
-				}
-			}		
-	},
+    "following": {
+        "idUsuario": ["3"]
+    },
 
-	chatRooms:{
-	  idChat1:{
-		miembro1:"123",
-		miembro2:"456"
-		messages: [
-		  sender: "xxxx",
-		  fecha y hora: "xxxx",
-		  mensaje: "sdjbfkeb"
-		]
-	  }
-	},
-	conversationsPerUser:{
-	  "123":[
-		"idChat1"
-	  ],
-	  "456":[
-		"idChat1"
-	  ]
-	},
+    "comments": {
+        "idPost": {
+            "idComentario": {
+                "idUsuarioQueEscribióComentario": "el_id_del_usuario",
+                "comentario": "el_comentario_del_usuario",
+                "creationDate": "Mon Apr 20 2020 17:49:03 GMT-0600 (Central Standard Time)",
+                "created": 12931249819248120
+            }
+        }
+    },
 
-	notificaciones:{
-		"idUsuario":{
-			"mensajes": "0",
-			"nuevoSeguidor": "0",
-			"likesNuevo": "0",
-			"comentariosNuevos": "0"
-		}
-	}
+    "chatRooms": {
+        "idChat1": {
+						"users":{
+						
+				},
+            "miembro1": "123",
+            "miembro2": "456",
+            "messages": [
+							{ 
+							"sender": "xxxx",
+						  "fecha y hora": "xxxx",
+						  "mensaje": "sdjbfkeb",
+							"timestamp": 877778
+							}
+							],
+            "lastUpdate": 7137127838212321
+        }
+    },
 
+    "conversationsPerUser": {
+        "123": [
+            "idChat1"
+        ],
+        "456": [
+            "idChat1"
+        ]
+    },
+
+    "notifications": {
+        "idUsuario": {
+            "mensajes": "0",
+            "nuevoSeguidor": "0",
+            "likesNuevo": "0",
+            "comentariosNuevos": "0"
+        },
+        "ZhLvdu5951NUkgrkQSXf7pNULGc2": {
+            "mensajes": "0",
+            "nuevoSeguidor": "0",
+            "likesNuevo": "0",
+            "comentariosNuevos": "0"
+        }
+    }
 }

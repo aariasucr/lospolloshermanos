@@ -10,6 +10,7 @@ import {NotificationService} from "../shared/notification.service";
 import {AngularFireDatabase} from "@angular/fire/database";
 import {AngularFireAuth} from "@angular/fire/auth";
 import {ChatService} from "../shared/chat.service";
+import {CommentService} from "../shared/comment.service";
 
 @Component({
   selector: "app-profile",
@@ -35,6 +36,7 @@ export class ProfileComponent implements OnInit {
     private datePipe: DatePipe,
     private userService: UserService,
     private chatService: ChatService,
+    private commentService: CommentService,
     private modalService: ModalService,
     private notificationService: NotificationService,
     private router: Router,
@@ -78,24 +80,6 @@ export class ProfileComponent implements OnInit {
       .catch((error) => {
         console.error("error", error);
       });
-    /** Cambiar forma de conseguir las cosas */
-    /*this.getProfilePhoto()
-      .then((photo) => {
-        console.log('jqdbluwhdbiuwhfiuehlaefbuefbiulaebfiueraufaleub',photo);
-        this.profilePicturePath = photo.val();
-        console.log('------------------', this.profilePicturePath);
-      })
-      .catch((error) => {
-        console.error('error', error);
-      });*/
-
-    /*this.getFullName()
-      .then((name) => {
-        this.fullName = name.val();
-      })
-      .catch((error) => {
-        console.error('error', error);
-      });*/
 
     this.getNumberFollowersAndFollowing();
 
@@ -342,6 +326,7 @@ export class ProfileComponent implements OnInit {
             followersArray = [currentUser];
           }
           this.firebaseDatabase.database.ref("/followers/" + id).set(followersArray);
+          this.commentService.newFollower(id);
         },
         (errorObject) => {
           console.error("The read failed: " + errorObject);
@@ -498,6 +483,7 @@ export class ProfileComponent implements OnInit {
             });
           });
         });
+      this.commentService.newMessage(friendId);
     }
     this.notificationService.showSuccessMessage(
       "Mensaje enviado",

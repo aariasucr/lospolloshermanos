@@ -1,6 +1,6 @@
 import {Injectable, OnInit} from "@angular/core";
 import {AngularFireDatabase, AngularFireObject} from "@angular/fire/database";
-import {Message} from "./model";
+import {Observable} from "rxjs";
 
 @Injectable({
   providedIn: "root"
@@ -12,7 +12,7 @@ export class ChatService {
     return this.db.object(chatId).valueChanges();
   }
 
-  getMessages(chat: string) {
+  getMessages(chat: string): Observable<any> {
     return this.db
       .list("/chatRooms/" + chat + "/messages", (ref) => {
         return ref; //.orderByChild("timestamp");
