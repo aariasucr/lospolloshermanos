@@ -154,5 +154,5 @@
     </div>
 </div>
 <section *ngFor="let post of this.posts">
-    <app-post-frame></app-post-frame>
+    <app-post-frame [posts]="post"></app-post-frame>
 </section>

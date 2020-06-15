@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, Input} from '@angular/core';
 import {Post} from '../shared/model';
 import {PostService} from '../shared/post.service';
 import {NotificationService} from '../shared/notification.service';
@@ -13,11 +13,14 @@ import {AngularFireAuth} from '@angular/fire/auth';
   styleUrls: ['./post-frame.component.css']
 })
 export class PostFrameComponent implements OnInit {
-  private posts: Post[] = [];
+  @Input() posts: Post[] = [];
+  // @Input() postId = '';
 
   postRef: any;
   author = '';
   uploadedFileUrl = '';
+  numComm = 0;
+  numLikes = 0;
   public userDataId;
   public profilePicturePath = '';
   public fullName;
@@ -36,7 +39,6 @@ export class PostFrameComponent implements OnInit {
 
       this.userService.getProfilePhoto(this.userDataId)
       .then((photo) => {
-        console.log('*****************************', photo.val());
         this.profilePicturePath = photo.val();
       })
       .catch((error) => {
@@ -54,5 +56,9 @@ export class PostFrameComponent implements OnInit {
     .catch(error => {
       console.error('error', error);
     });
+
+    this.uploadedFileUrl = this.posts["img"];
+    this.numComm = this.posts["numberComm"];
+    this.numLikes = this.posts["numberLikes"];
   }
 }

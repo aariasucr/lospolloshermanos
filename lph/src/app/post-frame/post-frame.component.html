@@ -75,12 +75,15 @@
             <div class="overlay">
                 <span></span>
             </div>
-            <img src='https://source.unsplash.com/featured/?smile, people' alt="image profile here">
+            <img [src]='uploadedFileUrl' alt="image profile here">
+            <!--<img [src]='https://source.unsplash.com/featured/?smile, people' alt="image profile here">-->
         </div>
         <div class='footer'>
             <div class='react'>
                 <a href='#' role='button'><span class='love'></span></a>
+                <a>{{this.numLikes}}</a>
                 <a href='#' role='button'><span class='comment'></span></a>
+                <a>{{this.numComm}}</a>
                 <a href='#' role='button'><span class='save'></span></a>
             </div>
             <div class='caption'>

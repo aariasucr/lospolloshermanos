@@ -37,6 +37,7 @@ export class HomeComponent implements OnInit {
           .subscribe((data) => {  // Cuando se detecte algún cambio en la base, va a ir a traer ese cambio de forma reactiva.
             console.log(data);
             this.posts = data.map((e) => { // A cada elemento que viene, de los 100 que se traen, se le saca el val
+              console.log(e.payload.val());
               return {
                 ...(e.payload.val() as Post)
               };

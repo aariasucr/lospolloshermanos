@@ -50,6 +50,7 @@ export class UserService {
       .once(
         'value',
         snapshot => {
+          console.log('---------------------', Object.keys(snapshot.val()));
           return snapshot.val();
         },
         errorObject => {
