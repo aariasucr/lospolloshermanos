@@ -11,7 +11,7 @@ export class PostService {
   constructor(private firebaseDatabase: AngularFireDatabase,
               private firebaseAuth: AngularFireAuth) {}
 
-  addNewPostAsync(content: string, author: string, imgUrl: string) {
+  addNewPostAsync(author: string, imgUrl: string, postDescription: string) {
     return this.firebaseAuth.currentUser.then(userData => {
       const firebaseUserId = userData.uid;
       const newPostKey = this.firebaseDatabase.database
@@ -24,11 +24,13 @@ export class PostService {
       }
 
       const newPostEntry = {
-        author: author,
-        content: content,
+        auth: author,
+        img: imgUrl,
+        postDesc: postDescription,
         created: new Date().getTime(),
         creationDate: new Date().toString(),
-        img: imgUrl
+        likeCounter: 0,
+        commentCounter: 0
       };
 
       const updates = {};

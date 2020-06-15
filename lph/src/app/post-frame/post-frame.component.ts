@@ -39,23 +39,4 @@ export class PostFrameComponent implements OnInit {
       this.posts.push(newPost);
     });
   }
-
-  onSubmit(form: NgForm) {
-    this.userService.getUserDataFromFirebase(firebase.auth().currentUser.uid).then((userData) => {
-      // Pormesa que devuelve los datos del usuario
-      this.postService
-        .addNewPostAsync('una descripción ahi cualquiera', 'el autor del post', this.uploadedFileUrl)
-        .then((results) => {
-          this.notificationService.showSuccessMessage('Todo bien!', 'Publicación Creada');
-        })
-        .catch((error) => {
-          this.notificationService.showErrorMessage('Error!!!', 'Error creando publicación');
-        });
-    });
-  }
-
-  onImagePicked(imageUrl: string) {
-    // console.log("url en firebase listo para guardar en la base de datos", imageUrl);
-    this.uploadedFileUrl = imageUrl;
-  }
 }

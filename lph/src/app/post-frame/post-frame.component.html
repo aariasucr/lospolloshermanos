@@ -64,32 +64,6 @@
     });
 </script>
 
-<form class="form-horizontal col-xs-12" (ngSubmit)="onSubmit(f)" #f="ngForm">
-    <fieldset>
-
-        <!-- Form Name -->
-        <legend>Agrega un nuevo post</legend>
-
-        <!-- Textarea -->
-        <div class="control-group">
-            <label class="control-label" for="Description">Description</label>
-            <div class="controls">
-                <textarea id="Description" name="Description" placeholder="Escribe lo que piensas"></textarea>
-            </div>
-        </div>
-
-        <!-- Button -->
-        <app-file-uploader></app-file-uploader>
-
-        <div class="col-sm-2 mb-3 mb-sm-0">
-            <button type="submit" class="btn btn-success btn-icon-split" [disabled]="!f.valid">
-        Publicar
-      </button>
-        </div>
-
-    </fieldset>
-</form>
-
 <section *ngFor="let post of this.posts">
     <div class='insta fade-scroll'>
         <div class='top-insta'>
