@@ -165,7 +165,6 @@ body {
   background: none;
   width: 1.5rem;
   height: 1.5rem;
-  border-radius: 50%;
   animation: bounceScale 3s cubic-bezier(0.3, 0, 0.7, 1) infinite 2s;
 }
 @keyframes bounceScale {
@@ -262,7 +261,6 @@ body {
   width: 100%;
   box-sizing: border-box;
   border-radius: 0.5rem;
-  padding: 0;
   margin: 0;
   display: flex;
   padding: 0 1.5rem;
@@ -310,7 +308,6 @@ body {
   color: #7f8c8d;
 }
 .modalBody {
-  padding: 10%;
   border-bottom: 1px solid #c4c4c4;
   margin: 0;
   padding: 18px 16px 10px;
