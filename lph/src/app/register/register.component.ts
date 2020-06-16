@@ -59,23 +59,8 @@ export class RegisterComponent implements OnInit {
             .ref('/users/' + newUserId.toString())
             .set(db);
 
-          /*firebase
-            .database()
-            .ref("/posts/" + newUser.uid.toString())
-            .set([]);
-
-          firebase
-            .database()
-            .ref("/followers/" + newUser.uid.toString())
-            .set([]);
-
-          firebase
-            .database()
-            .ref("/following/" + newUser.uid.toString())
-            .set([]);*/
-
-          this.router.navigate(['/home']);
-          this.notificationService.showSuccessMessage('Bienvenido', 'Sesión iniciada');
+          this.router.navigate(["/home"]);
+          this.notificationService.showSuccessMessage("Bienvenido", "Sesión iniciada");
         })
         .catch((error) => {
           console.log(error.message);
