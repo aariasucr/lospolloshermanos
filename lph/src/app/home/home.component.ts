@@ -14,7 +14,7 @@ import {AngularFireAuth} from '@angular/fire/auth';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
-  private posts: Post[] = [];
+  posts: Post[] = [];
   postRef: any;
   user = '';
   uploadedFileUrl = '';
@@ -31,11 +31,13 @@ export class HomeComponent implements OnInit {
         this.user = userData.uid; // Aquí se saca el user id que viene en una promesa desde firebase
 
         this.firebaseDatabase
-          .list(`posts/${this.user}`, (ref) => ref.limitToLast(100).orderByChild('created')) // crearle esta característica a los post
+          // .list(`posts/${this.user}`, (ref) => ref.limitToLast(100).orderByChild('created')) // crearle esta característica a los post
+          .list(`posts/${this.user}`, (ref) => ref.limitToLast(10))
           .snapshotChanges()
           .subscribe((data) => {  // Cuando se detecte algún cambio en la base, va a ir a traer ese cambio de forma reactiva.
             console.log(data);
             this.posts = data.map((e) => { // A cada elemento que viene, de los 100 que se traen, se le saca el val
+              console.log(e.payload.val());
               return {
                 ...(e.payload.val() as Post)
               };
@@ -51,7 +53,7 @@ export class HomeComponent implements OnInit {
       this.userService.getUserDataFromFirebase(authData.uid).then((userData) => {
         // Pormesa que devuelve los datos del usuario
         this.postService
-          .addNewPostAsync(content, userData.val().userName, this.uploadedFileUrl)
+          .addNewPostAsync(userData.val().fullName, this.uploadedFileUrl, content)
           .then((results) => {
             this.notificationService.showSuccessMessage('Todo bien!', 'Publicación Creada');
           })

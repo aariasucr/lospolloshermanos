@@ -2,7 +2,8 @@
     "posts": {
         "idUsuario": {
             "idPost": {
-                "postPhoto": "image",
+                "author": "nombre_del_creador",
+                "imgUrl": "https://placeimg.com/320/240/any/sepia",
                 "postDescription": "User's description created",
                 "created": 123124231432,
                 "creationDate": "Mon Apr 20 2020 17:49:03 GMT-0600 (Central Standard Time)",
@@ -32,8 +33,9 @@
             "idComentario": {
                 "idUsuarioQueEscribióComentario": "el_id_del_usuario",
                 "comentario": "el_comentario_del_usuario",
-                "creationDate": "Mon Apr 20 2020 17:49:03 GMT-0600 (Central Standard Time)",
-                "created": 12931249819248120
+                "created": 12931249819248120,
+                "creationDate": "Mon Apr 20 2020 17:49:03 GMT-0600 (Central Standard Time)"
+
             }
         }
     },
@@ -53,7 +55,7 @@
 							"timestamp": 877778
 							}
 							],
-            "lastUpdate": 7137127838212321
+            "timestamp": 7137127838212321
         }
     },
 
@@ -81,3 +83,4 @@
         }
     }
 }
+

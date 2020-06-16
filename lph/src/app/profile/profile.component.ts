@@ -56,45 +56,32 @@ export class ProfileComponent implements OnInit {
     this.isFollowing = this.isFollowingTo();
     this.followUnfollowBtn = "Seguir";
 
-    this.firebaseAuth.currentUser
+        this.firebaseAuth.currentUser
       .then((userData) => {
-        //console.log("mn jndsvjk sd.vznkjvfdnkldz vk.d.vlkd", userData.uid);
         this.userDataId = userData.uid;
-
-        this.getProfilePhoto(this.userDataId)
-          .then((photo) => {
-            this.profilePicturePath = photo.val();
-          })
-          .catch((error) => {
-            console.error("error", error);
-          });
-
-        this.getFullName(this.userDataId)
-          .then((name) => {
-            this.fullName = name.val();
-          })
-          .catch((error) => {
-            console.error("error", error);
-          });
+      this.userService.getProfilePhoto(this.userDataId, this.route)
+      .then((photo) => {
+        this.profilePicturePath = photo.val();
       })
+      .catch((error) => {
+        console.error('error', error);
+      });
+
+      this.userService.getFullName(this.userDataId, this.route)
+      .then((name) => {
+        this.fullName = name.val();
+        })
       .catch((error) => {
         console.error("error", error);
       });
+    })
+    .catch(error => {
+      console.error('error', error);
+    });
 
     this.getNumberFollowersAndFollowing();
 
     this.getPosts();
-  }
-
-  getUser() {
-    this.firebaseAuth.currentUser
-      .then((userData) => {
-        console.log("mn jndsvjk sd.vznkjvfdnkldz vk.d.vlkd", userData.uid);
-        this.userDataId = userData.uid;
-      })
-      .catch((error) => {
-        console.error("error", error);
-      });
   }
 
   getNumberFollowersAndFollowing() {
@@ -153,50 +140,6 @@ export class ProfileComponent implements OnInit {
         }
       });
     }
-  }
-
-  getProfilePhoto(userId: string) {
-    if (this.route === "/myprofile") {
-      return this.firebaseDatabase.database.ref("/users/" + userId + "/profilePhoto").once(
-        "value",
-        (snapshot) => {
-          return snapshot.val();
-        },
-        (errorObject) => {
-          console.error("The read failed: " + errorObject);
-        }
-      );
-    } else if (this.route.includes("user")) {
-      let userId = this.route.replace("/user", "");
-      return this.firebaseDatabase.database.ref("/users/" + userId + "/profilePhoto").once(
-        "value",
-        (snapshot) => {
-          return snapshot.val();
-        },
-        (errorObject) => {
-          console.error("The read failed: " + errorObject);
-        }
-      );
-    }
-  }
-
-  getFullName(userId: string) {
-    let id = "";
-    if (this.route === "/myprofile") {
-      id = userId;
-    } else if (this.route.includes("user")) {
-      id = this.route.replace("/user", "");
-    }
-
-    return this.firebaseDatabase.database.ref("/users/" + id + "/fullName").once(
-      "value",
-      (snapshot) => {
-        return snapshot.val();
-      },
-      (errorObject) => {
-        console.error("The read failed: " + errorObject);
-      }
-    );
   }
 
   editProfile() {

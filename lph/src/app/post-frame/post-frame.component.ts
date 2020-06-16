@@ -1,10 +1,11 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, Input} from '@angular/core';
 import {Post} from '../shared/model';
 import {PostService} from '../shared/post.service';
 import {NotificationService} from '../shared/notification.service';
-import {NgForm} from '@angular/forms';
 import * as firebase from 'firebase';
 import {UserService} from '../shared/user.service';
+import {AngularFireDatabase} from '@angular/fire/database';
+import {AngularFireAuth} from '@angular/fire/auth';
 
 @Component({
   selector: 'app-post-frame',
@@ -12,50 +13,52 @@ import {UserService} from '../shared/user.service';
   styleUrls: ['./post-frame.component.css']
 })
 export class PostFrameComponent implements OnInit {
-  private posts: Post[] = [];
+  @Input() posts: Post[] = [];
+  // @Input() postId = '';
 
   postRef: any;
   author = '';
   uploadedFileUrl = '';
+  numComm = 0;
+  numLikes = 0;
+  public userDataId;
+  public profilePicturePath = '';
+  public fullName;
 
   constructor(
     private postService: PostService,
     private notificationService: NotificationService,
-    private userService: UserService
+    private userService: UserService,
+    private firebaseDatabase: AngularFireDatabase,
+    private firebaseAuth: AngularFireAuth
   ) {}
 
   ngOnInit() {
-    this.author = firebase.auth().currentUser.uid;
-    // console.log(`autor: ${this.author}`);
+    this.firebaseAuth.currentUser.then(userData => {
+      this.userDataId = userData.uid;
 
-    /** Con firebase */
-    this.postRef = firebase.database().ref('posts').child(this.author).limitToLast(10);
-    // .orderByChild('created');               esto también se ocupa en la nueva estructura
+      this.userService.getProfilePhoto(this.userDataId)
+      .then((photo) => {
+        this.profilePicturePath = photo.val();
+      })
+      .catch((error) => {
+        console.error('error', error);
+      });
 
-    this.postRef.on('child_added', (data) => {
-      // console.log(data);
-      const newPost: Post = data.val();
-      newPost.created = 20200530221;
-      this.posts.push(newPost);
+      this.userService.getFullName(this.userDataId)
+      .then((name) => {
+        this.fullName = name.val();
+      })
+      .catch((error) => {
+        console.error('error', error);
+      });
+    })
+    .catch(error => {
+      console.error('error', error);
     });
-  }
 
-  onSubmit(form: NgForm) {
-    this.userService.getUserDataFromFirebase(firebase.auth().currentUser.uid).then((userData) => {
-      // Pormesa que devuelve los datos del usuario
-      this.postService
-        .addNewPostAsync('una descripción ahi cualquiera', 'el autor del post', this.uploadedFileUrl)
-        .then((results) => {
-          this.notificationService.showSuccessMessage('Todo bien!', 'Publicación Creada');
-        })
-        .catch((error) => {
-          this.notificationService.showErrorMessage('Error!!!', 'Error creando publicación');
-        });
-    });
-  }
-
-  onImagePicked(imageUrl: string) {
-    // console.log("url en firebase listo para guardar en la base de datos", imageUrl);
-    this.uploadedFileUrl = imageUrl;
+    this.uploadedFileUrl = this.posts["img"];
+    this.numComm = this.posts["numberComm"];
+    this.numLikes = this.posts["numberLikes"];
   }
 }

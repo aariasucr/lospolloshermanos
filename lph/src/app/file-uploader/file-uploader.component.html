@@ -1,5 +1,6 @@
 <div class="upload">
-  <img class="preview-img" [src]="fileUrl" alt="photo to upload" />
-  <button class="btnSubirFoto" (click)="onUploadImage()">Examinar {{ this.uploadStatus }}</button>
-  <input type="file" accept="image/jpeg" #filePicker (change)="onFileChosen($event)" />
+    <!--<img class="preview-img" [src]="fileUrl" alt="photo to upload" />-->
+    <button class="btnSubirFoto" (click)="onUploadImage()">Examinar {{ this.uploadStatus }}</button>
+    <input type="file" accept="image/jpeg" #filePicker (change)="onFileChosen($event)" />
+    <p>{{fileUrl}}</p>
 </div>
