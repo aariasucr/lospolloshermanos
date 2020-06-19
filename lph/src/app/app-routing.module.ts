@@ -9,6 +9,7 @@ import {ProfileComponent} from "./profile/profile.component";
 import {EditProfileComponent} from "./edit-profile/edit-profile.component";
 import {HomeComponent} from "./home/home.component";
 import {ChatComponent} from "./chat/chat.component";
+import {SearchResultsComponent} from "./search-results/search-results.component";
 
 const routes: Routes = [
   {path: "", component: AppComponent, canActivate: [RouteGuard]},
@@ -19,6 +20,7 @@ const routes: Routes = [
   {path: "login", component: LoginComponent},
   {path: "logout", component: LoginComponent},
   {path: "register", component: RegisterComponent},
+  {path: "searchResults", component: SearchResultsComponent},
   {path: "messages", component: ChatComponent, canActivate: [RouteGuard]},
   {path: "resetPassword", component: ResetPasswordComponent}
 ];
