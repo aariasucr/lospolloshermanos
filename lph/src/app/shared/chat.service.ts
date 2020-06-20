@@ -1,11 +1,13 @@
-import {Injectable, OnInit} from "@angular/core";
-import {AngularFireDatabase, AngularFireObject} from "@angular/fire/database";
-import {Observable} from "rxjs";
+import {Injectable} from "@angular/core";
+import {AngularFireDatabase} from "@angular/fire/database";
+import {Observable, Subject} from "rxjs";
 
 @Injectable({
   providedIn: "root"
 })
 export class ChatService {
+  private newMessagesNumber: Subject<number> = new Subject<number>();
+
   constructor(private db: AngularFireDatabase) {}
 
   getMessagesList(chatId) {

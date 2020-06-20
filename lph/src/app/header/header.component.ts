@@ -5,6 +5,9 @@ import {CommentService} from "../shared/comment.service";
 import {AngularFireAuth} from "@angular/fire/auth";
 import {AngularFireDatabase} from "@angular/fire/database";
 import {ModalService} from "../shared/modal.service";
+import {NgForm} from "@angular/forms";
+import {SearchService} from "../shared/search.service";
+import {SearchResultsComponent} from "../search-results/search-results.component";
 
 @Component({
   selector: "app-header",
@@ -28,7 +31,8 @@ export class HeaderComponent implements OnInit {
     private commentService: CommentService,
     private firebaseAuth: AngularFireAuth,
     private modalService: ModalService,
-    private firebaseDatabase: AngularFireDatabase
+    private firebaseDatabase: AngularFireDatabase,
+    private searchService: SearchService
   ) {}
 
   ngOnInit() {
@@ -50,7 +54,7 @@ export class HeaderComponent implements OnInit {
           let comments = this.commentsNumber();
           let followers = this.followersNumber();
 
-          console.log(this.newComments, this.newFollower, this.newLikes);
+          // console.log(this.newComments, this.newFollower, this.newLikes);
         });
       } else {
         this.isLogged = false;
@@ -129,6 +133,7 @@ export class HeaderComponent implements OnInit {
     this.firebaseDatabase.database
       .ref("/notifications/" + this.userDataId + "/messages")
       .set(this.newMessages);
+    this.router.navigate(["/messages"]);
   }
 
   resetNotifications(modal) {
@@ -152,6 +157,17 @@ export class HeaderComponent implements OnInit {
 
   openNotifications(modal) {
     this.modalService.open(modal);
+  }
+
+  search(form: NgForm) {
+    //console.log();
+    if (form.value.searchText.length > 0) {
+      this.searchService.setValueToSearch(form.value.searchText);
+      //this.searchService.fetchResults();
+      if (this.router.url !== "/searchResults") {
+        this.router.navigate(["/searchResults"]);
+      }
+    }
   }
 
   //this.resetNotifications();

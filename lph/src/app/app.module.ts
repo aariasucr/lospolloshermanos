@@ -31,6 +31,9 @@ import {AngularFireStorageModule} from "@angular/fire/storage"; // Para las func
 /** Para no subir credenciales a git: */
 import {environment} from "src/environments/environment";
 import {CommentService} from "./shared/comment.service";
+import {SearchResultsComponent} from "./search-results/search-results.component";
+import {SearchService} from "./shared/search.service";
+import { SpinnerComponent } from './spinner/spinner.component';
 
 @NgModule({
   declarations: [
@@ -44,7 +47,9 @@ import {CommentService} from "./shared/comment.service";
     EditProfileComponent,
     FileUploaderComponent,
     PostFrameComponent,
-    ChatComponent
+    ChatComponent,
+    SearchResultsComponent,
+    SpinnerComponent
   ],
   imports: [
     BrowserModule,
@@ -65,7 +70,8 @@ import {CommentService} from "./shared/comment.service";
     ModalService,
     ChatService,
     DatePipe,
-    CommentService
+    CommentService,
+    SearchService
   ],
   bootstrap: [AppComponent]
 })
