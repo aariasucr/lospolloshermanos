@@ -133,6 +133,7 @@ export class HeaderComponent implements OnInit {
     this.firebaseDatabase.database
       .ref("/notifications/" + this.userDataId + "/messages")
       .set(this.newMessages);
+    this.router.navigate(["/messages"]);
   }
 
   resetNotifications(modal) {

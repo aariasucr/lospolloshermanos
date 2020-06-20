@@ -10,31 +10,39 @@
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   </head>
-  <div class="container">
-    <div class="mb20">
-      <h1>Resultados de la búsqueda</h1>
-      <h2 class="lead">
-        <strong class="text-danger">{{ numberOfResults }}</strong> Resultados encontrados para
-        <strong class="text-danger">{{ searchValue }}</strong>
-      </h2>
-    </div>
+  <div *ngIf="showSpinner == false; then results; else spinner"></div>
 
-    <section class="col-xs-12 col-sm-6 col-md-12">
-      <div *ngFor="let result of listResults">
-        <article class="search-result row" style="margin-bottom: 2%;">
-          <div class="col-xs-12 col-sm-12 col-md-3">
-            <a title="{{ result.name }} Profile Photo" class="thumbnail"
-              ><img src="{{ result.photo }}" width="230" height="120" alt="Profile Photo"
-            /></a>
-          </div>
-          <div class="col-xs-12 col-sm-12 col-md-7 excerpet">
-            <h3>
-              <a href="user/{{ result.id }}" title="name">{{ result.name }}</a>
-            </h3>
-          </div>
-          <span class="clearfix borda"></span>
-        </article>
+  <ng-template #results>
+    <div class="container">
+      <div class="mb20">
+        <h1>Resultados de la búsqueda</h1>
+        <h2 class="lead">
+          <strong class="text-danger">{{ numberOfResults }}</strong> Resultados encontrados para
+          <strong class="text-danger">{{ searchValue }}</strong>
+        </h2>
       </div>
-    </section>
-  </div>
+
+      <section class="col-xs-12 col-sm-6 col-md-12">
+        <div *ngFor="let result of listResults">
+          <article class="search-result row" style="margin-bottom: 2%;">
+            <div class="col-xs-12 col-sm-12 col-md-3">
+              <a title="{{ result.name }} Profile Photo" class="thumbnail"
+                ><img src="{{ result.photo }}" width="230" height="120" alt="Profile Photo"
+              /></a>
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-7 excerpet">
+              <h3>
+                <a href="user/{{ result.id }}" title="name">{{ result.name }}</a>
+              </h3>
+            </div>
+            <span class="clearfix borda"></span>
+          </article>
+        </div>
+      </section>
+    </div>
+  </ng-template>
 </html>
+
+<ng-template #spinner>
+  <app-spinner></app-spinner>
+</ng-template>
