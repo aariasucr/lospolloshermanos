@@ -6,7 +6,7 @@ import {AngularFireModule} from "@angular/fire";
 import {environment} from "src/environments/environment";
 import {AngularFireStorageModule} from "@angular/fire/storage";
 import {AngularFireDatabaseModule} from "@angular/fire/database";
-import {AngularFireAuthModule} from "@angular/fire/auth";
+import {AngularFireAuthModule, AngularFireAuth} from "@angular/fire/auth";
 import {routes} from "../app-routing.module";
 import {RouterTestingModule} from "@angular/router/testing";
 import {AppComponent} from "../app.component";
