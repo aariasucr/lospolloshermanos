@@ -37,32 +37,33 @@ export class ChatComponent implements OnInit {
     this.reversed = false;
     this.selectedChat = "";
     this.messagesArray = [];
-    //this.userData = firebase.auth().currentUser.uid;
     this.firebaseAuth.currentUser.then((user) => {
-      this.userData = user.uid;
-      this.previews = [];
-      this.getUserChatRooms().subscribe((rooms: Array<string>) => {
-        //console.log("click al inicio");
-        this.userchatRooms = rooms;
-        rooms.forEach((room) => {
-          this.getUserChats(room).subscribe((messageList) => {
-            this.previews = [];
-            this.getPreviews();
-            //console.log("message list", messageList);
-            //let lista = [];
-            messageList.forEach((element) => {
-              let oneMessage: Message;
-              oneMessage = {
-                datetime: element["datetime"],
-                message: element["mensaje"],
-                sender: element["sender"],
-                timestamp: element["timestamp"]
-              };
-              //lista.push(oneMessage);
+      if (user != null) {
+        this.userData = user.uid;
+        this.previews = [];
+        this.getUserChatRooms().subscribe((rooms: Array<string>) => {
+          //console.log("click al inicio");
+          this.userchatRooms = rooms;
+          rooms.forEach((room) => {
+            this.getUserChats(room).subscribe((messageList) => {
+              this.previews = [];
+              this.getPreviews();
+              //console.log("message list", messageList);
+              //let lista = [];
+              messageList.forEach((element) => {
+                let oneMessage: Message;
+                oneMessage = {
+                  datetime: element["datetime"],
+                  message: element["mensaje"],
+                  sender: element["sender"],
+                  timestamp: element["timestamp"]
+                };
+                //lista.push(oneMessage);
+              });
             });
           });
         });
-      });
+      }
     });
   }
 

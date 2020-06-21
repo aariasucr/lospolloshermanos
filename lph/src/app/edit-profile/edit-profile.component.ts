@@ -30,39 +30,43 @@ export class EditProfileComponent implements OnInit {
         this.user = user.uid;
       }
     });
-    //this.user = firebase.auth().currentUser.uid;
   }
 
   onSubmitData(form: NgForm) {
     this.firebaseAuth.currentUser.then((userData) => {
-      this.user = userData.uid;
-      const nombre: string = form.value.name;
-      const newEmail: string = form.value.email;
-      const newUsername: string = form.value.username;
+      if (userData != null) {
+        this.user = userData.uid;
+        const nombre: string = form.value.name;
+        const newEmail: string = form.value.email;
+        const newUsername: string = form.value.username;
 
-      if (nombre.length !== 0) {
-        console.log("entra a nombre ", this.user);
-        this.firebaseDatabase.database.ref("/users/" + this.user.uid).update({
-          fullName: nombre,
-          nameToLower: nombre.toLowerCase()
-        });
-        this.notificationService.showSuccessMessage("Hecho", "Nombre actualizado");
-      }
-
-      if (newEmail !== "" && newEmail != null) {
-        this.user
-          .updateEmail(newEmail)
-          .then(() => {
-            this.notificationService.showSuccessMessage("Hecho", "Se cambió el correo electrónico");
-          })
-          .catch((error) => {
-            this.notificationService.showSuccessMessage("Error", error.message);
+        if (nombre.length !== 0) {
+          console.log("entra a nombre ", this.user);
+          this.firebaseDatabase.database.ref("/users/" + this.user).update({
+            fullName: nombre,
+            nameToLower: nombre.toLowerCase()
           });
-      }
+          this.notificationService.showSuccessMessage("Hecho", "Nombre actualizado");
+        }
 
-      if (newUsername !== "" && newUsername != null) {
-        this.user.updateProfile({displayName: newUsername});
-        this.notificationService.showSuccessMessage("Hecho", "Se cambió su nombre de usuario");
+        if (newEmail !== "" && newEmail != null) {
+          this.user
+            .updateEmail(newEmail)
+            .then(() => {
+              this.notificationService.showSuccessMessage(
+                "Hecho",
+                "Se cambió el correo electrónico"
+              );
+            })
+            .catch((error) => {
+              this.notificationService.showSuccessMessage("Error", error.message);
+            });
+        }
+
+        if (newUsername !== "" && newUsername != null) {
+          this.user.updateProfile({displayName: newUsername});
+          this.notificationService.showSuccessMessage("Hecho", "Se cambió su nombre de usuario");
+        }
       }
     });
   }
@@ -73,13 +77,15 @@ export class EditProfileComponent implements OnInit {
 
   onChangePhoto() {
     this.firebaseAuth.currentUser.then((user) => {
-      const newPhoto = "";
-      user.updateProfile({photoURL: newPhoto}).then(() => {
-        this.firebaseDatabase.database
-          .ref("/users/" + this.user.uid)
-          .update({profilePhoto: this.urlImage});
-        this.notificationService.showSuccessMessage("Hecho", "Se cambió la foto de perfil");
-      });
+      if (user != null) {
+        const newPhoto = "";
+        user.updateProfile({photoURL: newPhoto}).then(() => {
+          this.firebaseDatabase.database
+            .ref("/users/" + this.user.uid)
+            .update({profilePhoto: this.urlImage});
+          this.notificationService.showSuccessMessage("Hecho", "Se cambió la foto de perfil");
+        });
+      }
     });
   }
 
