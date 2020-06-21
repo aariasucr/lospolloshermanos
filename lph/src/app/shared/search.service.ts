@@ -1,5 +1,7 @@
 import {Injectable} from "@angular/core";
-import * as firebase from "firebase";
+//import * as firebase from "firebase";
+import {AngularFireAuth} from "@angular/fire/auth";
+import {AngularFireDatabase} from "@angular/fire/database";
 import {Observable, Subject} from "rxjs";
 
 @Injectable({
@@ -7,7 +9,11 @@ import {Observable, Subject} from "rxjs";
 })
 export class SearchService {
   private prom: Subject<string> = new Subject<string>();
-  constructor() {}
+
+  constructor(
+    private firebaseAuth: AngularFireAuth,
+    private firebaseDatabase: AngularFireDatabase
+  ) {}
 
   setValueToSearch(val: string) {
     this.prom.next(val);
@@ -18,8 +24,7 @@ export class SearchService {
   }
 
   fetchResults(val: string) {
-    return firebase
-      .database()
+    return this.firebaseDatabase.database
       .ref("users/")
       .orderByChild("nameToLower")
       .startAt(val)
