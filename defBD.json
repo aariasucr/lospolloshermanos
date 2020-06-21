@@ -8,7 +8,8 @@
                 "created": 123124231432,
                 "creationDate": "Mon Apr 20 2020 17:49:03 GMT-0600 (Central Standard Time)",
                 "likeCounter": 0,
-                "commentCounter": 0
+                "commentCounter": 0,
+                "isLiked": 0
             }
         }
     },

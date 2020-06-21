@@ -24,6 +24,7 @@ export class PostFrameComponent implements OnInit {
   public userDataId;
   public profilePicturePath = '';
   public fullName;
+  private isLiked = false;
 
   constructor(
     private postService: PostService,
@@ -64,6 +65,13 @@ export class PostFrameComponent implements OnInit {
 
   incNumLikes(){
     console.log(this.numLikes);
-    this.numLikes = this.numLikes + 1;
+    if(!this.isLiked){
+      this.isLiked = true;
+      this.numLikes = this.numLikes + 1;
+    } else {
+      this.isLiked = false;
+      this.numLikes = this.numLikes - 1;
+    }
+
   }
 }
