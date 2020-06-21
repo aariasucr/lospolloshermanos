@@ -36,25 +36,27 @@ export class PostFrameComponent implements OnInit {
   ngOnInit() {
     this.firebaseAuth.currentUser
       .then((userData) => {
-        this.userDataId = userData.uid;
+        if (userData != null) {
+          this.userDataId = userData.uid;
 
-        this.userService
-          .getProfilePhoto(this.userDataId)
-          .then((photo) => {
-            this.profilePicturePath = photo.val();
-          })
-          .catch((error) => {
-            console.error("error", error);
-          });
+          this.userService
+            .getProfilePhoto(this.userDataId)
+            .then((photo) => {
+              this.profilePicturePath = photo.val();
+            })
+            .catch((error) => {
+              console.error("error", error);
+            });
 
-        this.userService
-          .getFullName(this.userDataId)
-          .then((name) => {
-            this.fullName = name.val();
-          })
-          .catch((error) => {
-            console.error("error", error);
-          });
+          this.userService
+            .getFullName(this.userDataId)
+            .then((name) => {
+              this.fullName = name.val();
+            })
+            .catch((error) => {
+              console.error("error", error);
+            });
+        }
       })
       .catch((error) => {
         console.error("error", error);
