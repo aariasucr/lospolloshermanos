@@ -1,5 +1,5 @@
 import {Component, OnInit} from "@angular/core";
-import * as firebase from "firebase";
+//import * as firebase from "firebase";
 import {NgForm} from "@angular/forms";
 import {UserService} from "../shared/user.service";
 import {NotificationService} from "../shared/notification.service";
@@ -25,7 +25,12 @@ export class EditProfileComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.user = firebase.auth().currentUser.uid;
+    this.firebaseAuth.currentUser.then((user) => {
+      if (user != null) {
+        this.user = user.uid;
+      }
+    });
+    //this.user = firebase.auth().currentUser.uid;
   }
 
   onSubmitData(form: NgForm) {

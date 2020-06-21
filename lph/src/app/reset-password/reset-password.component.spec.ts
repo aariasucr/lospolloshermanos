@@ -1,51 +1,57 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from "@angular/core/testing";
+import {ResetPasswordComponent} from "./reset-password.component";
+import {NotificationService} from "../shared/notification.service";
+import {AngularFireModule} from "@angular/fire";
+import {AngularFireAuthModule} from "@angular/fire/auth";
+import {environment} from "../../environments/environment";
+import {ToastrModule} from "ngx-toastr";
+import {NgForm} from "@angular/forms";
+import {routes} from "../app-routing.module";
+import {RouterTestingModule} from "@angular/router/testing";
+import {AppComponent} from "../app.component";
+import {HomeComponent} from "../home/home.component";
+import {ProfileComponent} from "../profile/profile.component";
+import {EditProfileComponent} from "../edit-profile/edit-profile.component";
+import {LoginComponent} from "../login/login.component";
+import {RegisterComponent} from "../register/register.component";
+import {SearchResultsComponent} from "../search-results/search-results.component";
+import {ChatComponent} from "../chat/chat.component";
+import {SpinnerComponent} from "../spinner/spinner.component";
+import {HeaderComponent} from "../header/header.component";
+import {FileUploaderComponent} from "../file-uploader/file-uploader.component";
+import {PostFrameComponent} from "../post-frame/post-frame.component";
 
-import { ResetPasswordComponent } from './reset-password.component';
-
-import {FormsModule} from '@angular/forms';
-import {NotificationService} from '../shared/notification.service';
-// import {Router} from '@angular/router';
-import {AppRoutingModule} from '../app-routing.module';
-import {AngularFireModule} from '@angular/fire';
-import {AngularFireAuthModule} from '@angular/fire/auth';
-import {environment} from '../../environments/environment';
-import {AngularFireDatabaseModule} from '@angular/fire/database';
-import { AppComponent } from '../app.component';
-import { HomeComponent } from '../home/home.component';
-import { ProfileComponent } from '../profile/profile.component';
-import { EditProfileComponent } from '../edit-profile/edit-profile.component';
-import { LoginComponent } from '../login/login.component';
-import { RegisterComponent } from '../register/register.component';
-import { HeaderComponent } from '../header/header.component';
-import { PostFrameComponent } from '../post-frame/post-frame.component';
-import { FileUploaderComponent } from '../file-uploader/file-uploader.component';
-import { ToastrModule } from 'ngx-toastr';
-
-describe('ResetPasswordComponent', () => {
+describe("ResetPasswordComponent", () => {
   let component: ResetPasswordComponent;
   let fixture: ComponentFixture<ResetPasswordComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [FormsModule,
-        AppRoutingModule,
+      imports: [
+        RouterTestingModule.withRoutes(routes),
         AngularFireModule.initializeApp(environment.firebaseConfig),
         AngularFireAuthModule,
-        AngularFireDatabaseModule,
-        ToastrModule.forRoot()],
-      declarations: [ ResetPasswordComponent,
+        ToastrModule.forRoot()
+      ],
+      declarations: [
+        ResetPasswordComponent,
+        NgForm,
         AppComponent,
         HomeComponent,
         ProfileComponent,
+        ResetPasswordComponent,
         EditProfileComponent,
         LoginComponent,
         RegisterComponent,
+        SearchResultsComponent,
+        ChatComponent,
+        SpinnerComponent,
         HeaderComponent,
-        PostFrameComponent,
-        FileUploaderComponent],
+        FileUploaderComponent,
+        PostFrameComponent
+      ],
       providers: [NotificationService]
-    })
-    .compileComponents();
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -54,7 +60,7 @@ describe('ResetPasswordComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

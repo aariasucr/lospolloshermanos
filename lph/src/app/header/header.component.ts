@@ -7,7 +7,6 @@ import {AngularFireDatabase} from "@angular/fire/database";
 import {ModalService} from "../shared/modal.service";
 import {NgForm} from "@angular/forms";
 import {SearchService} from "../shared/search.service";
-import {SearchResultsComponent} from "../search-results/search-results.component";
 
 @Component({
   selector: "app-header",

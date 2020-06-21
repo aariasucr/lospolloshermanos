@@ -33,7 +33,7 @@ import {environment} from "src/environments/environment";
 import {CommentService} from "./shared/comment.service";
 import {SearchResultsComponent} from "./search-results/search-results.component";
 import {SearchService} from "./shared/search.service";
-import { SpinnerComponent } from './spinner/spinner.component';
+import {SpinnerComponent} from "./spinner/spinner.component";
 
 @NgModule({
   declarations: [
