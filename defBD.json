@@ -30,9 +30,9 @@
 
     "comments": {
         "idPost": {
-            "idComentario": {
-                "idUsuarioQueEscribióComentario": "el_id_del_usuario",
-                "comentario": "el_comentario_del_usuario",
+            "idComment": {
+                "author": "el_id_del_usuario",
+                "comment": "el_comentario_del_usuario",
                 "created": 12931249819248120,
                 "creationDate": "Mon Apr 20 2020 17:49:03 GMT-0600 (Central Standard Time)"
 
@@ -42,19 +42,17 @@
 
     "chatRooms": {
         "idChat1": {
-						"users":{
-						
-				},
+            "users": {
+
+            },
             "miembro1": "123",
             "miembro2": "456",
-            "messages": [
-							{ 
-							"sender": "xxxx",
-						  "fecha y hora": "xxxx",
-						  "mensaje": "sdjbfkeb",
-							"timestamp": 877778
-							}
-							],
+            "messages": [{
+                "sender": "xxxx",
+                "fecha y hora": "xxxx",
+                "mensaje": "sdjbfkeb",
+                "timestamp": 877778
+            }],
             "timestamp": 7137127838212321
         }
     },
@@ -83,4 +81,3 @@
         }
     }
 }
-

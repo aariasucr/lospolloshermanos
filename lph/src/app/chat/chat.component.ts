@@ -1,16 +1,16 @@
-import {Component, OnInit} from "@angular/core";
-import * as firebase from "firebase";
-import {UserService} from "../shared/user.service";
-import {Message, PreviewMessage} from "../shared/model";
-import {ChatService} from "../shared/chat.service";
-import {AngularFireDatabase} from "@angular/fire/database";
-import {DatePipe} from "@angular/common";
-import {NgForm} from "@angular/forms";
-import {CommentService} from "../shared/comment.service";
+import {Component, OnInit} from '@angular/core';
+import * as firebase from 'firebase';
+import {UserService} from '../shared/user.service';
+import {Message, PreviewMessage} from '../shared/model';
+import {ChatService} from '../shared/chat.service';
+import {AngularFireDatabase} from '@angular/fire/database';
+import {DatePipe} from '@angular/common';
+import {NgForm} from '@angular/forms';
+import {CommentService} from '../shared/comment.service';
 @Component({
-  selector: "app-messages",
-  templateUrl: "./chat.component.html",
-  styleUrls: ["./chat.component.css"]
+  selector: 'app-messages',
+  templateUrl: './chat.component.html',
+  styleUrls: ['./chat.component.css']
 })
 export class ChatComponent implements OnInit {
   public userchatRooms: Array<string>;
@@ -31,9 +31,9 @@ export class ChatComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.userData = "not set";
+    this.userData = 'not set';
     this.reversed = false;
-    this.selectedChat = "";
+    this.selectedChat = '';
     this.messagesArray = [];
     this.userData = firebase.auth().currentUser.uid;
     this.previews = [];
@@ -50,10 +50,10 @@ export class ChatComponent implements OnInit {
           messageList.forEach((element) => {
             let oneMessage: Message;
             oneMessage = {
-              datetime: element["datetime"],
-              message: element["mensaje"],
-              sender: element["sender"],
-              timestamp: element["timestamp"]
+              datetime: element['datetime'],
+              message: element['mensaje'],
+              sender: element['sender'],
+              timestamp: element['timestamp']
             };
             //lista.push(oneMessage);
           });
@@ -64,7 +64,7 @@ export class ChatComponent implements OnInit {
 
   getUserChatRooms() {
     return this.db
-      .list("/conversationsPerUser/" + this.userData, (ref) => {
+      .list('/conversationsPerUser/' + this.userData, (ref) => {
         return ref;
       })
       .valueChanges();
@@ -72,8 +72,8 @@ export class ChatComponent implements OnInit {
 
   getUserChats(idChat: string) {
     return this.db
-      .list("/chatRooms/" + idChat + "/messages", (ref) => {
-        return ref.orderByChild("timestamp");
+      .list('/chatRooms/' + idChat + '/messages', (ref) => {
+        return ref.orderByChild('timestamp');
       })
       .valueChanges();
   }
@@ -84,28 +84,28 @@ export class ChatComponent implements OnInit {
     this.userchatRooms.forEach((room) => {
       firebase
         .database()
-        .ref("chatRooms/" + room)
-        .orderByChild("timestamp")
+        .ref('chatRooms/' + room)
+        .orderByChild('timestamp')
         .once(
-          "value",
+          'value',
           function (snapshot) {
             if (snapshot.val() != null) {
-              let _photo = "";
-              let _name = "";
-              let _lastmessage = "";
-              let _date = "";
-              let user = snapshot.val()["users"]["user1"];
-              if (snapshot.val().users["user1"] == myid) {
-                user = snapshot.val().users["user2"];
+              let _photo = '';
+              let _name = '';
+              let _lastmessage = '';
+              let _date = '';
+              let user = snapshot.val()['users']['user1'];
+              if (snapshot.val().users['user1'] == myid) {
+                user = snapshot.val().users['user2'];
               }
               firebase
                 .database()
-                .ref("/users/" + user)
+                .ref('/users/' + user)
                 .once(
-                  "value",
+                  'value',
                   function (users) {
-                    _photo = users.val()["profilePhoto"];
-                    _name = users.val()["fullName"];
+                    _photo = users.val()['profilePhoto'];
+                    _name = users.val()['fullName'];
                     let lista = snapshot.val().messages;
                     _lastmessage = lista[lista.length - 1].message;
                     _date = lista[lista.length - 1].datetime;
@@ -119,19 +119,18 @@ export class ChatComponent implements OnInit {
                     pr.push(preview);
                   },
                   function (errorObject) {
-                    console.error("The read failed: " + errorObject);
+                    console.error('The read failed: ' + errorObject);
                   }
                 );
             }
           },
           function (errorObject) {
-            console.error("The read failed: " + errorObject);
+            console.error('The read failed: ' + errorObject);
           }
         );
     });
 
     this.previews = pr;
-    //console.log("previ", this.previews);
   }
 
   openChat(idchat: string) {
@@ -145,9 +144,9 @@ export class ChatComponent implements OnInit {
   sendNewMessage(form: NgForm) {
     const mensaje = form.value.msg;
     form.resetForm();
-    if (this.selectedChat !== "") {
+    if (this.selectedChat !== '') {
       let now = new Date();
-      let n = this.datePipe.transform(now, "dd-MM-yyyy HH:mm");
+      let n = this.datePipe.transform(now, 'dd-MM-yyyy HH:mm');
       const current = new Date();
       const stamp = current.getTime();
       let nMessage: Message = {
@@ -159,14 +158,14 @@ export class ChatComponent implements OnInit {
 
       firebase
         .database()
-        .ref("/chatRooms/" + this.selectedChat + "/timestamp")
+        .ref('/chatRooms/' + this.selectedChat + '/timestamp')
         .set(stamp)
         .then(() => {
           this.messagesArray.push(nMessage);
-          this.db.object("/chatRooms/" + this.selectedChat + "/messages").set(this.messagesArray);
+          this.db.object('/chatRooms/' + this.selectedChat + '/messages').set(this.messagesArray);
         });
-      let friendId = this.selectedChat.replace(this.userData, "");
-      friendId = friendId.replace("_", "");
+      let friendId = this.selectedChat.replace(this.userData, '');
+      friendId = friendId.replace('_', '');
       this.commentService.newMessage(friendId);
     }
   }

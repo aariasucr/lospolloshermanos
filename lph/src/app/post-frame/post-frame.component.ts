@@ -61,4 +61,9 @@ export class PostFrameComponent implements OnInit {
     this.numComm = this.posts["numberComm"];
     this.numLikes = this.posts["numberLikes"];
   }
+
+  incNumLikes(){
+    console.log(this.numLikes);
+    this.numLikes = this.numLikes + 1;
+  }
 }
