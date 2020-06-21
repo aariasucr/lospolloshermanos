@@ -3,11 +3,13 @@ import {Injectable} from '@angular/core';
 // import * as firebase from "firebase";
 import {AngularFireDatabase} from '@angular/fire/database';
 import {AngularFireAuth} from '@angular/fire/auth';
+import { Post } from '../shared/model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PostService {
+  private dataPost: Post;
   constructor(private firebaseDatabase: AngularFireDatabase,
               private firebaseAuth: AngularFireAuth) {}
 
@@ -37,6 +39,22 @@ export class PostService {
       updates[`posts/${firebaseUserId}/${newPostKey}`] = newPostEntry;
 
       return this.firebaseDatabase.database.ref().update(updates);
+    });
+  }
+
+  getSpecifictPost(userId: string, idPost: string) {
+    return this.firebaseDatabase
+    .database
+    .ref('posts/' + userId + '/' + idPost).once('value',
+    snapshot => {
+      if (snapshot.val() != null) {
+        return snapshot.val();
+      } else {
+        console.log('Error');
+      }
+    },
+    errorObject => {
+      console.error('The read failed: ' + errorObject);
     });
   }
 }

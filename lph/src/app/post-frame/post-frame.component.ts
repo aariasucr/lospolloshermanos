@@ -2,7 +2,6 @@ import {Component, OnInit, Input} from '@angular/core';
 import {Post} from '../shared/model';
 import {PostService} from '../shared/post.service';
 import {NotificationService} from '../shared/notification.service';
-import * as firebase from 'firebase';
 import {UserService} from '../shared/user.service';
 import {AngularFireDatabase} from '@angular/fire/database';
 import {AngularFireAuth} from '@angular/fire/auth';
@@ -13,8 +12,8 @@ import {AngularFireAuth} from '@angular/fire/auth';
   styleUrls: ['./post-frame.component.css']
 })
 export class PostFrameComponent implements OnInit {
-  @Input() posts: Post[] = [];
-  // @Input() postId = '';
+  private post: Post;
+  @Input() postId = '';
 
   postRef: any;
   author = '';
@@ -24,7 +23,7 @@ export class PostFrameComponent implements OnInit {
   public userDataId;
   public profilePicturePath = '';
   public fullName;
-  private isLiked = false;
+  private isLiked;
 
   constructor(
     private postService: PostService,
@@ -53,14 +52,21 @@ export class PostFrameComponent implements OnInit {
       .catch((error) => {
         console.error('error', error);
       });
+      this.postService.getSpecifictPost(this.userDataId, this.postId)
+      .then(postData => {
+        this.post = postData.val();
+        this.numComm = this.post["numberComm"];
+        this.numLikes = this.post["numberLikes"];
+        this.isLiked = this.post["isLiked"];
+        this.uploadedFileUrl = this.post["img"];
+      })
+      .catch(err => {
+        console.error('error', err);
+      });
     })
     .catch(error => {
       console.error('error', error);
     });
-
-    this.uploadedFileUrl = this.posts["img"];
-    this.numComm = this.posts["numberComm"];
-    this.numLikes = this.posts["numberLikes"];
   }
 
   incNumLikes(){
@@ -72,6 +78,5 @@ export class PostFrameComponent implements OnInit {
       this.isLiked = false;
       this.numLikes = this.numLikes - 1;
     }
-
   }
 }
