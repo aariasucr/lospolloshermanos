@@ -37,6 +37,7 @@ export class PostFrameComponent implements OnInit {
     this.firebaseAuth.currentUser.then(userData => {
       this.userDataId = userData.uid;
 
+      // Recupera la foto de perfil del usuario
       this.userService.getProfilePhoto(this.userDataId)
       .then((photo) => {
         this.profilePicturePath = photo.val();
@@ -45,6 +46,7 @@ export class PostFrameComponent implements OnInit {
         console.error('error', error);
       });
 
+      // Recupera el nombre del usuario
       this.userService.getFullName(this.userDataId)
       .then((name) => {
         this.fullName = name.val();
@@ -52,9 +54,13 @@ export class PostFrameComponent implements OnInit {
       .catch((error) => {
         console.error('error', error);
       });
+
+      // Recupera la información de un post específico
       this.postService.getSpecifictPost(this.userDataId, this.postId)
       .then(postData => {
         this.post = postData.val();
+
+        // Mapeo de datos que se muestran en el post
         this.numComm = this.post["numberComm"];
         this.numLikes = this.post["numberLikes"];
         this.isLiked = this.post["isLiked"];
@@ -70,8 +76,7 @@ export class PostFrameComponent implements OnInit {
   }
 
   incNumLikes(){
-    console.log(this.numLikes);
-    if(!this.isLiked){
+    if (!this.isLiked) {
       this.isLiked = true;
       this.numLikes = this.numLikes + 1;
     } else {
