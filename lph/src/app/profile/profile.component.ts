@@ -58,24 +58,26 @@ export class ProfileComponent implements OnInit {
 
     this.firebaseAuth.currentUser
       .then((userData) => {
-        this.userDataId = userData.uid;
-        this.userService
-          .getProfilePhoto(this.userDataId, this.route)
-          .then((photo) => {
-            this.profilePicturePath = photo.val();
-          })
-          .catch((error) => {
-            console.error("error", error);
-          });
+        if (userData != null) {
+          this.userDataId = userData.uid;
+          this.userService
+            .getProfilePhoto(this.userDataId, this.route)
+            .then((photo) => {
+              this.profilePicturePath = photo.val();
+            })
+            .catch((error) => {
+              console.error("error", error);
+            });
 
-        this.userService
-          .getFullName(this.userDataId, this.route)
-          .then((name) => {
-            this.fullName = name.val();
-          })
-          .catch((error) => {
-            console.error("error", error);
-          });
+          this.userService
+            .getFullName(this.userDataId, this.route)
+            .then((name) => {
+              this.fullName = name.val();
+            })
+            .catch((error) => {
+              console.error("error", error);
+            });
+        }
       })
       .catch((error) => {
         console.error("error", error);
