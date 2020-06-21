@@ -5,6 +5,7 @@ import {NotificationService} from '../shared/notification.service';
 import {UserService} from '../shared/user.service';
 import {AngularFireDatabase} from '@angular/fire/database';
 import {AngularFireAuth} from '@angular/fire/auth';
+import { PostCommentService } from '../shared/post-comment.service';
 
 @Component({
   selector: 'app-post-frame',
@@ -29,6 +30,7 @@ export class PostFrameComponent implements OnInit {
     private postService: PostService,
     private notificationService: NotificationService,
     private userService: UserService,
+    private postCommentService: PostCommentService,
     private firebaseDatabase: AngularFireDatabase,
     private firebaseAuth: AngularFireAuth
   ) {}

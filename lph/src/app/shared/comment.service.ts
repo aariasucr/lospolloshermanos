@@ -18,7 +18,6 @@ export class CommentService {
     db.ref('notifications/' + userId + '/messages').once('value', function (snapshot) {
       if (snapshot.val() != null) {
         numMessages = snapshot.val();
-        //console.log("envi", snapshot.val());
         numMessages = numMessages + 1;
       } else {
         numMessages = 1;

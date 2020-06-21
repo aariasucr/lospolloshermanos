@@ -3,13 +3,11 @@ import {Injectable} from '@angular/core';
 // import * as firebase from "firebase";
 import {AngularFireDatabase} from '@angular/fire/database';
 import {AngularFireAuth} from '@angular/fire/auth';
-import { Post } from '../shared/model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PostService {
-  private dataPost: Post;
   constructor(private firebaseDatabase: AngularFireDatabase,
               private firebaseAuth: AngularFireAuth) {}
 

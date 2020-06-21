@@ -8,6 +8,13 @@ export interface Post {
   numberLikes: number;
 }
 
+export interface CommentPost {
+  author: string;
+  comment: string;
+  created: number;
+  date: string;
+}
+
 export interface NewAccount {
   fullName: string;
   profilePhoto: string;
