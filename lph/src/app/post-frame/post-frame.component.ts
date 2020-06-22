@@ -81,13 +81,11 @@ export class PostFrameComponent implements OnInit {
     .snapshotChanges()
     .subscribe((data) => {  // Cuando se detecte algún cambio en la base, va a ir a traer ese cambio de forma reactiva.
       this.commentPost = data.map((e) => { // A cada elemento que viene, de los 100 que se traen, se le saca el val
-        console.log(e.payload.val());
         return {
           ...(e.payload.val() as CommentPost)
         };
       });
-      console.log("......................", this.commentPost[0]["author"]);
-    })
+    });
   }
 
   incNumLikes(){
