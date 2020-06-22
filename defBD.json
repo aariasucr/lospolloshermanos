@@ -39,6 +39,19 @@
             }
         }
     },
+    "like": {
+        "idUsuario": {
+            "idPost": {
+                "isLiked": 0
+            }
+        }
+    },
+    "likeAndCommentCounter": {
+        "idPost": {
+            "likeCounter": 0,
+            "commentCounter": 0
+        }
+    },
 
     "chatRooms": {
         "idChat1": {
