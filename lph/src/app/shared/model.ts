@@ -1,9 +1,18 @@
 export interface Post {
-  comments?: number;
-  date?: string;
-  likes?: number;
-  link?: string;
-  created?: number;
+  author: string;
+  created: number;
+  date: string;
+  img: string;
+  isLiked: boolean;
+  numberComm: number;
+  numberLikes: number;
+}
+
+export interface CommentPost {
+  author: string;
+  comment: string;
+  created: number;
+  date: string;
 }
 
 export interface NewAccount {

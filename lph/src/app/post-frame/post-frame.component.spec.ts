@@ -7,6 +7,7 @@ import {ToastrModule} from "ngx-toastr";
 import {AngularFireStorageModule} from "@angular/fire/storage";
 import {AngularFireDatabaseModule} from "@angular/fire/database";
 import {AngularFireAuthModule} from "@angular/fire/auth";
+import {NgForm} from "@angular/forms";
 
 describe("PostFrameComponent", () => {
   let component: PostFrameComponent;
@@ -21,7 +22,7 @@ describe("PostFrameComponent", () => {
         AngularFireDatabaseModule,
         AngularFireAuthModule
       ],
-      declarations: [PostFrameComponent]
+      declarations: [PostFrameComponent, NgForm]
     }).compileComponents();
   }));
 

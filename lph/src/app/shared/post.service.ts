@@ -39,4 +39,20 @@ export class PostService {
       return this.firebaseDatabase.database.ref().update(updates);
     });
   }
+
+  getSpecifictPost(userId: string, idPost: string) {
+    return this.firebaseDatabase
+    .database
+    .ref('posts/' + userId + '/' + idPost).once('value',
+    snapshot => {
+      if (snapshot.val() != null) {
+        return snapshot.val();
+      } else {
+        console.log('Error');
+      }
+    },
+    errorObject => {
+      console.error('The read failed: ' + errorObject);
+    });
+  }
 }

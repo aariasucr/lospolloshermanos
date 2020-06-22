@@ -14,7 +14,7 @@ import {AngularFireAuth} from '@angular/fire/auth';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
-  posts: Post[] = [];
+  posts: string[] = [];
   postRef: any;
   user = '';
   uploadedFileUrl = '';
@@ -23,6 +23,29 @@ export class HomeComponent implements OnInit {
               private userService: UserService,
               private firebaseDatabase: AngularFireDatabase,
               private firebaseAuth: AngularFireAuth) {}
+
+  /*ngOnInit() {
+    this.firebaseAuth.currentUser.then((userData) => {
+      // console.log('userData en el componente', userData);
+      if (!!userData && 'uid' in userData && !!userData.uid) {
+        this.user = userData.uid; // Aquí se saca el user id que viene en una promesa desde firebase
+
+        this.firebaseDatabase
+          // .list(`posts/${this.user}`, (ref) => ref.limitToLast(100).orderByChild('created')) // crearle esta característica a los post
+          .list(`posts/${this.user}`, (ref) => ref.limitToLast(10))
+          .snapshotChanges()
+          .subscribe((data) => {  // Cuando se detecte algún cambio en la base, va a ir a traer ese cambio de forma reactiva.
+            console.log(data[0]["key"]);
+            this.posts = data.map((e) => { // A cada elemento que viene, de los 100 que se traen, se le saca el val
+              console.log(e.payload.val());
+              return {
+                ...(e.payload.val() as Post)
+              };
+            });
+          });
+      }
+    });
+  }*/
 
   ngOnInit() {
     this.firebaseAuth.currentUser.then((userData) => {
@@ -35,12 +58,9 @@ export class HomeComponent implements OnInit {
           .list(`posts/${this.user}`, (ref) => ref.limitToLast(10))
           .snapshotChanges()
           .subscribe((data) => {  // Cuando se detecte algún cambio en la base, va a ir a traer ese cambio de forma reactiva.
-            console.log(data);
+            console.log(data[0]);
             this.posts = data.map((e) => { // A cada elemento que viene, de los 100 que se traen, se le saca el val
-              console.log(e.payload.val());
-              return {
-                ...(e.payload.val() as Post)
-              };
+              return e.key;
             });
           });
       }
