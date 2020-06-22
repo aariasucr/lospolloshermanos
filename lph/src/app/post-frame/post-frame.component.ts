@@ -1,12 +1,12 @@
-import {Component, OnInit, Input} from '@angular/core';
-import { Post, CommentPost } from '../shared/model';
-import {PostService} from '../shared/post.service';
-import {NotificationService} from '../shared/notification.service';
-import {UserService} from '../shared/user.service';
-import {AngularFireDatabase} from '@angular/fire/database';
-import {AngularFireAuth} from '@angular/fire/auth';
-import { PostCommentService } from '../shared/post-comment.service';
-import { NgForm } from '@angular/forms';
+import {Component, OnInit, Input} from "@angular/core";
+import {Post, CommentPost} from "../shared/model";
+import {PostService} from "../shared/post.service";
+import {NotificationService} from "../shared/notification.service";
+import {UserService} from "../shared/user.service";
+import {AngularFireDatabase} from "@angular/fire/database";
+import {AngularFireAuth} from "@angular/fire/auth";
+import {PostCommentService} from "../shared/post-comment.service";
+import {NgForm} from "@angular/forms";
 
 @Component({
   selector: "app-post-frame",
@@ -15,7 +15,7 @@ import { NgForm } from '@angular/forms';
 })
 export class PostFrameComponent implements OnInit {
   private post: Post;
-  @Input() postId = '';
+  @Input() postId = "";
 
   postRef: any;
   author = "";
@@ -26,7 +26,7 @@ export class PostFrameComponent implements OnInit {
   public profilePicturePath = "";
   public fullName;
   private isLiked;
-  private commentPost: CommentPost[] = []
+  private commentPost: CommentPost[] = [];
 
   constructor(
     private postService: PostService,
@@ -60,41 +60,42 @@ export class PostFrameComponent implements OnInit {
             .catch((error) => {
               console.error("error", error);
             });
+
+          this.postService
+            .getSpecifictPost(this.userDataId, this.postId)
+            .then((postData) => {
+              console.log("lken", postData.val());
+              this.post = postData.val();
+
+              // Mapeo de datos que se muestran en el post
+              this.numComm = this.post["numberComm"];
+              this.numLikes = this.post["numberLikes"];
+              this.isLiked = this.post["isLiked"];
+              this.uploadedFileUrl = this.post["img"];
+            })
+            .catch((err) => {
+              console.error("error", err);
+            });
         }
       })
       .catch((error) => {
         console.error("error", error);
       });
 
-      // Recupera la información de un post específico
-      this.postService.getSpecifictPost(this.userDataId, this.postId)
-      .then(postData => {
-        this.post = postData.val();
+    // Recupera la información de un post específico
 
-        // Mapeo de datos que se muestran en el post
-        this.numComm = this.post['numberComm'];
-        this.numLikes = this.post['numberLikes'];
-        this.isLiked = this.post['isLiked'];
-        this.uploadedFileUrl = this.post['img'];
-      })
-      .catch(err => {
-        console.error('error', err);
+    this.postCommentService
+      .getAllPostComments(this.postId)
+      .snapshotChanges()
+      .subscribe((data) => {
+        // Cuando se detecte algún cambio en la base, va a ir a traer ese cambio de forma reactiva.
+        this.commentPost = data.map((e) => {
+          // A cada elemento que viene, de los 100 que se traen, se le saca el val
+          return {
+            ...(e.payload.val() as CommentPost)
+          };
+        });
       });
-    })
-    .catch(error => {
-      console.error('error', error);
-    });
-
-
-    this.postCommentService.getAllPostComments(this.postId)
-    .snapshotChanges()
-    .subscribe((data) => {  // Cuando se detecte algún cambio en la base, va a ir a traer ese cambio de forma reactiva.
-      this.commentPost = data.map((e) => { // A cada elemento que viene, de los 100 que se traen, se le saca el val
-        return {
-          ...(e.payload.val() as CommentPost)
-        };
-      });
-    });
   }
 
   incNumLikes() {
@@ -108,24 +109,26 @@ export class PostFrameComponent implements OnInit {
   }
 
   onSubmit(form: NgForm) {
-    console.log('Submit the msj!');
+    console.log("Submit the msj!");
 
     const comment = form.value.comment;
-    this.firebaseAuth.currentUser.then((authData) => {
-      this.userService.getFullName(authData.uid).then((userData) => {
-        // Pormesa que devuelve los datos del usuario
-        console.log(userData.val());
-        this.postCommentService
-          .addNewPostCommentAsync(this.postId, userData.val(), comment)
-          .then((results) => {
-            this.notificationService.showSuccessMessage('Todo bien!', 'Comentario Realizado');
-          })
-          .catch((error) => {
-            this.notificationService.showErrorMessage('Error!!!', 'Error creando comentario');
-          });
+    this.firebaseAuth.currentUser
+      .then((authData) => {
+        this.userService.getFullName(authData.uid).then((userData) => {
+          // Pormesa que devuelve los datos del usuario
+          console.log(userData.val());
+          this.postCommentService
+            .addNewPostCommentAsync(this.postId, userData.val(), comment)
+            .then((results) => {
+              this.notificationService.showSuccessMessage("Todo bien!", "Comentario Realizado");
+            })
+            .catch((error) => {
+              this.notificationService.showErrorMessage("Error!!!", "Error creando comentario");
+            });
+        });
+      })
+      .catch((err) => {
+        this.notificationService.showErrorMessage("Error!!!", err);
       });
-    }).catch(err => {
-      this.notificationService.showErrorMessage('Error!!!', err);
-    });
   }
 }
