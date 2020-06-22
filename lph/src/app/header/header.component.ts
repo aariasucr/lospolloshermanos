@@ -7,7 +7,6 @@ import {AngularFireDatabase} from "@angular/fire/database";
 import {ModalService} from "../shared/modal.service";
 import {NgForm} from "@angular/forms";
 import {SearchService} from "../shared/search.service";
-import {SearchResultsComponent} from "../search-results/search-results.component";
 
 @Component({
   selector: "app-header",
@@ -47,14 +46,13 @@ export class HeaderComponent implements OnInit {
         this.userName = userData.username;
         this.fullName = userData.fullName;
         this.firebaseAuth.currentUser.then((u) => {
-          this.userDataId = u.uid;
-          //console.log("user id", this.userDataId);
-          this.messagesNumber();
-          let likes = this.likesNumber();
-          let comments = this.commentsNumber();
-          let followers = this.followersNumber();
-
-          // console.log(this.newComments, this.newFollower, this.newLikes);
+          if (u != null) {
+            this.userDataId = u.uid;
+            this.messagesNumber();
+            let likes = this.likesNumber();
+            let comments = this.commentsNumber();
+            let followers = this.followersNumber();
+          }
         });
       } else {
         this.isLogged = false;

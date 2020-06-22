@@ -11,7 +11,7 @@ import {HomeComponent} from "./home/home.component";
 import {ChatComponent} from "./chat/chat.component";
 import {SearchResultsComponent} from "./search-results/search-results.component";
 
-const routes: Routes = [
+export const routes: Routes = [
   {path: "", component: AppComponent, canActivate: [RouteGuard]},
   {path: "home", component: HomeComponent, canActivate: [RouteGuard]},
   {path: "myprofile", component: ProfileComponent, canActivate: [RouteGuard]},

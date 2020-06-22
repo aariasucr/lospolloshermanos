@@ -1,16 +1,16 @@
 import {Component, OnInit} from "@angular/core";
 import {UserService} from "../shared/user.service";
-// import * as firebase from 'firebase';
 import {Router} from "@angular/router";
 import {ModalService} from "../shared/modal.service";
 import {Friend, Message} from "../shared/model";
 import {NgForm} from "@angular/forms";
-import {DatePipe} from "@angular/common";
+//import {DatePipe} from "@angular/common";
 import {NotificationService} from "../shared/notification.service";
 import {AngularFireDatabase} from "@angular/fire/database";
 import {AngularFireAuth} from "@angular/fire/auth";
 import {ChatService} from "../shared/chat.service";
 import {CommentService} from "../shared/comment.service";
+import {DatePipe} from "@angular/common";
 
 @Component({
   selector: "app-profile",
@@ -55,29 +55,33 @@ export class ProfileComponent implements OnInit {
     this.following = 0;
     this.isFollowing = this.isFollowingTo();
     this.followUnfollowBtn = "Seguir";
-
-        this.firebaseAuth.currentUser
+    this.userDataId = "";
+    this.firebaseAuth.currentUser
       .then((userData) => {
-        this.userDataId = userData.uid;
-      this.userService.getProfilePhoto(this.userDataId, this.route)
-      .then((photo) => {
-        this.profilePicturePath = photo.val();
-      })
-      .catch((error) => {
-        console.error('error', error);
-      });
+        if (userData != null) {
+          this.userDataId = userData.uid;
+          this.userService
+            .getProfilePhoto(this.userDataId, this.route)
+            .then((photo) => {
+              this.profilePicturePath = photo.val();
+            })
+            .catch((error) => {
+              console.error("error", error);
+            });
 
-      this.userService.getFullName(this.userDataId, this.route)
-      .then((name) => {
-        this.fullName = name.val();
-        })
+          this.userService
+            .getFullName(this.userDataId, this.route)
+            .then((name) => {
+              this.fullName = name.val();
+            })
+            .catch((error) => {
+              console.error("error", error);
+            });
+        }
+      })
       .catch((error) => {
         console.error("error", error);
       });
-    })
-    .catch(error => {
-      console.error('error', error);
-    });
 
     this.getNumberFollowersAndFollowing();
 

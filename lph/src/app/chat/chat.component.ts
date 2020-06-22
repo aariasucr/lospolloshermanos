@@ -1,5 +1,5 @@
 import {Component, OnInit} from "@angular/core";
-import * as firebase from "firebase";
+//import * as firebase from "firebase";
 import {UserService} from "../shared/user.service";
 import {Message, PreviewMessage} from "../shared/model";
 import {ChatService} from "../shared/chat.service";
@@ -7,6 +7,7 @@ import {AngularFireDatabase} from "@angular/fire/database";
 import {DatePipe} from "@angular/common";
 import {NgForm} from "@angular/forms";
 import {CommentService} from "../shared/comment.service";
+import {AngularFireAuthModule, AngularFireAuth} from "@angular/fire/auth";
 @Component({
   selector: "app-messages",
   templateUrl: "./chat.component.html",
@@ -27,7 +28,8 @@ export class ChatComponent implements OnInit {
     private chatService: ChatService,
     private db: AngularFireDatabase,
     private commentService: CommentService,
-    private datePipe: DatePipe
+    private datePipe: DatePipe,
+    private firebaseAuth: AngularFireAuth
   ) {}
 
   ngOnInit() {
@@ -35,30 +37,33 @@ export class ChatComponent implements OnInit {
     this.reversed = false;
     this.selectedChat = "";
     this.messagesArray = [];
-    this.userData = firebase.auth().currentUser.uid;
-    this.previews = [];
-
-    this.getUserChatRooms().subscribe((rooms: Array<string>) => {
-      //console.log("click al inicio");
-      this.userchatRooms = rooms;
-      rooms.forEach((room) => {
-        this.getUserChats(room).subscribe((messageList) => {
-          this.previews = [];
-          this.getPreviews();
-          //console.log("message list", messageList);
-          //let lista = [];
-          messageList.forEach((element) => {
-            let oneMessage: Message;
-            oneMessage = {
-              datetime: element["datetime"],
-              message: element["mensaje"],
-              sender: element["sender"],
-              timestamp: element["timestamp"]
-            };
-            //lista.push(oneMessage);
+    this.firebaseAuth.currentUser.then((user) => {
+      if (user != null) {
+        this.userData = user.uid;
+        this.previews = [];
+        this.getUserChatRooms().subscribe((rooms: Array<string>) => {
+          //console.log("click al inicio");
+          this.userchatRooms = rooms;
+          rooms.forEach((room) => {
+            this.getUserChats(room).subscribe((messageList) => {
+              this.previews = [];
+              this.getPreviews();
+              //console.log("message list", messageList);
+              //let lista = [];
+              messageList.forEach((element) => {
+                let oneMessage: Message;
+                oneMessage = {
+                  datetime: element["datetime"],
+                  message: element["mensaje"],
+                  sender: element["sender"],
+                  timestamp: element["timestamp"]
+                };
+                //lista.push(oneMessage);
+              });
+            });
           });
         });
-      });
+      }
     });
   }
 
@@ -79,58 +84,60 @@ export class ChatComponent implements OnInit {
   }
 
   getPreviews() {
-    let myid = this.userData;
-    let pr: Array<PreviewMessage> = [];
-    this.userchatRooms.forEach((room) => {
-      firebase
-        .database()
-        .ref("chatRooms/" + room)
-        .orderByChild("timestamp")
-        .once(
-          "value",
-          function (snapshot) {
-            if (snapshot.val() != null) {
-              let _photo = "";
-              let _name = "";
-              let _lastmessage = "";
-              let _date = "";
-              let user = snapshot.val()["users"]["user1"];
-              if (snapshot.val().users["user1"] == myid) {
-                user = snapshot.val().users["user2"];
-              }
-              firebase
-                .database()
-                .ref("/users/" + user)
-                .once(
-                  "value",
-                  function (users) {
-                    _photo = users.val()["profilePhoto"];
-                    _name = users.val()["fullName"];
-                    let lista = snapshot.val().messages;
-                    _lastmessage = lista[lista.length - 1].message;
-                    _date = lista[lista.length - 1].datetime;
-                    let preview: PreviewMessage = {
-                      idChat: room,
-                      date: _date,
-                      lastMessage: _lastmessage,
-                      name: _name,
-                      photo: _photo
-                    };
-                    pr.push(preview);
-                  },
-                  function (errorObject) {
-                    console.error("The read failed: " + errorObject);
+    let database = this.db.database;
+    this.firebaseAuth.currentUser.then((user) => {
+      if (user != null) {
+        let myid = user.uid;
+        let pr: Array<PreviewMessage> = [];
+        this.userchatRooms.forEach((room) => {
+          this.db.database
+            .ref("chatRooms/" + room)
+            .orderByChild("timestamp")
+            .once(
+              "value",
+              function (snapshot) {
+                if (snapshot.val() != null) {
+                  let _photo = "";
+                  let _name = "";
+                  let _lastmessage = "";
+                  let _date = "";
+                  let user = snapshot.val()["users"]["user1"];
+                  if (snapshot.val().users["user1"] == myid) {
+                    user = snapshot.val().users["user2"];
                   }
-                );
-            }
-          },
-          function (errorObject) {
-            console.error("The read failed: " + errorObject);
-          }
-        );
+                  database.ref("/users/" + user).once(
+                    "value",
+                    function (users) {
+                      _photo = users.val()["profilePhoto"];
+                      _name = users.val()["fullName"];
+                      let lista = snapshot.val().messages;
+                      _lastmessage = lista[lista.length - 1].message;
+                      _date = lista[lista.length - 1].datetime;
+                      let preview: PreviewMessage = {
+                        idChat: room,
+                        date: _date,
+                        lastMessage: _lastmessage,
+                        name: _name,
+                        photo: _photo
+                      };
+                      pr.push(preview);
+                    },
+                    function (errorObject) {
+                      console.error("The read failed: " + errorObject);
+                    }
+                  );
+                }
+              },
+              function (errorObject) {
+                console.error("The read failed: " + errorObject);
+              }
+            );
+        });
+
+        this.previews = pr;
+      }
     });
 
-    this.previews = pr;
     //console.log("previ", this.previews);
   }
 
@@ -157,8 +164,7 @@ export class ChatComponent implements OnInit {
         timestamp: stamp
       };
 
-      firebase
-        .database()
+      this.db.database
         .ref("/chatRooms/" + this.selectedChat + "/timestamp")
         .set(stamp)
         .then(() => {

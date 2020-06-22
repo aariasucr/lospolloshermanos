@@ -1,16 +1,28 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from "@angular/core/testing";
 
-import { PostFrameComponent } from './post-frame.component';
+import {PostFrameComponent} from "./post-frame.component";
+import {AngularFireModule} from "@angular/fire";
+import {environment} from "src/environments/environment";
+import {ToastrModule} from "ngx-toastr";
+import {AngularFireStorageModule} from "@angular/fire/storage";
+import {AngularFireDatabaseModule} from "@angular/fire/database";
+import {AngularFireAuthModule} from "@angular/fire/auth";
 
-describe('PostFrameComponent', () => {
+describe("PostFrameComponent", () => {
   let component: PostFrameComponent;
   let fixture: ComponentFixture<PostFrameComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ PostFrameComponent ]
-    })
-    .compileComponents();
+      imports: [
+        AngularFireModule.initializeApp(environment.firebaseConfig),
+        ToastrModule.forRoot(),
+        AngularFireStorageModule,
+        AngularFireDatabaseModule,
+        AngularFireAuthModule
+      ],
+      declarations: [PostFrameComponent]
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -19,7 +31,7 @@ describe('PostFrameComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });
