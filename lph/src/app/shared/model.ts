@@ -17,6 +17,7 @@ export interface CommentPost {
 
 export interface NewAccount {
   fullName: string;
+  nameToLower: string;
   profilePhoto: string;
 }
 
@@ -45,3 +46,8 @@ export interface UserData {
   photoUrl: string;
 }
 
+export interface SearchResult {
+  name: string;
+  photo: string;
+  id: string;
+}

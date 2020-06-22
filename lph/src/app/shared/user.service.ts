@@ -29,6 +29,10 @@ export class UserService {
     return this.user;
   }
 
+  getUserId() {
+    return this.userId;
+  }
+
   isUserLogged() {
     return this.isLogged;
   }
@@ -79,54 +83,48 @@ export class UserService {
     );
   }
 
-  getProfilePhoto(userId: string, route: string = '/myprofile') {
-    if (route === '/myprofile') {
-      return this.firebaseDatabase.database
-        .ref('/users/' + userId + '/profilePhoto')
-        .once(
-          'value',
-          snapshot => {
-            return snapshot.val();
-          },
-          errorObject => {
-            console.error('The read failed: ' + errorObject);
-          }
-        );
-    } else if (route.includes('user')) {
-      const userIdConst = route.replace('/user', '');
-      return this.firebaseDatabase.database
-        .ref('/users/' + userIdConst + '/profilePhoto')
-        .once(
-          'value',
-          snapshot => {
-            return snapshot.val();
-          },
-          errorObject => {
-            console.error('The read failed: ' + errorObject);
-          }
-        );
+  getProfilePhoto(userId: string, route: string = "/myprofile") {
+    if (route === "/myprofile") {
+      return this.firebaseDatabase.database.ref("/users/" + userId + "/profilePhoto").once(
+        "value",
+        (snapshot) => {
+          return snapshot.val();
+        },
+        (errorObject) => {
+          console.error("The read failed: " + errorObject);
+        }
+      );
+    } else if (route.includes("user")) {
+      const userIdConst = route.replace("/user", "");
+      return this.firebaseDatabase.database.ref("/users/" + userIdConst + "/profilePhoto").once(
+        "value",
+        (snapshot) => {
+          return snapshot.val();
+        },
+        (errorObject) => {
+          console.error("The read failed: " + errorObject);
+        }
+      );
     }
   }
 
-  getFullName(userId: string, route: string = '/myprofile') {
-    let id = '';
-    if (route === '/myprofile') {
+  getFullName(userId: string, route: string = "/myprofile") {
+    let id = "";
+    if (route === "/myprofile") {
       id = userId;
-    } else if (route.includes('user')) {
-      id = route.replace('/user', '');
+    } else if (route.includes("user")) {
+      id = route.replace("/user", "");
     }
 
-    return this.firebaseDatabase.database
-      .ref('/users/' + id + '/fullName')
-      .once(
-        'value',
-        snapshot => {
-          return snapshot.val();
-        },
-        errorObject => {
-          console.error('The read failed: ' + errorObject);
-        }
-      );
+    return this.firebaseDatabase.database.ref("/users/" + id + "/fullName").once(
+      "value",
+      (snapshot) => {
+        return snapshot.val();
+      },
+      (errorObject) => {
+        console.error("The read failed: " + errorObject);
+      }
+    );
   }
 
   getUserDataFromFirebase(uid: string) {

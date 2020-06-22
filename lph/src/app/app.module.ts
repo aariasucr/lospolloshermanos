@@ -29,8 +29,11 @@ import {AngularFireDatabaseModule} from '@angular/fire/database'; // Para la bas
 import {AngularFireAuthModule} from '@angular/fire/auth'; // Para las funcionalidades de autenticación.
 import {AngularFireStorageModule} from '@angular/fire/storage'; // Para las funcionalidades del storage
 /** Para no subir credenciales a git: */
-import {environment} from 'src/environments/environment';
-import {CommentService} from './shared/comment.service';
+import {environment} from "src/environments/environment";
+import {CommentService} from "./shared/comment.service";
+import {SearchResultsComponent} from "./search-results/search-results.component";
+import {SearchService} from "./shared/search.service";
+import {SpinnerComponent} from "./spinner/spinner.component";
 import { PostCommentService } from './shared/post-comment.service';
 import { PostService } from './shared/post.service';
 
@@ -46,7 +49,9 @@ import { PostService } from './shared/post.service';
     EditProfileComponent,
     FileUploaderComponent,
     PostFrameComponent,
-    ChatComponent
+    ChatComponent,
+    SearchResultsComponent,
+    SpinnerComponent
   ],
   imports: [
     BrowserModule,
@@ -69,6 +74,7 @@ import { PostService } from './shared/post.service';
     DatePipe,
     CommentService,
     PostCommentService,
+    SearchService,
     PostService
   ],
   bootstrap: [AppComponent]

@@ -5,6 +5,8 @@ import {CommentService} from "../shared/comment.service";
 import {AngularFireAuth} from "@angular/fire/auth";
 import {AngularFireDatabase} from "@angular/fire/database";
 import {ModalService} from "../shared/modal.service";
+import {NgForm} from "@angular/forms";
+import {SearchService} from "../shared/search.service";
 
 @Component({
   selector: "app-header",
@@ -28,7 +30,8 @@ export class HeaderComponent implements OnInit {
     private commentService: CommentService,
     private firebaseAuth: AngularFireAuth,
     private modalService: ModalService,
-    private firebaseDatabase: AngularFireDatabase
+    private firebaseDatabase: AngularFireDatabase,
+    private searchService: SearchService
   ) {}
 
   ngOnInit() {
@@ -43,14 +46,13 @@ export class HeaderComponent implements OnInit {
         this.userName = userData.username;
         this.fullName = userData.fullName;
         this.firebaseAuth.currentUser.then((u) => {
-          this.userDataId = u.uid;
-          //console.log("user id", this.userDataId);
-          this.messagesNumber();
-          let likes = this.likesNumber();
-          let comments = this.commentsNumber();
-          let followers = this.followersNumber();
-
-          console.log(this.newComments, this.newFollower, this.newLikes);
+          if (u != null) {
+            this.userDataId = u.uid;
+            this.messagesNumber();
+            let likes = this.likesNumber();
+            let comments = this.commentsNumber();
+            let followers = this.followersNumber();
+          }
         });
       } else {
         this.isLogged = false;
@@ -129,6 +131,7 @@ export class HeaderComponent implements OnInit {
     this.firebaseDatabase.database
       .ref("/notifications/" + this.userDataId + "/messages")
       .set(this.newMessages);
+    this.router.navigate(["/messages"]);
   }
 
   resetNotifications(modal) {
@@ -152,6 +155,17 @@ export class HeaderComponent implements OnInit {
 
   openNotifications(modal) {
     this.modalService.open(modal);
+  }
+
+  search(form: NgForm) {
+    //console.log();
+    if (form.value.searchText.length > 0) {
+      this.searchService.setValueToSearch(form.value.searchText);
+      //this.searchService.fetchResults();
+      if (this.router.url !== "/searchResults") {
+        this.router.navigate(["/searchResults"]);
+      }
+    }
   }
 
   //this.resetNotifications();

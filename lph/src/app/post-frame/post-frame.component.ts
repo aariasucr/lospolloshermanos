@@ -9,21 +9,21 @@ import { PostCommentService } from '../shared/post-comment.service';
 import { NgForm } from '@angular/forms';
 
 @Component({
-  selector: 'app-post-frame',
-  templateUrl: './post-frame.component.html',
-  styleUrls: ['./post-frame.component.css']
+  selector: "app-post-frame",
+  templateUrl: "./post-frame.component.html",
+  styleUrls: ["./post-frame.component.css"]
 })
 export class PostFrameComponent implements OnInit {
   private post: Post;
   @Input() postId = '';
 
   postRef: any;
-  author = '';
-  uploadedFileUrl = '';
+  author = "";
+  uploadedFileUrl = "";
   numComm = 0;
   numLikes = 0;
   public userDataId;
-  public profilePicturePath = '';
+  public profilePicturePath = "";
   public fullName;
   private isLiked;
   private commentPost: CommentPost[] = []
@@ -38,25 +38,32 @@ export class PostFrameComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.firebaseAuth.currentUser.then(userData => {
-      this.userDataId = userData.uid;
+    this.firebaseAuth.currentUser
+      .then((userData) => {
+        if (userData != null) {
+          this.userDataId = userData.uid;
 
-      // Recupera la foto de perfil del usuario
-      this.userService.getProfilePhoto(this.userDataId)
-      .then((photo) => {
-        this.profilePicturePath = photo.val();
+          this.userService
+            .getProfilePhoto(this.userDataId)
+            .then((photo) => {
+              this.profilePicturePath = photo.val();
+            })
+            .catch((error) => {
+              console.error("error", error);
+            });
+
+          this.userService
+            .getFullName(this.userDataId)
+            .then((name) => {
+              this.fullName = name.val();
+            })
+            .catch((error) => {
+              console.error("error", error);
+            });
+        }
       })
       .catch((error) => {
-        console.error('error', error);
-      });
-
-      // Recupera el nombre del usuario
-      this.userService.getFullName(this.userDataId)
-      .then((name) => {
-        this.fullName = name.val();
-      })
-      .catch((error) => {
-        console.error('error', error);
+        console.error("error", error);
       });
 
       // Recupera la información de un post específico
@@ -77,6 +84,7 @@ export class PostFrameComponent implements OnInit {
     .catch(error => {
       console.error('error', error);
     });
+
 
     this.postCommentService.getAllPostComments(this.postId)
     .snapshotChanges()

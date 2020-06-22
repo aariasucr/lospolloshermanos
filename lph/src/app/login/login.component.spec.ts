@@ -1,24 +1,27 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from "@angular/core/testing";
 
-import { LoginComponent } from './login.component';
-import { FormsModule } from '@angular/forms';
-import { AppRoutingModule } from '../app-routing.module';
-import { ToastrModule } from 'ngx-toastr';
-import { AngularFireModule } from '@angular/fire';
-import { environment } from 'src/environments/environment';
-import { AngularFireAuthModule } from '@angular/fire/auth';
-import { AngularFireDatabaseModule } from '@angular/fire/database';
-import { HomeComponent } from '../home/home.component';
-import { FileUploaderComponent } from '../file-uploader/file-uploader.component';
-import { AppComponent } from '../app.component';
-import { ProfileComponent } from '../profile/profile.component';
-import { EditProfileComponent } from '../edit-profile/edit-profile.component';
-import { RegisterComponent } from '../register/register.component';
-import { HeaderComponent } from '../header/header.component';
-import { PostFrameComponent } from '../post-frame/post-frame.component';
-import { ResetPasswordComponent } from '../reset-password/reset-password.component';
+import {LoginComponent} from "./login.component";
+import {FormsModule} from "@angular/forms";
+import {AppRoutingModule} from "../app-routing.module";
+import {ToastrModule} from "ngx-toastr";
+import {AngularFireModule} from "@angular/fire";
+import {environment} from "src/environments/environment";
+import {AngularFireAuthModule} from "@angular/fire/auth";
+import {AngularFireDatabaseModule} from "@angular/fire/database";
+import {HomeComponent} from "../home/home.component";
+import {FileUploaderComponent} from "../file-uploader/file-uploader.component";
+import {AppComponent} from "../app.component";
+import {ProfileComponent} from "../profile/profile.component";
+import {EditProfileComponent} from "../edit-profile/edit-profile.component";
+import {RegisterComponent} from "../register/register.component";
+import {HeaderComponent} from "../header/header.component";
+import {PostFrameComponent} from "../post-frame/post-frame.component";
+import {ResetPasswordComponent} from "../reset-password/reset-password.component";
+import {SearchResultsComponent} from "../search-results/search-results.component";
+import {ChatComponent} from "../chat/chat.component";
+import {SpinnerComponent} from "../spinner/spinner.component";
 
-describe('LoginComponent', () => {
+describe("LoginComponent", () => {
   let component: LoginComponent;
   let fixture: ComponentFixture<LoginComponent>;
 
@@ -32,7 +35,9 @@ describe('LoginComponent', () => {
         AngularFireAuthModule,
         AngularFireDatabaseModule
       ],
-      declarations: [ LoginComponent, AppComponent,
+      declarations: [
+        LoginComponent,
+        AppComponent,
         HomeComponent,
         ProfileComponent,
         EditProfileComponent,
@@ -40,9 +45,12 @@ describe('LoginComponent', () => {
         HeaderComponent,
         PostFrameComponent,
         FileUploaderComponent,
-        ResetPasswordComponent ]
-    })
-    .compileComponents();
+        ResetPasswordComponent,
+        SearchResultsComponent,
+        ChatComponent,
+        SpinnerComponent
+      ]
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -51,7 +59,7 @@ describe('LoginComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });
