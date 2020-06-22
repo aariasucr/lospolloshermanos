@@ -12,7 +12,7 @@ export class PostCommentService{
     private firebaseDatabase: AngularFireDatabase,
     private firebaseAuth: AngularFireAuth) { }
 
-  addNewPostCommentAsync(idPost: string, author: string, postComment: string ){
+  addNewPostCommentAsync(idPost: string, auth: string, postComment: string ){
     return this.firebaseAuth.currentUser.then(userData => {
       const firebaseUserId = userData.uid;
       const newPostCommentKey = this.firebaseDatabase.database
@@ -21,14 +21,14 @@ export class PostCommentService{
         .push().key;
 
       const newPostCommentEntry = {
-        auth: author,
+        author: auth,
         comment: postComment,
         created: new Date().getTime(),
         creationDate: new Date().toString(),
       };
 
       const updates = {};
-      updates[`posts/${idPost}/${newPostCommentKey}`] = newPostCommentEntry;
+      updates[`comment/${idPost}/${newPostCommentKey}`] = newPostCommentEntry;
 
       return this.firebaseDatabase.database.ref().update(updates);
     });

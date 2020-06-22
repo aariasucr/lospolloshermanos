@@ -6,6 +6,7 @@ import {UserService} from '../shared/user.service';
 import {AngularFireDatabase} from '@angular/fire/database';
 import {AngularFireAuth} from '@angular/fire/auth';
 import { PostCommentService } from '../shared/post-comment.service';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-post-frame',
@@ -64,10 +65,10 @@ export class PostFrameComponent implements OnInit {
         this.post = postData.val();
 
         // Mapeo de datos que se muestran en el post
-        this.numComm = this.post["numberComm"];
-        this.numLikes = this.post["numberLikes"];
-        this.isLiked = this.post["isLiked"];
-        this.uploadedFileUrl = this.post["img"];
+        this.numComm = this.post['numberComm'];
+        this.numLikes = this.post['numberLikes'];
+        this.isLiked = this.post['isLiked'];
+        this.uploadedFileUrl = this.post['img'];
       })
       .catch(err => {
         console.error('error', err);
@@ -88,7 +89,7 @@ export class PostFrameComponent implements OnInit {
     });
   }
 
-  incNumLikes(){
+  incNumLikes() {
     if (!this.isLiked) {
       this.isLiked = true;
       this.numLikes = this.numLikes + 1;
@@ -96,5 +97,27 @@ export class PostFrameComponent implements OnInit {
       this.isLiked = false;
       this.numLikes = this.numLikes - 1;
     }
+  }
+
+  onSubmit(form: NgForm) {
+    console.log('Submit the msj!');
+
+    const comment = form.value.comment;
+    this.firebaseAuth.currentUser.then((authData) => {
+      this.userService.getFullName(authData.uid).then((userData) => {
+        // Pormesa que devuelve los datos del usuario
+        console.log(userData.val());
+        this.postCommentService
+          .addNewPostCommentAsync(this.postId, userData.val(), comment)
+          .then((results) => {
+            this.notificationService.showSuccessMessage('Todo bien!', 'Comentario Realizado');
+          })
+          .catch((error) => {
+            this.notificationService.showErrorMessage('Error!!!', 'Error creando comentario');
+          });
+      });
+    }).catch(err => {
+      this.notificationService.showErrorMessage('Error!!!', err);
+    });
   }
 }
