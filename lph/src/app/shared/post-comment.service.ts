@@ -34,7 +34,7 @@ export class PostCommentService{
     });
   }
 
-  getAllPostComments(idCommentPost: string){
+  /*getAllPostComments(idCommentPost: string){
     return this.firebaseDatabase
       .list(`comment/${idCommentPost}`, (ref) => ref.limitToLast(10).orderByChild('created'))
       .snapshotChanges()
@@ -46,5 +46,10 @@ export class PostCommentService{
           };
         });
       });
+  }*/
+
+  getAllPostComments(idCommentPost: string){
+    return this.firebaseDatabase
+      .list(`comment/${idCommentPost}`, (ref) => ref.limitToLast(10).orderByChild('created'));
   }
 }

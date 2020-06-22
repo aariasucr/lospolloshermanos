@@ -1,5 +1,5 @@
 import {Component, OnInit, Input} from '@angular/core';
-import {Post} from '../shared/model';
+import { Post, CommentPost } from '../shared/model';
 import {PostService} from '../shared/post.service';
 import {NotificationService} from '../shared/notification.service';
 import {UserService} from '../shared/user.service';
@@ -25,6 +25,7 @@ export class PostFrameComponent implements OnInit {
   public profilePicturePath = '';
   public fullName;
   private isLiked;
+  private commentPost: CommentPost[] = []
 
   constructor(
     private postService: PostService,
@@ -75,6 +76,18 @@ export class PostFrameComponent implements OnInit {
     .catch(error => {
       console.error('error', error);
     });
+
+    this.postCommentService.getAllPostComments(this.postId)
+    .snapshotChanges()
+    .subscribe((data) => {  // Cuando se detecte algún cambio en la base, va a ir a traer ese cambio de forma reactiva.
+      this.commentPost = data.map((e) => { // A cada elemento que viene, de los 100 que se traen, se le saca el val
+        console.log(e.payload.val());
+        return {
+          ...(e.payload.val() as CommentPost)
+        };
+      });
+      console.log("......................", this.commentPost[0]["author"]);
+    })
   }
 
   incNumLikes(){

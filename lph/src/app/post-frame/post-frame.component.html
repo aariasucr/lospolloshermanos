@@ -87,7 +87,10 @@
                 <a role='button'><span class='save'></span></a>
             </div>
             <div class='caption'>
-                <a>jimmyacua</a><span>Descripción de la imagen</span>
+                <a>{{this.fullName}}</a><span>Descripción de la imagen</span>
+            </div>
+            <div class='caption' *ngFor="let comment of this.commentPost">
+                <a>{{comment["author"]}}</a><span>{{comment["comment"]}}</span>
             </div>
             <div class='comment-section'>
                 <input type='text' id='cmnt' placeholder='Add a comment...'>
