@@ -55,7 +55,7 @@ export class ProfileComponent implements OnInit {
     this.following = 0;
     this.isFollowing = this.isFollowingTo();
     this.followUnfollowBtn = "Seguir";
-
+    this.userDataId = "";
     this.firebaseAuth.currentUser
       .then((userData) => {
         if (userData != null) {
