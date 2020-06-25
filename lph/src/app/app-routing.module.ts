@@ -10,7 +10,6 @@ import {EditProfileComponent} from "./edit-profile/edit-profile.component";
 import {HomeComponent} from "./home/home.component";
 import {ChatComponent} from "./chat/chat.component";
 import {SearchResultsComponent} from "./search-results/search-results.component";
-
 export const routes: Routes = [
   {path: "", component: AppComponent, canActivate: [RouteGuard]},
   {path: "home", component: HomeComponent, canActivate: [RouteGuard]},
@@ -22,7 +21,8 @@ export const routes: Routes = [
   {path: "register", component: RegisterComponent},
   {path: "searchResults", component: SearchResultsComponent},
   {path: "messages", component: ChatComponent, canActivate: [RouteGuard]},
-  {path: "resetPassword", component: ResetPasswordComponent}
+  {path: "resetPassword", component: ResetPasswordComponent},
+  {path: "post/:id", component: ProfileComponent, canActivate: [RouteGuard]}
 ];
 
 @NgModule({

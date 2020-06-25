@@ -2,15 +2,15 @@ import {Component, OnInit} from "@angular/core";
 import {UserService} from "../shared/user.service";
 import {Router} from "@angular/router";
 import {ModalService} from "../shared/modal.service";
-import {Friend, Message} from "../shared/model";
+import {Friend, Message, CommentPost} from "../shared/model";
 import {NgForm} from "@angular/forms";
 //import {DatePipe} from "@angular/common";
 import {NotificationService} from "../shared/notification.service";
 import {AngularFireDatabase} from "@angular/fire/database";
 import {AngularFireAuth} from "@angular/fire/auth";
-import {ChatService} from "../shared/chat.service";
 import {CommentService} from "../shared/comment.service";
 import {DatePipe} from "@angular/common";
+import {PostCommentService} from "../shared/post-comment.service";
 
 @Component({
   selector: "app-profile",
@@ -31,22 +31,32 @@ export class ProfileComponent implements OnInit {
   public route = "";
   public isFollowing: boolean;
   public followUnfollowBtn: string;
+  public selectedPost: string;
+  public selectedPhoto: string;
+  public postDescription: string;
+  public postNumLikes: number;
+  public postNumComments: number;
+  public postComments: Array<CommentPost> = [];
 
   constructor(
     private datePipe: DatePipe,
     private userService: UserService,
-    private chatService: ChatService,
     private commentService: CommentService,
     private modalService: ModalService,
     private notificationService: NotificationService,
     private router: Router,
     private firebaseDatabase: AngularFireDatabase,
-    private firebaseAuth: AngularFireAuth
+    private firebaseAuth: AngularFireAuth,
+    private postCommentService: PostCommentService
   ) {
     this.route = router.url;
   }
 
   ngOnInit() {
+    this.postNumComments = 0;
+    this.postNumLikes = 0;
+    this.selectedPhoto = "";
+    this.selectedPost = "";
     this.postsNumber = 0;
     this.posts = [];
     this.followersList = [];
@@ -121,7 +131,9 @@ export class ProfileComponent implements OnInit {
     if (this.route === "/myprofile") {
       this.userService.getUserPosts().then((userPosts) => {
         try {
+          //console.log("POSTS", userPosts.val());
           userPosts.forEach((element) => {
+            //console.log("ELEMENTS", element.val());
             let p = element.val();
             this.posts.push(p["img"]);
             this.postsNumber++;
@@ -437,5 +449,33 @@ export class ProfileComponent implements OnInit {
       "Su mensaje ha sido enviado con éxito."
     );
     this.modalService.close();
+  }
+
+  openModalPost(modal, photoUrl) {
+    //console.log("post id", photoUrl);
+    this.userService.getUserPosts().then((posts) => {
+      let keys = Object.keys(posts.val());
+      keys.forEach((key) => {
+        if (posts.val()[key].img == photoUrl) {
+          this.selectedPost = key;
+        }
+      });
+      this.selectedPhoto = photoUrl;
+      this.postDescription = posts.val()[this.selectedPost]["postDescription"];
+      this.postNumLikes = posts.val()[this.selectedPost]["numberLikes"];
+      this.postCommentService
+        .getAllPostComments(this.selectedPost)
+        .snapshotChanges()
+        .subscribe((comments) => {
+          this.postComments = comments.map((e) => {
+            return {
+              ...(e.payload.val() as CommentPost)
+            };
+          });
+          //console.log("comentarios2", this.postComments);
+          this.postNumComments = this.postComments.length;
+          this.modalService.open(modal);
+        });
+    });
   }
 }

@@ -1,5 +1,4 @@
 import {Component, OnInit} from "@angular/core";
-//import * as firebase from "firebase";
 import {UserService} from "../shared/user.service";
 import {Message, PreviewMessage} from "../shared/model";
 import {ChatService} from "../shared/chat.service";
@@ -7,11 +6,11 @@ import {AngularFireDatabase} from "@angular/fire/database";
 import {DatePipe} from "@angular/common";
 import {NgForm} from "@angular/forms";
 import {CommentService} from "../shared/comment.service";
-import {AngularFireAuthModule, AngularFireAuth} from "@angular/fire/auth";
+import {AngularFireAuth} from "@angular/fire/auth";
 @Component({
-  selector: 'app-messages',
-  templateUrl: './chat.component.html',
-  styleUrls: ['./chat.component.css']
+  selector: "app-messages",
+  templateUrl: "./chat.component.html",
+  styleUrls: ["./chat.component.css"]
 })
 export class ChatComponent implements OnInit {
   public userchatRooms: Array<string>;
@@ -33,9 +32,9 @@ export class ChatComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.userData = 'not set';
+    this.userData = "not set";
     this.reversed = false;
-    this.selectedChat = '';
+    this.selectedChat = "";
     this.messagesArray = [];
     this.firebaseAuth.currentUser.then((user) => {
       if (user != null) {
@@ -69,7 +68,7 @@ export class ChatComponent implements OnInit {
 
   getUserChatRooms() {
     return this.db
-      .list('/conversationsPerUser/' + this.userData, (ref) => {
+      .list("/conversationsPerUser/" + this.userData, (ref) => {
         return ref;
       })
       .valueChanges();
@@ -77,8 +76,8 @@ export class ChatComponent implements OnInit {
 
   getUserChats(idChat: string) {
     return this.db
-      .list('/chatRooms/' + idChat + '/messages', (ref) => {
-        return ref.orderByChild('timestamp');
+      .list("/chatRooms/" + idChat + "/messages", (ref) => {
+        return ref.orderByChild("timestamp");
       })
       .valueChanges();
   }
@@ -152,9 +151,9 @@ export class ChatComponent implements OnInit {
   sendNewMessage(form: NgForm) {
     const mensaje = form.value.msg;
     form.resetForm();
-    if (this.selectedChat !== '') {
+    if (this.selectedChat !== "") {
       let now = new Date();
-      let n = this.datePipe.transform(now, 'dd-MM-yyyy HH:mm');
+      let n = this.datePipe.transform(now, "dd-MM-yyyy HH:mm");
       const current = new Date();
       const stamp = current.getTime();
       let nMessage: Message = {
@@ -168,10 +167,10 @@ export class ChatComponent implements OnInit {
         .set(stamp)
         .then(() => {
           this.messagesArray.push(nMessage);
-          this.db.object('/chatRooms/' + this.selectedChat + '/messages').set(this.messagesArray);
+          this.db.object("/chatRooms/" + this.selectedChat + "/messages").set(this.messagesArray);
         });
-      let friendId = this.selectedChat.replace(this.userData, '');
-      friendId = friendId.replace('_', '');
+      let friendId = this.selectedChat.replace(this.userData, "");
+      friendId = friendId.replace("_", "");
       this.commentService.newMessage(friendId);
     }
   }
