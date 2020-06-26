@@ -153,6 +153,6 @@
         </div>
     </div>
 </div>
-<section *ngFor="let post of this.posts">
-    <app-post-frame [postId]="post"></app-post-frame>
+<section *ngFor="let post of this.listGeneralUserAndPostData">
+    <app-post-frame [postId]="post.postId" [authorId]="post.authorId"></app-post-frame>
 </section>
