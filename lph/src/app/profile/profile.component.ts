@@ -35,8 +35,11 @@ export class ProfileComponent implements OnInit {
   public selectedPhoto: string;
   public postDescription: string;
   public postNumLikes: number;
+  public postLikedBy: string[];
   public postNumComments: number;
   public postComments: Array<CommentPost> = [];
+  public allowComments: boolean;
+  public likePost: boolean;
 
   constructor(
     private datePipe: DatePipe,
@@ -53,8 +56,11 @@ export class ProfileComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.postLikedBy = [];
+    this.allowComments = true;
     this.postNumComments = 0;
     this.postNumLikes = 0;
+    this.likePost = false;
     this.selectedPhoto = "";
     this.selectedPost = "";
     this.postsNumber = 0;
@@ -452,8 +458,11 @@ export class ProfileComponent implements OnInit {
   }
 
   openModalPost(modal, photoUrl) {
-    //console.log("post id", photoUrl);
-    this.userService.getUserPosts().then((posts) => {
+    let id = this.userDataId;
+    if (this.route.includes("/user")) {
+      id = this.route.replace("/user", "");
+    }
+    this.userService.getUserPosts(id).then((posts) => {
       let keys = Object.keys(posts.val());
       keys.forEach((key) => {
         if (posts.val()[key].img == photoUrl) {
@@ -461,8 +470,21 @@ export class ProfileComponent implements OnInit {
         }
       });
       this.selectedPhoto = photoUrl;
+      try {
+        this.postLikedBy = posts.val()[this.selectedPost]["likedBy"];
+      } catch (e) {
+        console.error(e);
+      }
+
+      if (this.postLikedBy != null && this.postLikedBy.length > 0) {
+        if (this.postLikedBy.includes(this.userDataId)) {
+          this.likePost = true;
+        }
+      } else {
+        this.postLikedBy = [];
+      }
       this.postDescription = posts.val()[this.selectedPost]["postDescription"];
-      this.postNumLikes = posts.val()[this.selectedPost]["numberLikes"];
+      this.allowComments = posts.val()[this.selectedPost]["allowComments"];
       this.postCommentService
         .getAllPostComments(this.selectedPost)
         .snapshotChanges()
@@ -472,10 +494,77 @@ export class ProfileComponent implements OnInit {
               ...(e.payload.val() as CommentPost)
             };
           });
-          //console.log("comentarios2", this.postComments);
           this.postNumComments = this.postComments.length;
           this.modalService.open(modal);
         });
     });
+  }
+
+  onSubmitComment(form: NgForm) {
+    let id = this.userDataId;
+    if (this.route.includes("/user")) {
+      id = this.route.replace("/user", "");
+    }
+    const comment = form.value.comment;
+    if (comment != "" && comment != null) {
+      this.firebaseAuth.currentUser
+        .then((authData) => {
+          this.userService.getFullName(authData.uid).then((userData) => {
+            console.log(userData.val());
+            this.postCommentService
+              .addNewPostCommentAsync(this.selectedPost, userData.val(), comment)
+              .then((results) => {
+                this.notificationService.showSuccessMessage("Todo bien!", "Comentario Realizado");
+              })
+              .catch((error) => {
+                this.notificationService.showErrorMessage("Error!!!", "Error creando comentario");
+              });
+          });
+        })
+        .catch((err) => {
+          this.notificationService.showErrorMessage("Error!!!", err);
+        });
+    } else {
+      this.notificationService.showErrorMessage(
+        "Debes escribir algo",
+        "No se pueden hacer comentarios sin contenido"
+      );
+    }
+  }
+
+  changeAllowComments() {
+    this.allowComments = !this.allowComments;
+    //console.log("entra a this.allowComments", this.allowComments);
+    this.firebaseDatabase.database
+      .ref("/posts/" + this.userDataId + "/" + this.selectedPost + "/allowComments")
+      .set(this.allowComments);
+    if (this.allowComments) {
+      this.notificationService.showSuccessMessage(
+        "Éxito.",
+        "Se activaron los comentarios para esta publicación."
+      );
+    } else {
+      this.notificationService.showSuccessMessage(
+        "Éxito.",
+        "Se descactivaron los comentarios para esta publicación."
+      );
+    }
+  }
+
+  incNumLikes() {
+    let id = this.userDataId;
+    if (this.route.includes("/user")) {
+      id = this.route.replace("/user", "");
+    }
+    if (this.likePost) {
+      this.postLikedBy = this.postLikedBy.filter((item) => item !== this.userDataId);
+      this.likePost = false;
+    } else {
+      this.postLikedBy.push(this.userDataId);
+      this.likePost = true;
+    }
+    this.firebaseDatabase.database
+      .ref("posts/" + id + "/" + this.selectedPost + "/likedBy")
+      .set(this.postLikedBy);
   }
 }
