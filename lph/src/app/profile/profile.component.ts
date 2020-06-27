@@ -501,10 +501,6 @@ export class ProfileComponent implements OnInit {
   }
 
   onSubmitComment(form: NgForm) {
-    let id = this.userDataId;
-    if (this.route.includes("/user")) {
-      id = this.route.replace("/user", "");
-    }
     const comment = form.value.comment;
     if (comment != "" && comment != null) {
       this.firebaseAuth.currentUser
