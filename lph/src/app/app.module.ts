@@ -36,6 +36,7 @@ import {SearchService} from "./shared/search.service";
 import {SpinnerComponent} from "./spinner/spinner.component";
 import {PostCommentService} from "./shared/post-comment.service";
 import {PostService} from "./shared/post.service";
+import {AngularFirePerformanceModule} from "@angular/fire/performance";
 
 @NgModule({
   declarations: [
@@ -54,6 +55,7 @@ import {PostService} from "./shared/post.service";
     SpinnerComponent
   ],
   imports: [
+    AngularFirePerformanceModule,
     BrowserModule,
     AppRoutingModule,
     FormsModule,
