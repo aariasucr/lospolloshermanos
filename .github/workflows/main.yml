@@ -28,3 +28,11 @@ jobs:
       - name: Create Build
         working-directory: lph
         run: npm run build
+
+      - name: Deploy to Firebase
+        uses: w9jds/firebase-action@v1.3.1
+        with:
+          args: deploy --only hosting
+        env:
+          FIREBASE_TOKEN: ${{enviroment.firebaseToken}}
+          PROJECT_PATH: lph
