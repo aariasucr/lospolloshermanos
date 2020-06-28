@@ -20,6 +20,7 @@ import {ResetPasswordComponent} from "../reset-password/reset-password.component
 import {SearchResultsComponent} from "../search-results/search-results.component";
 import {ChatComponent} from "../chat/chat.component";
 import {SpinnerComponent} from "../spinner/spinner.component";
+import {AngularFirePerformanceModule} from "@angular/fire/performance";
 
 describe("LoginComponent", () => {
   let component: LoginComponent;
@@ -33,6 +34,7 @@ describe("LoginComponent", () => {
         ToastrModule.forRoot(),
         AngularFireModule.initializeApp(environment.firebaseConfig),
         AngularFireAuthModule,
+        AngularFirePerformanceModule,
         AngularFireDatabaseModule
       ],
       declarations: [
