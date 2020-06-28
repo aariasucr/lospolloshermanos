@@ -2,15 +2,15 @@ import {Component, OnInit} from "@angular/core";
 import {UserService} from "../shared/user.service";
 import {Router} from "@angular/router";
 import {ModalService} from "../shared/modal.service";
-import {Friend, Message} from "../shared/model";
+import {Friend, Message, CommentPost} from "../shared/model";
 import {NgForm} from "@angular/forms";
 //import {DatePipe} from "@angular/common";
 import {NotificationService} from "../shared/notification.service";
 import {AngularFireDatabase} from "@angular/fire/database";
 import {AngularFireAuth} from "@angular/fire/auth";
-import {ChatService} from "../shared/chat.service";
 import {CommentService} from "../shared/comment.service";
 import {DatePipe} from "@angular/common";
+import {PostCommentService} from "../shared/post-comment.service";
 
 @Component({
   selector: "app-profile",
@@ -31,22 +31,38 @@ export class ProfileComponent implements OnInit {
   public route = "";
   public isFollowing: boolean;
   public followUnfollowBtn: string;
+  public selectedPost: string;
+  public selectedPhoto: string;
+  public postDescription: string;
+  public postNumLikes: number;
+  public postLikedBy: string[];
+  public postNumComments: number;
+  public postComments: Array<CommentPost> = [];
+  public allowComments: boolean;
+  public likePost: boolean;
 
   constructor(
     private datePipe: DatePipe,
     private userService: UserService,
-    private chatService: ChatService,
     private commentService: CommentService,
     private modalService: ModalService,
     private notificationService: NotificationService,
     private router: Router,
     private firebaseDatabase: AngularFireDatabase,
-    private firebaseAuth: AngularFireAuth
+    private firebaseAuth: AngularFireAuth,
+    private postCommentService: PostCommentService
   ) {
     this.route = router.url;
   }
 
   ngOnInit() {
+    this.postLikedBy = [];
+    this.allowComments = true;
+    this.postNumComments = 0;
+    this.postNumLikes = 0;
+    this.likePost = false;
+    this.selectedPhoto = "";
+    this.selectedPost = "";
     this.postsNumber = 0;
     this.posts = [];
     this.followersList = [];
@@ -121,7 +137,9 @@ export class ProfileComponent implements OnInit {
     if (this.route === "/myprofile") {
       this.userService.getUserPosts().then((userPosts) => {
         try {
+          //console.log("POSTS", userPosts.val());
           userPosts.forEach((element) => {
+            //console.log("ELEMENTS", element.val());
             let p = element.val();
             this.posts.push(p["img"]);
             this.postsNumber++;
@@ -437,5 +455,112 @@ export class ProfileComponent implements OnInit {
       "Su mensaje ha sido enviado con éxito."
     );
     this.modalService.close();
+  }
+
+  openModalPost(modal, photoUrl) {
+    let id = this.userDataId;
+    if (this.route.includes("/user")) {
+      id = this.route.replace("/user", "");
+    }
+    this.userService.getUserPosts(id).then((posts) => {
+      let keys = Object.keys(posts.val());
+      keys.forEach((key) => {
+        if (posts.val()[key].img == photoUrl) {
+          this.selectedPost = key;
+        }
+      });
+      this.selectedPhoto = photoUrl;
+      try {
+        this.postLikedBy = posts.val()[this.selectedPost]["likedBy"];
+      } catch (e) {
+        console.error(e);
+      }
+
+      if (this.postLikedBy != null && this.postLikedBy.length > 0) {
+        if (this.postLikedBy.includes(this.userDataId)) {
+          this.likePost = true;
+        }
+      } else {
+        this.postLikedBy = [];
+      }
+      this.postDescription = posts.val()[this.selectedPost]["postDescription"];
+      this.allowComments = posts.val()[this.selectedPost]["allowComments"];
+      this.postCommentService
+        .getAllPostComments(this.selectedPost)
+        .snapshotChanges()
+        .subscribe((comments) => {
+          this.postComments = comments.map((e) => {
+            return {
+              ...(e.payload.val() as CommentPost)
+            };
+          });
+          this.postNumComments = this.postComments.length;
+          this.modalService.open(modal);
+        });
+    });
+  }
+
+  onSubmitComment(form: NgForm) {
+    const comment = form.value.comment;
+    if (comment != "" && comment != null) {
+      this.firebaseAuth.currentUser
+        .then((authData) => {
+          this.userService.getFullName(authData.uid).then((userData) => {
+            console.log(userData.val());
+            this.postCommentService
+              .addNewPostCommentAsync(this.selectedPost, userData.val(), comment)
+              .then((results) => {
+                this.notificationService.showSuccessMessage("Todo bien!", "Comentario Realizado");
+              })
+              .catch((error) => {
+                this.notificationService.showErrorMessage("Error!!!", "Error creando comentario");
+              });
+          });
+        })
+        .catch((err) => {
+          this.notificationService.showErrorMessage("Error!!!", err);
+        });
+    } else {
+      this.notificationService.showErrorMessage(
+        "Debes escribir algo",
+        "No se pueden hacer comentarios sin contenido"
+      );
+    }
+  }
+
+  changeAllowComments() {
+    this.allowComments = !this.allowComments;
+    //console.log("entra a this.allowComments", this.allowComments);
+    this.firebaseDatabase.database
+      .ref("/posts/" + this.userDataId + "/" + this.selectedPost + "/allowComments")
+      .set(this.allowComments);
+    if (this.allowComments) {
+      this.notificationService.showSuccessMessage(
+        "Éxito.",
+        "Se activaron los comentarios para esta publicación."
+      );
+    } else {
+      this.notificationService.showSuccessMessage(
+        "Éxito.",
+        "Se descactivaron los comentarios para esta publicación."
+      );
+    }
+  }
+
+  incNumLikes() {
+    let id = this.userDataId;
+    if (this.route.includes("/user")) {
+      id = this.route.replace("/user", "");
+    }
+    if (this.likePost) {
+      this.postLikedBy = this.postLikedBy.filter((item) => item !== this.userDataId);
+      this.likePost = false;
+    } else {
+      this.postLikedBy.push(this.userDataId);
+      this.likePost = true;
+    }
+    this.firebaseDatabase.database
+      .ref("posts/" + id + "/" + this.selectedPost + "/likedBy")
+      .set(this.postLikedBy);
   }
 }

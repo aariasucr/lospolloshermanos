@@ -84,8 +84,8 @@
     <div class="span12">
       <ul style="list-style: none; display: inline-block;" *ngFor="let post of posts">
         <li style="list-style: none;">
-          <a href="#" class="thumbnail">
-            <img src="{{ post }}" width="293" height="293" alt="post" />
+          <a href="javascript:void(0)" class="thumbnail" (click)="openModalPost(postBlock, post)">
+            <img src="{{ post }}" width="250" height="250" alt="post" />
           </a>
         </li>
       </ul>
@@ -182,4 +182,74 @@
       </form>
     </div>
   </div>
+</ng-template>
+
+<ng-template #postBlock>
+  <section>
+    <div class="insta">
+      <div class="top-insta">
+        <a rel="noopener noreferrer" target="_blank"
+          ><img [src]="profilePicturePath" alt="image profile here"
+        /></a>
+        <a rel="noopener noreferrer" target="_blank" class="user">{{ this.fullName }}</a>
+        <a *ngIf="route.includes('myprofile')" class="allowComments">Permitir comentarios</a>
+        <div *ngIf="allowComments && route.includes('myprofile')">
+          <label class="switch" (click)="changeAllowComments()">
+            <input type="checkbox" checked />
+            <span class="slider round"></span>
+          </label>
+        </div>
+        <div *ngIf="!allowComments && route.includes('myprofile')">
+          <label class="switch" (click)="changeAllowComments()">
+            <input type="checkbox" unchecked />
+            <span class="slider round"></span>
+          </label>
+        </div>
+      </div>
+      <div class="post" width="100" height="100">
+        <div class="overlay" (click)="incNumLikes()">
+          <span></span>
+        </div>
+        <img src="{{ selectedPhoto }}" width="480" height="600" alt="image profile here" />
+      </div>
+      <div class="footer">
+        <div class="caption">
+          <span>{{ postDescription }}</span>
+        </div>
+        <div class="react">
+          <a role="button" *ngIf="!likePost" (click)="incNumLikes()"><span class="love"></span></a>
+          <a role="button" *ngIf="likePost" (click)="incNumLikes()"><span class="loved"></span></a>
+          <a>{{ postLikedBy.length }}</a>
+          <a role="button"><span class="comment"></span></a>
+          <a>{{ postNumComments }}</a>
+        </div>
+
+        <div class="caption" *ngFor="let comment of this.postComments">
+          <a>{{ comment["author"] }}</a
+          ><span>{{ comment["comment"] }}</span>
+        </div>
+      </div>
+      <div class="comment-section" *ngIf="allowComments">
+        <form class="user" #f="ngForm" (ngSubmit)="onSubmitComment(f)">
+          <div class="form-group">
+            <textarea
+              type="text"
+              id="comment"
+              name="comment"
+              class="form-control"
+              placeholder="Escribe un comentario"
+              ngModel
+              style="margin-left: 1%; width: 95%; resize: none;"
+            >
+            </textarea>
+          </div>
+          <div class="form-group">
+            <button type="submit" class="dot02"></button>
+          </div>
+        </form>
+      </div>
+      <!-- end Footer -->
+    </div>
+    <!-- end Insta -->
+  </section>
 </ng-template>
