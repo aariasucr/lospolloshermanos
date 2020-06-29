@@ -18,6 +18,7 @@ export class HeaderComponent implements OnInit {
   userName: string;
   fullName: string;
   userDataId: string;
+  profilePhoto: string;
   newMessages: number;
   newLikes: number;
   newFollower: number;
@@ -45,6 +46,8 @@ export class HeaderComponent implements OnInit {
         this.isLogged = true;
         this.userName = userData.username;
         this.fullName = userData.fullName;
+        this.profilePhoto = userData.profilePhoto;
+        console.log("*******", userData);
         this.firebaseAuth.currentUser.then((u) => {
           if (u != null) {
             this.userDataId = u.uid;
