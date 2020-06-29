@@ -22,9 +22,9 @@ export class PostFrameComponent implements OnInit {
   uploadedFileUrl = "";
   numComm = 0;
   numLikes = 0;
-  public userDataId;
+  public userDataId = "";
   public profilePicturePath = "";
-  public fullName;
+  public fullName = "";
   private isLiked;
   private commentPost: CommentPost[] = [];
 

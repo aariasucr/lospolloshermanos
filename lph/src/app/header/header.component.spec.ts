@@ -87,6 +87,7 @@ describe("HeaderComponent", () => {
     fixture.detectChanges();
 
     userService = fixture.debugElement.injector.get(UserService);
+    userServiceSpy = spyOn(userService, "performLogin");
     userServiceSpy = spyOn(userService, "performLogout");
 
     modalService = fixture.debugElement.injector.get(ModalService);
@@ -95,8 +96,8 @@ describe("HeaderComponent", () => {
     searchService = fixture.debugElement.injector.get(SearchService);
     searchServiceSpy = spyOn(searchService, "setValueToSearch");
 
-    userService.userId = userData.uid;
-    userService.performLogin(userData.uid);
+    //userService.userId = userData.uid;
+    //userService.performLogin(userData.uid);
   });
 
   it("should create", () => {
@@ -104,7 +105,7 @@ describe("HeaderComponent", () => {
   });
 
   it("should initiate", () => {
-    userService.performLogin(userData.uid);
+    //userService.performLogin(userData.uid);
     component.ngOnInit();
 
     expect(component.numOfNotifications).toBe(0);
@@ -147,7 +148,7 @@ describe("HeaderComponent", () => {
     expect(component.newMessages).toBe(0);
   });
 
-  it("should perform login", () => {
+  it("should perform logout", () => {
     component.logout();
     expect(userServiceSpy).toBeTruthy();
     expect(userServiceSpy.calls.all().length).toBeGreaterThanOrEqual(0);

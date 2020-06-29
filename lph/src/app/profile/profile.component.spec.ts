@@ -108,12 +108,12 @@ describe("ProfileComponent", () => {
     fixture.detectChanges();
 
     userService = fixture.debugElement.injector.get(UserService);
-    //userServiceSpy = spyOn(userService, "getUserData");
+    userServiceSpy = spyOn(userService, "performLogin");
     let result: Promise<any>;
     userServiceSpy = spyOn(userService, "getUserPosts").and.returnValue(result);
 
-    userService.userId = userData.uid;
-    userService.performLogin(userData.uid);
+    //userService.userId = userData.uid;
+    //userService.performLogin(userData.uid);
 
     notificationService = fixture.debugElement.injector.get(NotificationService);
     notificationServiceSpy = spyOn(notificationService, "showSuccessMessage");
