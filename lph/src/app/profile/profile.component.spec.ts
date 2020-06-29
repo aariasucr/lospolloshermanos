@@ -125,7 +125,7 @@ describe("ProfileComponent", () => {
   });
 
   it("should initialize", fakeAsync(() => {
-    userService.performLogin(userData.uid);
+    //userService.performLogin(userData.uid);
     component.ngOnInit();
     tick(1000);
     component.route = "/myprofile";
@@ -180,7 +180,7 @@ describe("ProfileComponent", () => {
   it("should get posts", fakeAsync(() => {
     component.ngOnInit();
     //component.setRoute("/myprofile");
-    userService.performLogin(userData.uid);
+    //userService.performLogin(userData.uid);
     component.getPosts();
     expect(userServiceSpy).toBeTruthy();
     expect(userServiceSpy.calls.all().length).toBeGreaterThanOrEqual(0);
@@ -191,7 +191,7 @@ describe("ProfileComponent", () => {
     component.ngOnInit();
     tick();
     component.route = "/user/234567";
-    userService.performLogin(userData.uid);
+    //userService.performLogin(userData.uid);
     let btn = component.followUnfollowBtn;
     //component.startToFollowUnfollow();
     expect(component.followUnfollowBtn).toBe(btn);
