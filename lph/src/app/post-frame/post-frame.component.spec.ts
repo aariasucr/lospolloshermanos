@@ -16,25 +16,16 @@ describe("PostFrameComponent", () => {
   let component: PostFrameComponent;
   let fixture: ComponentFixture<PostFrameComponent>;
 
-  //mock de datos de usuario
-  const userData = {
-    uid: "ZhLvdu5951NUkgrkQSXf7pNULGc2"
-  };
-
-  const mockAngularFireAuth: any = {
-    currentUser: Promise.resolve(userData)
-  };
-
   // Spies para UserService
-  let userService: UserService;
-  let userServiceSpy: jasmine.Spy;
+  let userServicePF: UserService;
+  let userServicePFSpy: jasmine.Spy;
 
   // Spies para notifService
-  let notificationService: NotificationService;
-  let notificationServiceSpy: jasmine.Spy;
+  let notificationPFService: NotificationService;
+  let notificationPFServiceSpy: jasmine.Spy;
 
-  let postService: PostService;
-  let postServiceSpy: jasmine.Spy;
+  let postServicePF: PostService;
+  let postServicePFSpy: jasmine.Spy;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -54,15 +45,15 @@ describe("PostFrameComponent", () => {
     component = fixture.componentInstance;
     fixture.detectChanges();
 
-    userService = fixture.debugElement.injector.get(UserService);
-    userServiceSpy = spyOn(userService, "getUserDataFromFirebase");
+    userServicePF = fixture.debugElement.injector.get(UserService);
+    userServicePFSpy = spyOn(userServicePF, "getUserDataFromFirebase");
 
-    postService = fixture.debugElement.injector.get(PostService);
-    postServiceSpy = spyOn(postService, "addNewPostAsync");
+    postServicePF = fixture.debugElement.injector.get(PostService);
+    postServicePFSpy = spyOn(postServicePF, "addNewPostAsync");
 
-    notificationService = fixture.debugElement.injector.get(NotificationService);
-    notificationServiceSpy = spyOn(notificationService, "showSuccessMessage");
-    notificationServiceSpy = spyOn(notificationService, "showErrorMessage");
+    notificationPFService = fixture.debugElement.injector.get(NotificationService);
+    notificationPFServiceSpy = spyOn(notificationPFService, "showSuccessMessage");
+    notificationPFServiceSpy = spyOn(notificationPFService, "showErrorMessage");
   });
 
   it("should create", () => {
@@ -95,11 +86,11 @@ describe("PostFrameComponent", () => {
       }
     } as NgForm;
     component.onSubmit(testForm);
-    expect(notificationServiceSpy).toBeTruthy();
-    expect(notificationServiceSpy.calls.all().length).toBeGreaterThanOrEqual(0);
-    expect(userServiceSpy).toBeTruthy();
-    expect(userServiceSpy.calls.all().length).toBeGreaterThanOrEqual(0);
-    expect(postServiceSpy).toBeTruthy();
-    expect(postServiceSpy.calls.all().length).toBeGreaterThanOrEqual(0);
+    expect(notificationPFServiceSpy).toBeTruthy();
+    expect(notificationPFServiceSpy.calls.all().length).toBeGreaterThanOrEqual(0);
+    expect(userServicePFSpy).toBeTruthy();
+    expect(userServicePFSpy.calls.all().length).toBeGreaterThanOrEqual(0);
+    expect(postServicePFSpy).toBeTruthy();
+    expect(postServicePFSpy.calls.all().length).toBeGreaterThanOrEqual(0);
   });
 });
