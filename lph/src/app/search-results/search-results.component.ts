@@ -9,17 +9,18 @@ import {SearchResult} from "../shared/model";
   styleUrls: ["./search-results.component.css"]
 })
 export class SearchResultsComponent implements OnInit {
-  numberOfResults: number;
-  searchValue: string;
-  listResults;
-  showSpinner: boolean = true;
+  public numberOfResults: number;
+  public searchValue: string;
+  public listResults;
+  public showSpinner: boolean;
 
   constructor(private searchService: SearchService, private userService: UserService) {}
 
   ngOnInit() {
     this.numberOfResults = 0;
-    this.searchValue = "";
+    this.searchValue = "not set";
     this.listResults = [];
+    this.showSpinner = true;
 
     this.searchService.getValueToSearch().subscribe((val) => {
       let rr = [];
