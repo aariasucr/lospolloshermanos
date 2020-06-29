@@ -7,6 +7,7 @@ import {AngularFireDatabase} from "@angular/fire/database";
 import {AngularFireAuth} from "@angular/fire/auth";
 import {PostCommentService} from "../shared/post-comment.service";
 import {NgForm} from "@angular/forms";
+import { Router } from '@angular/router';
 
 @Component({
   selector: "app-post-frame",
@@ -22,22 +23,30 @@ export class PostFrameComponent implements OnInit {
   uploadedFileUrl = "";
   numComm = 0;
   numLikes = 0;
+  public postLikedBy: string[];
+  public route = "";
   public userDataId;
   public profilePicturePath = "";
   public fullName;
   private isLiked;
   private commentPost: CommentPost[] = [];
+  public likePost: boolean;
 
   constructor(
     private postService: PostService,
     private notificationService: NotificationService,
     private userService: UserService,
+    private router: Router,
     private postCommentService: PostCommentService,
     private firebaseDatabase: AngularFireDatabase,
     private firebaseAuth: AngularFireAuth
-  ) {}
+  ) {
+    this.route = router.url;
+  }
 
   ngOnInit() {
+    this.likePost = false;
+    this.postLikedBy = [];
     this.firebaseAuth.currentUser
       .then((userData) => {
         if (userData != null) {
@@ -64,12 +73,15 @@ export class PostFrameComponent implements OnInit {
           this.postService
             .getSpecifictPost(this.userDataId, this.postId)
             .then((postData) => {
-              console.log("lken", postData.val());
               this.post = postData.val();
+              console.log(this.post);
+              try {
+                this.postLikedBy = this.post["likedBy"];
+              } catch (e) {
+                console.error(e);
+              }
 
               // Mapeo de datos que se muestran en el post
-              this.numComm = this.post["numberComm"];
-              this.numLikes = this.post["numberLikes"];
               this.isLiked = this.post["isLiked"];
               this.uploadedFileUrl = this.post["img"];
             })
@@ -95,17 +107,25 @@ export class PostFrameComponent implements OnInit {
             ...(e.payload.val() as CommentPost)
           };
         });
+        this.numComm = this.commentPost.length;
       });
   }
 
   incNumLikes() {
-    if (!this.isLiked) {
-      this.isLiked = true;
-      this.numLikes = this.numLikes + 1;
-    } else {
-      this.isLiked = false;
-      this.numLikes = this.numLikes - 1;
+    let id = this.userDataId;
+    if (this.route.includes("/user")) {
+      id = this.route.replace("/user", "");
     }
+    if (this.likePost) {
+      this.postLikedBy = this.postLikedBy.filter((item) => item !== this.userDataId);
+      this.likePost = false;
+    } else {
+      this.postLikedBy.push(this.userDataId);
+      this.likePost = true;
+    }
+    this.firebaseDatabase.database
+      .ref("posts/" + id + "/" + this.postId + "/likedBy")
+      .set(this.postLikedBy);
   }
 
   onSubmit(form: NgForm) {

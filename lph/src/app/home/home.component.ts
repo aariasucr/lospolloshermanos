@@ -7,6 +7,7 @@ import { NgForm } from '@angular/forms';
 /** [FB] Actualización */
 import {AngularFireDatabase} from '@angular/fire/database';
 import {AngularFireAuth} from '@angular/fire/auth';
+import { TransitiveCompileNgModuleMetadata } from '@angular/compiler';
 
 @Component({
   selector: 'app-home',
@@ -18,6 +19,9 @@ export class HomeComponent implements OnInit {
   postRef: any;
   user = '';
   uploadedFileUrl = '';
+  following = 0;
+  followers = 0;
+  userName: string;
   constructor(private postService: PostService,
               private notificationService: NotificationService,
               private userService: UserService,
@@ -49,7 +53,6 @@ export class HomeComponent implements OnInit {
 
   ngOnInit() {
     this.firebaseAuth.currentUser.then((userData) => {
-      // console.log('userData en el componente', userData);
       if (!!userData && 'uid' in userData && !!userData.uid) {
         this.user = userData.uid; // Aquí se saca el user id que viene en una promesa desde firebase
 
@@ -62,6 +65,29 @@ export class HomeComponent implements OnInit {
             this.posts = data.map((e) => { // A cada elemento que viene, de los 100 que se traen, se le saca el val
               return e.key;
             });
+          });
+
+          /** Para recuperar datos del usuario */
+        this.userService.getUserDataFromFirebase(this.user).then((userData) => {
+            this.userName = userData.val().fullName;
+          }).catch(err => {
+            this.notificationService.showErrorMessage('Error!!!', err);
+          });
+
+        this.userService.getUserFollowing().then((following) => {
+            if (following.val() != null) {
+              this.following = following.val().length;
+            }
+          }).catch(err => {
+            this.notificationService.showErrorMessage('Error!!!', err);
+          });
+
+        this.userService.getUserFollowers().then((followers) => {
+            if (followers.val() != null) {
+              this.followers = followers.val().length;
+            }
+          }).catch(err => {
+            this.notificationService.showErrorMessage('Error!!!', err);
           });
       }
     });
