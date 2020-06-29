@@ -40,6 +40,7 @@ export class ProfileComponent implements OnInit {
   public postComments: Array<CommentPost> = [];
   public allowComments: boolean;
   public likePost: boolean;
+  public followersArray: Array<string>;
 
   constructor(
     private datePipe: DatePipe,
@@ -51,11 +52,11 @@ export class ProfileComponent implements OnInit {
     private firebaseDatabase: AngularFireDatabase,
     private firebaseAuth: AngularFireAuth,
     private postCommentService: PostCommentService
-  ) {
-    this.route = router.url;
-  }
+  ) {}
 
   ngOnInit() {
+    this.followersArray = [];
+    this.route = this.router.url;
     this.postLikedBy = [];
     this.allowComments = true;
     this.postNumComments = 0;
@@ -134,21 +135,26 @@ export class ProfileComponent implements OnInit {
   }
 
   getPosts() {
+    console.log("ruta profile", this.route);
     if (this.route === "/myprofile") {
       this.userService.getUserPosts().then((userPosts) => {
-        try {
-          //console.log("POSTS", userPosts.val());
-          userPosts.forEach((element) => {
-            //console.log("ELEMENTS", element.val());
-            let p = element.val();
-            this.posts.push(p["img"]);
-            this.postsNumber++;
-          });
-        } catch (e) {
-          console.error(e);
+        console.log("entra a aqui propio");
+        if (userPosts != null) {
+          try {
+            userPosts.forEach((element) => {
+              let p = element.val();
+              this.posts.push(p["img"]);
+              this.postsNumber++;
+            });
+          } catch (e) {
+            console.error(e);
+          }
+        } else {
+          console.error("Error");
         }
       });
     } else if (this.route.includes("user")) {
+      console.log("entra a aqui amigo");
       let userId = this.route.replace("/user", "");
       this.userService.getUserPosts(userId).then((userPosts) => {
         try {
@@ -278,19 +284,22 @@ export class ProfileComponent implements OnInit {
 
   follow(id: string) {
     const currentUser = this.userDataId;
-    let followersArray: Array<string> = [];
+    this.followersArray = [];
     this.firebaseDatabase.database
       .ref("/followers/" + id)
       .once(
         "value",
         (snapshot) => {
-          followersArray = snapshot.val();
-          if (followersArray != null) {
-            followersArray.push(currentUser);
+          this.followersArray = snapshot.val();
+          if (this.followersArray != null) {
+            console.log("llega a followersArray", currentUser);
+            if (!!currentUser) {
+              this.followersArray.push(currentUser);
+            }
           } else {
-            followersArray = [currentUser];
+            this.followersArray = [currentUser];
           }
-          this.firebaseDatabase.database.ref("/followers/" + id).set(followersArray);
+          this.firebaseDatabase.database.ref("/followers/" + id).set(this.followersArray);
           this.commentService.newFollower(id);
         },
         (errorObject) => {

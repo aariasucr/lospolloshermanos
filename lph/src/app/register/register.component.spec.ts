@@ -2,12 +2,12 @@ import {async, ComponentFixture, TestBed} from "@angular/core/testing";
 
 import {RegisterComponent} from "./register.component";
 
-import {FormsModule} from "@angular/forms";
+import {FormsModule, NgForm} from "@angular/forms";
 import {NotificationService} from "../shared/notification.service";
 import {AppRoutingModule} from "../app-routing.module";
 import {UserService} from "../shared/user.service";
 import {AngularFireModule} from "@angular/fire";
-import {AngularFireAuthModule} from "@angular/fire/auth";
+import {AngularFireAuthModule, AngularFireAuth} from "@angular/fire/auth";
 import {environment} from "../../environments/environment";
 import {AngularFireDatabaseModule} from "@angular/fire/database";
 import {AppComponent} from "../app.component";
@@ -27,6 +27,13 @@ import {SpinnerComponent} from "../spinner/spinner.component";
 describe("RegisterComponent", () => {
   let component: RegisterComponent;
   let fixture: ComponentFixture<RegisterComponent>;
+
+  // Spies para UserService
+  let userService: UserService;
+  let userServiceSpy: jasmine.Spy;
+
+  let notificationService: NotificationService;
+  let notificationServiceSpy: jasmine.Spy;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -54,7 +61,7 @@ describe("RegisterComponent", () => {
         ChatComponent,
         SpinnerComponent
       ],
-      providers: [NotificationService, UserService]
+      providers: [NotificationService, UserService, AngularFireAuth]
     }).compileComponents();
   }));
 
@@ -62,9 +69,40 @@ describe("RegisterComponent", () => {
     fixture = TestBed.createComponent(RegisterComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
+
+    userService = fixture.debugElement.injector.get(UserService);
+    userServiceSpy = spyOn(userService, "performLogin");
+
+    notificationService = fixture.debugElement.injector.get(NotificationService);
+    notificationServiceSpy = spyOn(notificationService, "showErrorMessage");
+    notificationServiceSpy = spyOn(notificationService, "showSuccessMessage");
   });
 
   it("should create", () => {
     expect(component).toBeTruthy();
+  });
+
+  it("should login", () => {
+    expect(component.login()).toBeUndefined();
+  });
+
+  it("should regiser", () => {
+    const testForm = {
+      reset() {},
+      value: {
+        nombre: "nombre",
+        apellido: "apellido",
+        username: "test1",
+        email: "test1@test1.com",
+        password: "123456",
+        passConfirmation: "123456"
+      }
+    } as NgForm;
+
+    component.register(testForm);
+    expect(userServiceSpy).toBeTruthy();
+    expect(userServiceSpy.calls.all().length).toBeGreaterThanOrEqual(0);
+    expect(notificationServiceSpy).toBeTruthy();
+    expect(notificationServiceSpy.calls.all().length).toBeGreaterThanOrEqual(0);
   });
 });
