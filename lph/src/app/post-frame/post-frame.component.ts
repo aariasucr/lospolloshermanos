@@ -16,6 +16,7 @@ import {NgForm} from "@angular/forms";
 export class PostFrameComponent implements OnInit {
   private post: Post;
   @Input() postId = "";
+  @Input() authorId = "";
 
   postRef: any;
   author = "";
@@ -38,48 +39,38 @@ export class PostFrameComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.firebaseAuth.currentUser
-      .then((userData) => {
-        if (userData != null) {
-          this.userDataId = userData.uid;
-
-          this.userService
-            .getProfilePhoto(this.userDataId)
-            .then((photo) => {
-              this.profilePicturePath = photo.val();
-            })
-            .catch((error) => {
-              console.error("error", error);
-            });
-
-          this.userService
-            .getFullName(this.userDataId)
-            .then((name) => {
-              this.fullName = name.val();
-            })
-            .catch((error) => {
-              console.error("error", error);
-            });
-
-          this.postService
-            .getSpecifictPost(this.userDataId, this.postId)
-            .then((postData) => {
-              console.log("lken", postData.val());
-              this.post = postData.val();
-
-              // Mapeo de datos que se muestran en el post
-              this.numComm = this.post["numberComm"];
-              this.numLikes = this.post["numberLikes"];
-              this.isLiked = this.post["isLiked"];
-              this.uploadedFileUrl = this.post["img"];
-            })
-            .catch((err) => {
-              console.error("error", err);
-            });
-        }
+    this.userService
+      .getProfilePhoto(this.authorId)
+      .then((photo) => {
+        this.profilePicturePath = photo.val();
       })
       .catch((error) => {
         console.error("error", error);
+      });
+
+    this.userService
+      .getFullName(this.authorId)
+      .then((name) => {
+        this.fullName = name.val();
+      })
+      .catch((error) => {
+        console.error("error", error);
+      });
+
+    this.postService
+      .getSpecifictPost(this.authorId, this.postId)
+      .then((postData) => {
+        console.log("lken", postData.val());
+        this.post = postData.val();
+
+        // Mapeo de datos que se muestran en el post
+        this.numComm = this.post["numberComm"];
+        this.numLikes = this.post["numberLikes"];
+        this.isLiked = this.post["isLiked"];
+        this.uploadedFileUrl = this.post["img"];
+      })
+      .catch((err) => {
+        console.error("error", err);
       });
 
     // Recupera la información de un post específico
