@@ -46,21 +46,23 @@ export class HomeComponent implements OnInit {
         this.userService.getUserFollowing(this.user).then(following => {
           if (following.val() != null) {
             following.val().forEach(followingId => {
-              this.firebaseDatabase
-                // .list(`posts/${this.user}`, (ref) => ref.limitToLast(100).orderByChild('created')) // crearle esta característica a los post
-                .list(`posts/${followingId}`, ref => ref.limitToLast(10))
-                .snapshotChanges()
-                .subscribe(data => {
-                  data.forEach(e => {
-                    const authorAndPostid = {
-                      authorId: followingId,
-                      postId: e.key,
-                      created: e.payload.val()["created"]
-                    };
-                    console.log(authorAndPostid);
-                    this.listGeneralUserAndPostData.push(authorAndPostid);
+              if (!!followingId && followingId != "") {
+                this.firebaseDatabase
+                  // .list(`posts/${this.user}`, (ref) => ref.limitToLast(100).orderByChild('created')) // crearle esta característica a los post
+                  .list(`posts/${followingId}`, ref => ref.limitToLast(10))
+                  .snapshotChanges()
+                  .subscribe(data => {
+                    data.forEach(e => {
+                      const authorAndPostid = {
+                        authorId: followingId,
+                        postId: e.key,
+                        created: e.payload.val()["created"]
+                      };
+                      console.log(authorAndPostid);
+                      this.listGeneralUserAndPostData.push(authorAndPostid);
+                    });
                   });
-                });
+              }
             });
           }
         });
