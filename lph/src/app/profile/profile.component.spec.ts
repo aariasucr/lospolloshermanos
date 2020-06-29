@@ -147,7 +147,7 @@ describe("ProfileComponent", () => {
     expect(component.following).toBeGreaterThanOrEqual(0);
   });
 
-  xit("should do a comment ", () => {
+  it("should do a comment ", () => {
     const testForm = {
       reset() {},
       value: {

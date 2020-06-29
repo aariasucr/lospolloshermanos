@@ -71,11 +71,13 @@ export class ChatComponent implements OnInit {
   }
 
   getUserChats(idChat: string) {
-    return this.db
-      .list("/chatRooms/" + idChat + "/messages", (ref) => {
-        return ref.orderByChild("timestamp");
-      })
-      .valueChanges();
+    if (idChat != "" && !!idChat) {
+      return this.db
+        .list("/chatRooms/" + idChat + "/messages", (ref) => {
+          return ref.orderByChild("timestamp");
+        })
+        .valueChanges();
+    }
   }
 
   getPreviews() {
