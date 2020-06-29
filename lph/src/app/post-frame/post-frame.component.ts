@@ -7,7 +7,7 @@ import {AngularFireDatabase} from "@angular/fire/database";
 import {AngularFireAuth} from "@angular/fire/auth";
 import {PostCommentService} from "../shared/post-comment.service";
 import {NgForm} from "@angular/forms";
-import { Router } from '@angular/router';
+import {Router} from "@angular/router";
 
 @Component({
   selector: "app-post-frame",
@@ -48,81 +48,80 @@ export class PostFrameComponent implements OnInit {
   ngOnInit() {
     this.likePost = false;
     this.postLikedBy = [];
-    this.firebaseAuth.currentUser
-      .then((userData) => {
-        if (userData != null) {
-          this.userDataId = userData.uid;
+    this.firebaseAuth.currentUser.then((userData) => {
+      if (userData != null) {
+        this.userDataId = userData.uid;
 
-          this.userService
-            .getProfilePhoto(this.userDataId)
-            .then((photo) => {
-              this.profilePicturePath = photo.val();
-            })
-            .catch((error) => {
-              console.error("error", error);
-            });
+        this.userService
+          .getProfilePhoto(this.userDataId)
+          .then((photo) => {
+            this.profilePicturePath = photo.val();
+          })
+          .catch((error) => {
+            console.error("error", error);
+          });
 
-          this.userService
-            .getFullName(this.userDataId)
-            .then((name) => {
-              this.fullName = name.val();
-            })
-            .catch((error) => {
-              console.error("error", error);
-            });
+        this.userService
+          .getFullName(this.userDataId)
+          .then((name) => {
+            this.fullName = name.val();
+          })
+          .catch((error) => {
+            console.error("error", error);
+          });
 
-          this.postService
-            .getSpecifictPost(this.userDataId, this.postId)
-            .then((postData) => {
-              this.post = postData.val();
-              console.log(this.post);
-              try {
-                this.postLikedBy = this.post["likedBy"];
-              } catch (e) {
-                console.error(e);
-              }
+        this.postService
+          .getSpecifictPost(this.userDataId, this.postId)
+          .then((postData) => {
+            this.post = postData.val();
+            console.log(this.post);
+            try {
+              this.postLikedBy = this.post["likedBy"];
+            } catch (e) {
+              console.error(e);
+            }
 
-              // Mapeo de datos que se muestran en el post
-              this.isLiked = this.post["isLiked"];
-              this.uploadedFileUrl = this.post["img"];
-            })
-            .catch((err) => {
-              console.error("error", err);
-            });
-        }
+            // Mapeo de datos que se muestran en el post
+            this.isLiked = this.post["isLiked"];
+            this.uploadedFileUrl = this.post["img"];
+          })
+          .catch((err) => {
+            console.error("error", err);
+          });
+      }
 
+      this.postService
+        .getSpecifictPost(this.authorId, this.postId)
+        .then((postData) => {
+          console.log("lken", postData.val());
+          this.post = postData.val();
 
-    this.postService
-      .getSpecifictPost(this.authorId, this.postId)
-      .then((postData) => {
-        console.log("lken", postData.val());
-        this.post = postData.val();
-
-        // Mapeo de datos que se muestran en el post
-        this.numComm = this.post["numberComm"];
-        this.numLikes = this.post["numberLikes"];
-        this.isLiked = this.post["isLiked"];
-        this.uploadedFileUrl = this.post["img"];
-      })
-      .catch((err) => {
-        console.error("error", err);
-      });
-
-    // Recupera la información de un post específico
-
-    this.postCommentService
-      .getAllPostComments(this.postId)
-      .snapshotChanges()
-      .subscribe((data) => {
-        // Cuando se detecte algún cambio en la base, va a ir a traer ese cambio de forma reactiva.
-        this.commentPost = data.map((e) => {
-          // A cada elemento que viene, de los 100 que se traen, se le saca el val
-          return {
-            ...(e.payload.val() as CommentPost)
-          };
+          // Mapeo de datos que se muestran en el post
+          this.numComm = this.post["numberComm"];
+          this.numLikes = this.post["numberLikes"];
+          this.isLiked = this.post["isLiked"];
+          this.uploadedFileUrl = this.post["img"];
+        })
+        .catch((err) => {
+          console.error("error", err);
         });
-        this.numComm = this.commentPost.length;
-      });
+
+      // Recupera la información de un post específico
+
+      this.postCommentService
+        .getAllPostComments(this.postId)
+        .snapshotChanges()
+        .subscribe((data) => {
+          // Cuando se detecte algún cambio en la base, va a ir a traer ese cambio de forma reactiva.
+          this.commentPost = data.map((e) => {
+            // A cada elemento que viene, de los 100 que se traen, se le saca el val
+            return {
+              ...(e.payload.val() as CommentPost)
+            };
+          });
+          this.numComm = this.commentPost.length;
+        });
+    });
   }
 
   incNumLikes() {
