@@ -1,58 +1,80 @@
-<link
-  href="//netdna.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
-  rel="stylesheet"
-  id="bootstrap-css"
-/>
+<!-- <link href="//netdna.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css" />
 <script src="//netdna.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
 <script src="//code.jquery.com/jquery-3.4.0.min.js"></script>
 
 <div class="row h-100 justify-content-center align-items-center">
-  <div class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
-    <form class="user" (ngSubmit)="onSubmit(f)" #f="ngForm">
-      <div>
-        <h2>Iniciar sesión</h2>
-        <hr class="colorgraph" />
-        <div class="row"></div>
-        <div class="form-group">
-          <input
-            type="email"
-            name="email"
-            id="email"
-            class="form-control input-lg"
-            placeholder="Correo electrónico"
-            tabindex="4"
-            ngModel
-            required
-          />
-        </div>
-        <div class="form-group">
-          <input
-            type="password"
-            name="password"
-            id="password"
-            class="form-control input-lg"
-            placeholder="Contraseña"
-            tabindex="4"
-            ngModel
-            required
-          />
-        </div>
+    <div class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
+        <form class="user" (ngSubmit)="onSubmit(f)" #f="ngForm">
+            <div>
+                <h2>Iniciar sesión</h2>
+                <hr class="colorgraph" />
+                <div class="row"></div>
+                <div class="form-group">
+                    <input type="email" name="email" id="email" class="form-control input-lg" placeholder="Correo electrónico" tabindex="4" ngModel required />
+                </div>
+                <div class="form-group">
+                    <input type="password" name="password" id="password" class="form-control input-lg" placeholder="Contraseña" tabindex="4" ngModel required />
+                </div>
 
-        <hr class="colorgraph" />
-        <div>
-          <div class="row h-100 justify-content-center align-items-center">
-            <button type="submit" class="btn btn-primary" [disabled]="!f.valid">
+                <hr class="colorgraph" />
+                <div>
+                    <div class="row h-100 justify-content-center align-items-center">
+                        <button type="submit" class="btn btn-primary" [disabled]="!f.valid">
               Iniciar sesión
             </button>
-          </div>
-        </div>
-        <div class="form-group">
-          <a class="float-md-left" href="/resetPassword" id="olvidado"
-            ><small>Recuperar contraseña</small></a
+                    </div>
+                </div>
+                <div class="form-group">
+                    <a class="float-md-left" href="/resetPassword" id="olvidado"><small>Recuperar contraseña</small></a
           >
           <a class="float-md-right" href="/register" id="register"><small>Registrese!</small></a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div> -->
+
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" rel="stylesheet" />
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.slim.js"></script>
+
+
+<div class="container-fluid">
+    <div class="row no-gutter">
+        <div class="d-none d-md-flex col-md-4 col-lg-6 bg-image"></div>
+        <div class="col-md-8 col-lg-6">
+            <div class="login d-flex align-items-center py-5">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-9 col-lg-8 mx-auto">
+                            <h3 class="login-heading mb-4">¡Bienvenido!</h3>
+                            <form class="user" (ngSubmit)="onSubmit(f)" #f="ngForm">
+                                <div class="form-label-group form-group">
+                                    <input type="email" name="email" id="email" class="form-control" placeholder="Email address" ngModel required autofocus>
+                                    <label for="email">Correo</label>
+                                </div>
+
+                                <div class="form-label-group form-group">
+                                    <input type="password" name="password" id="password" class="form-control" placeholder="Password" ngModel required>
+                                    <label for="password">Contraseña</label>
+                                </div>
+
+                                <div class="custom-control custom-checkbox mb-3">
+                                    <input type="checkbox" class="custom-control-input" id="customCheck1">
+                                    <label class="custom-control-label" for="customCheck1">Recordar contraseña</label>
+                                </div>
+                                <button class="btn btn-lg btn-primary btn-block btn-login text-uppercase font-weight-bold mb-2" type="submit" [disabled]="!f.valid">Ingresar</button>
+                                <div class="text-center">
+                                    <a class="small" href="/resetPassword" id="olvidado">¿Olvidó la contraseña?</a>
+                                </div>
+                                <div class="text-center">
+                                    <a class="small" href="/register" id="register">¡Registrese!</a>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
-    </form>
-  </div>
+    </div>
 </div>

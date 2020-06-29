@@ -20,11 +20,11 @@ export class EditProfileComponent implements OnInit {
     private notificationService: NotificationService,
     private firebaseAuth: AngularFireAuth,
     private firebaseDatabase: AngularFireDatabase
-  ) {
-    this.urlImage = "";
-  }
+  ) {}
 
   ngOnInit() {
+    this.user = "not set";
+    this.urlImage = "not set";
     this.firebaseAuth.currentUser.then((user) => {
       if (user != null) {
         this.user = user.uid;
@@ -41,7 +41,6 @@ export class EditProfileComponent implements OnInit {
         const newUsername: string = form.value.username;
 
         if (nombre.length !== 0) {
-          console.log("entra a nombre ", this.user);
           this.firebaseDatabase.database.ref("/users/" + this.user).update({
             fullName: nombre,
             nameToLower: nombre.toLowerCase()
@@ -81,8 +80,8 @@ export class EditProfileComponent implements OnInit {
         const newPhoto = "";
         user.updateProfile({photoURL: newPhoto}).then(() => {
           this.firebaseDatabase.database
-            .ref("/users/" + this.user.uid)
-            .update({profilePhoto: this.urlImage});
+            .ref("/users/" + user.uid)
+            .update({profilePhoto: this.urlImage}); //.set(this.urlImage)
           this.notificationService.showSuccessMessage("Hecho", "Se cambió la foto de perfil");
         });
       }
@@ -104,7 +103,7 @@ export class EditProfileComponent implements OnInit {
               this.notificationService.showSuccessMessage("Hecho", "Se cambió la contraseña");
             })
             .catch((error) => {
-              this.notificationService.showSuccessMessage("Error", error.message);
+              this.notificationService.showErrorMessage("Error", error.message);
             });
         }
       })

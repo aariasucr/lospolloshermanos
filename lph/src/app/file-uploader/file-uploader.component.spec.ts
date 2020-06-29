@@ -34,4 +34,8 @@ describe("FileUploaderComponent", () => {
   it("should create", () => {
     expect(component).toBeTruthy();
   });
+
+  it("should open windows", () => {
+    expect(component.onUploadImage()).toBeUndefined();
+  });
 });

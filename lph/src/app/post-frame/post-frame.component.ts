@@ -17,6 +17,7 @@ import { Router } from '@angular/router';
 export class PostFrameComponent implements OnInit {
   private post: Post;
   @Input() postId = "";
+  @Input() authorId = "";
 
   postRef: any;
   author = "";
@@ -25,9 +26,9 @@ export class PostFrameComponent implements OnInit {
   numLikes = 0;
   public postLikedBy: string[];
   public route = "";
-  public userDataId;
+  public userDataId = "";
   public profilePicturePath = "";
-  public fullName;
+  public fullName = "";
   private isLiked;
   private commentPost: CommentPost[] = [];
   public likePost: boolean;
@@ -89,9 +90,22 @@ export class PostFrameComponent implements OnInit {
               console.error("error", err);
             });
         }
+
+
+    this.postService
+      .getSpecifictPost(this.authorId, this.postId)
+      .then((postData) => {
+        console.log("lken", postData.val());
+        this.post = postData.val();
+
+        // Mapeo de datos que se muestran en el post
+        this.numComm = this.post["numberComm"];
+        this.numLikes = this.post["numberLikes"];
+        this.isLiked = this.post["isLiked"];
+        this.uploadedFileUrl = this.post["img"];
       })
-      .catch((error) => {
-        console.error("error", error);
+      .catch((err) => {
+        console.error("error", err);
       });
 
     // Recupera la información de un post específico

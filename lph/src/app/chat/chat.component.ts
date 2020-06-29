@@ -1,5 +1,4 @@
 import {Component, OnInit} from "@angular/core";
-import {UserService} from "../shared/user.service";
 import {Message, PreviewMessage} from "../shared/model";
 import {ChatService} from "../shared/chat.service";
 import {AngularFireDatabase} from "@angular/fire/database";
@@ -15,15 +14,11 @@ import {AngularFireAuth} from "@angular/fire/auth";
 export class ChatComponent implements OnInit {
   public userchatRooms: Array<string>;
   public messagesArray: Array<Message>;
-  public selesctedChatRoom: string;
   public userData;
-  public selectedRoomChat: string;
   public previews: Array<PreviewMessage>;
   public selectedChat: string;
-  public reversed: boolean;
 
   constructor(
-    private userService: UserService,
     private chatService: ChatService,
     private db: AngularFireDatabase,
     private commentService: CommentService,
@@ -33,22 +28,19 @@ export class ChatComponent implements OnInit {
 
   ngOnInit() {
     this.userData = "not set";
-    this.reversed = false;
-    this.selectedChat = "";
+    this.selectedChat = "not set";
     this.messagesArray = [];
+    this.previews = [];
+    this.userchatRooms = [];
     this.firebaseAuth.currentUser.then((user) => {
       if (user != null) {
         this.userData = user.uid;
         this.previews = [];
         this.getUserChatRooms().subscribe((rooms: Array<string>) => {
-          //console.log("click al inicio");
           this.userchatRooms = rooms;
           rooms.forEach((room) => {
             this.getUserChats(room).subscribe((messageList) => {
-              this.previews = [];
               this.getPreviews();
-              //console.log("message list", messageList);
-              //let lista = [];
               messageList.forEach((element) => {
                 let oneMessage: Message;
                 oneMessage = {
@@ -75,11 +67,13 @@ export class ChatComponent implements OnInit {
   }
 
   getUserChats(idChat: string) {
-    return this.db
-      .list("/chatRooms/" + idChat + "/messages", (ref) => {
-        return ref.orderByChild("timestamp");
-      })
-      .valueChanges();
+    if (idChat != "" && !!idChat) {
+      return this.db
+        .list("/chatRooms/" + idChat + "/messages", (ref) => {
+          return ref.orderByChild("timestamp");
+        })
+        .valueChanges();
+    }
   }
 
   getPreviews() {
@@ -92,7 +86,7 @@ export class ChatComponent implements OnInit {
           this.db.database
             .ref("chatRooms/" + room)
             .orderByChild("timestamp")
-            .once(
+            .on(
               "value",
               function (snapshot) {
                 if (snapshot.val() != null) {
@@ -150,8 +144,8 @@ export class ChatComponent implements OnInit {
 
   sendNewMessage(form: NgForm) {
     const mensaje = form.value.msg;
-    form.resetForm();
-    if (this.selectedChat !== "") {
+    //form.resetForm();
+    if (this.selectedChat !== "not set") {
       let now = new Date();
       let n = this.datePipe.transform(now, "dd-MM-yyyy HH:mm");
       const current = new Date();

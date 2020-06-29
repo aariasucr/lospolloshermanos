@@ -137,7 +137,7 @@ export class HeaderComponent implements OnInit {
     this.router.navigate(["/messages"]);
   }
 
-  resetNotifications(modal) {
+  resetNotifications() {
     this.numOfNotifications = 0;
     this.newLikes = 0;
     this.newFollower = 0;
@@ -157,6 +157,7 @@ export class HeaderComponent implements OnInit {
   }
 
   openNotifications(modal) {
+    console.log("modal", modal);
     this.modalService.open(modal);
   }
 

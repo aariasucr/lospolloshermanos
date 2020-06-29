@@ -2,7 +2,7 @@ import {async, ComponentFixture, TestBed} from "@angular/core/testing";
 import {ResetPasswordComponent} from "./reset-password.component";
 import {NotificationService} from "../shared/notification.service";
 import {AngularFireModule} from "@angular/fire";
-import {AngularFireAuthModule} from "@angular/fire/auth";
+import {AngularFireAuthModule, AngularFireAuth} from "@angular/fire/auth";
 import {environment} from "../../environments/environment";
 import {ToastrModule} from "ngx-toastr";
 import {NgForm} from "@angular/forms";
@@ -24,6 +24,18 @@ import {PostFrameComponent} from "../post-frame/post-frame.component";
 describe("ResetPasswordComponent", () => {
   let component: ResetPasswordComponent;
   let fixture: ComponentFixture<ResetPasswordComponent>;
+
+  //mock de datos de usuario
+  const userData = {
+    uid: "ZhLvdu5951NUkgrkQSXf7pNULGc2"
+  };
+
+  const mockAngularFireAuth: any = {
+    currentUser: Promise.resolve(userData)
+  };
+  // Spies para notifService
+  let notificationService: NotificationService;
+  let notificationServiceSpy: jasmine.Spy;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -58,9 +70,35 @@ describe("ResetPasswordComponent", () => {
     fixture = TestBed.createComponent(ResetPasswordComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
+
+    notificationService = fixture.debugElement.injector.get(NotificationService);
+    notificationServiceSpy = spyOn(notificationService, "showSuccessMessage");
+    notificationServiceSpy = spyOn(notificationService, "showErrorMessage");
   });
 
   it("should create", () => {
     expect(component).toBeTruthy();
+  });
+
+  it("should reset password ", () => {
+    const testForm = {
+      reset() {},
+      value: {
+        email: "blah@email.com"
+      }
+    } as NgForm;
+    component.resetPassword(testForm);
+    expect(notificationServiceSpy).toBeTruthy();
+    expect(notificationServiceSpy.calls.all().length).toBeGreaterThanOrEqual(0);
+
+    const testFormOk = {
+      reset() {},
+      value: {
+        email: "test@test.com"
+      }
+    } as NgForm;
+    component.resetPassword(testFormOk);
+    expect(notificationServiceSpy).toBeTruthy();
+    expect(notificationServiceSpy.calls.all().length).toBeGreaterThanOrEqual(0);
   });
 });
