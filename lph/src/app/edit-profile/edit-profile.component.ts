@@ -80,8 +80,8 @@ export class EditProfileComponent implements OnInit {
         const newPhoto = "";
         user.updateProfile({photoURL: newPhoto}).then(() => {
           this.firebaseDatabase.database
-            .ref("/users/" + this.user.uid)
-            .update({profilePhoto: this.urlImage});
+            .ref("/users/" + user.uid)
+            .update({profilePhoto: this.urlImage}); //.set(this.urlImage)
           this.notificationService.showSuccessMessage("Hecho", "Se cambió la foto de perfil");
         });
       }

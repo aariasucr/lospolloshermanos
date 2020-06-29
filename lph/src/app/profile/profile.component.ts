@@ -450,9 +450,7 @@ export class ProfileComponent implements OnInit {
               if (!conversations.includes(roomName)) {
                 conversations.push(roomName);
                 console.log("conv amigo", conversations);
-                this.firebaseDatabase.database
-                  .ref("/conversationsPerUser/" + friendId)
-                  .set(conversations);
+                db.ref("/conversationsPerUser/" + friendId).set(conversations);
               }
             });
           });

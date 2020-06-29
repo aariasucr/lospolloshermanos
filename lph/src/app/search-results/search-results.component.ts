@@ -25,10 +25,10 @@ export class SearchResultsComponent implements OnInit {
     this.searchService.getValueToSearch().subscribe((val) => {
       let rr = [];
       this.searchValue = val;
-      console.log("buscar:", this.searchValue);
-      if (this.searchValue != null && this.searchValue.length != 0) {
+      if (this.searchValue != null && this.searchValue.length > 0) {
+        this.listResults = [];
         this.searchService.fetchResults(this.searchValue).then((r) => {
-          if (r != null) {
+          if (r.val() != null) {
             let keys = Object.keys(r.val());
             this.numberOfResults = keys.length;
             keys.forEach((key) => {
@@ -48,6 +48,7 @@ export class SearchResultsComponent implements OnInit {
             console.log("rr", this.listResults);
           } else {
             this.numberOfResults = 0;
+            this.showSpinner = false;
           }
         });
       }
