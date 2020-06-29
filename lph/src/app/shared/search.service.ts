@@ -30,7 +30,11 @@ export class SearchService {
       .startAt(val)
       .endAt(val + "\uf8ff")
       .once("value", function (snapshot) {
-        return snapshot.val();
+        if (snapshot.val != null) {
+          return snapshot.val();
+        } else {
+          return null;
+        }
       });
   }
 }

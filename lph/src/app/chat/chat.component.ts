@@ -37,14 +37,10 @@ export class ChatComponent implements OnInit {
         this.userData = user.uid;
         this.previews = [];
         this.getUserChatRooms().subscribe((rooms: Array<string>) => {
-          //console.log("click al inicio");
           this.userchatRooms = rooms;
           rooms.forEach((room) => {
             this.getUserChats(room).subscribe((messageList) => {
-              //this.previews = [];
               this.getPreviews();
-              //console.log("message list", messageList);
-              //let lista = [];
               messageList.forEach((element) => {
                 let oneMessage: Message;
                 oneMessage = {
@@ -90,7 +86,7 @@ export class ChatComponent implements OnInit {
           this.db.database
             .ref("chatRooms/" + room)
             .orderByChild("timestamp")
-            .once(
+            .on(
               "value",
               function (snapshot) {
                 if (snapshot.val() != null) {
