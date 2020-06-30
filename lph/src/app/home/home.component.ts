@@ -150,6 +150,9 @@ export class HomeComponent implements OnInit {
       .then(authData => {
         this.userService.getUserDataFromFirebase(authData.uid).then(userData => {
           // Pormesa que devuelve los datos del usuario
+          console.log("ajbskjdnkqwn---------------->>>>", content);
+          console.log("ajbskjdnkqwn---------------->>>>", userData.val().fullName);
+          console.log("ajbskjdnkqwn---------------->>>>", this.uploadedFileUrl);
           this.postService
             .addNewPostAsync(userData.val().fullName, this.uploadedFileUrl, content)
             .then(results => {

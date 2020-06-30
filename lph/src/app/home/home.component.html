@@ -46,7 +46,7 @@
                             <div class="form-group">
                                 <label class="sr-only" for="message">post</label>
                                 <textarea class="form-control" id="message" name="content" rows="3" placeholder="¿Qué estás pensando?"></textarea>
-                                <app-file-uploader [author]="this.user" id="customFile" (imagePick)="onImagePicked($event)"></app-file-uploader>
+                                <!-- <app-file-uploader [author]="this.user" id="customFile" (imagePick)="onImagePicked($event)"></app-file-uploader> -->
                             </div>
                         </div>
                     </div>
@@ -56,6 +56,7 @@
                         </div>
                     </div>
                 </form>
+                <app-file-uploader [author]="this.user" id="customFile" (imagePick)="onImagePicked($event)"></app-file-uploader>
             </div>
             <!-- Post /////-->
 
