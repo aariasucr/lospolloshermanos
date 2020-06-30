@@ -40,20 +40,20 @@ export class FileUploaderComponent implements OnInit {
 
     if (fileList.length > 0) {
       this.selectedFile = fileList[0];
-      const author = firebase.auth().currentUser.uid;
+      console.log("qwjdkjqndwkqwd", this.selectedFile.name);
       this.firebaseAuth.currentUser.then((user) => {
         if (user != null) {
           const author = user.uid;
           const current = new Date();
-
+          console.log("El autor: ", author);
           const timestamp = current.getTime();
-          const fileName = `posts/${this.author}/${author.toString() + timestamp.toString()}.jpg`;
+          const fileName = `posts/${author.toString()}/${author.toString() + timestamp.toString()}.jpg`;
 
           /** [FB] Actualización */
           // const storageRef = firebase.storage().ref();
           const storageRef = this.firebaseStorage.storage.ref();
           this.uploadTask = storageRef.child(fileName).put(this.selectedFile);
-
+          console.log("ajbskjdnkqwn---------------->>>>");
           this.uploadTask.on(
             firebase.storage.TaskEvent.STATE_CHANGED,
             (snapshot) => {
@@ -63,6 +63,7 @@ export class FileUploaderComponent implements OnInit {
             },
             (error) => {
               // Error al hacer upload
+              console.log("ajbskjdnkqwn------>>>>");
               console.error(error.message);
             },
             () => {

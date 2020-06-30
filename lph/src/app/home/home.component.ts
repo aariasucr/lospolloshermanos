@@ -48,7 +48,6 @@ export class HomeComponent implements OnInit {
             following.val().forEach(followingId => {
               if (!!followingId && followingId != "") {
                 this.firebaseDatabase
-                  // .list(`posts/${this.user}`, (ref) => ref.limitToLast(100).orderByChild('created')) // crearle esta característica a los post
                   .list(`posts/${followingId}`, ref => ref.limitToLast(10))
                   .snapshotChanges()
                   .subscribe(data => {
@@ -69,18 +68,13 @@ export class HomeComponent implements OnInit {
 
         // Llena la lista de personas me siguen.
         this.userService.getUserFollowers(this.user).then(followers => {
-          console.log("Entro");
           if (followers.val() != null) {
-            console.log("Entro2", followers.val());
             followers.val().forEach(followerId => {
-              console.log("Entro3", followerId);
               this.firebaseDatabase
-                // .list(`posts/${this.user}`, (ref) => ref.limitToLast(100).orderByChild('created')) // crearle esta característica a los post
                 .list(`posts/${followerId}`, ref => ref.limitToLast(10))
                 .snapshotChanges()
                 .subscribe(data => {
                   data.forEach(e => {
-                    console.log("Entro4");
                     const authorAndPostid = {
                       authorId: followerId,
                       postId: e.key,
@@ -162,6 +156,7 @@ export class HomeComponent implements OnInit {
               this.notificationService.showSuccessMessage("Todo bien!", "Publicación Creada");
             })
             .catch(error => {
+              console.log("ajbskjdnkqwn------Error----->>>>");
               this.notificationService.showErrorMessage("Error!!!", "Error creando publicación");
             });
         });
